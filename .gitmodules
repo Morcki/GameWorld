@@ -1,0 +1,3 @@
+[submodule "GameWorld/ThirdParty/spdlog"]
+	path = GameWorld/ThirdParty/spdlog
+	url = https://github.com/gabime/spdlog.git
