@@ -1,7 +1,4 @@
 #pragma once
-#include <functional>
-#include <iostream>
-#include <sstream>
 
 //#include "Hazel/Debug/Instrumentor.h"
 //#include "Hazel/Core/Base.h"

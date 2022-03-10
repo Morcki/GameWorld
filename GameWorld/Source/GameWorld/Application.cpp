@@ -1,3 +1,5 @@
+#include "PrecompiledHeader.h"
+
 #include "Application.h"
 #include "Events/ApplicationEvent.h"
 #include "Log/Log.h"
@@ -18,8 +20,15 @@ namespace GameWorld
 	void Application::Run()
 	{
 		WindowResizeEvent e(1280, 720);
-		GAMEWORLD_CORE_TRACE(e);
-
+		GAMEWORLD_TRACE(e);
+		if (e.IsInCategory(EventCategoryApplication))
+		{
+			GAMEWORLD_INFO("Application");
+		}
+		if (e.IsInCategory(EventCategoryInput))
+		{
+			GAMEWORLD_INFO("Input");
+		}
 		while (true);
 	}
 

@@ -18,6 +18,9 @@ project "GameWorld"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
+	pchheader "PrecompiledHeader.h"
+	pchsource "GameWorld/Source/GameWorld/Pch/PrecompiledHeader.cpp"
+	
 	files
 	{
 		"%{prj.name}/Source/**.h",
