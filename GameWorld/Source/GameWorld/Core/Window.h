@@ -2,6 +2,7 @@
 #pragma once
 
 #include "../Events/Event.h"
+#include <functional>
 
 namespace GameWorld {
 
