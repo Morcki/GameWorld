@@ -5,6 +5,8 @@
 #include "../Events/MouseEvent.h"
 #include "../Events/KeyEvent.h"
 
+#include "glad/glad.h"
+
 namespace GameWorld {
 
 	static uint8_t s_GLFWWindowCount = 0;
@@ -44,8 +46,10 @@ namespace GameWorld {
 			++s_GLFWWindowCount;
 		}
 		glfwMakeContextCurrent(m_Window);
-		glfwSetWindowUserPointer(m_Window, &m_Data);
+		gladLoadGL();
 		SetVSync(true);
+
+		glfwSetWindowUserPointer(m_Window, &m_Data);
 	}
 
 	void WindowsWindow::Shutdown()
@@ -62,6 +66,8 @@ namespace GameWorld {
 
 	void WindowsWindow::OnUpdate()
 	{
+		glfwGetFramebufferSize(m_Window, &static_cast<int>(m_Data.Width), &static_cast<int>(m_Data.Height));
+		glfwSwapBuffers(m_Window);
 		glfwPollEvents();
 	}
 
