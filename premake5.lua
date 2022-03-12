@@ -10,6 +10,11 @@ workspace "GameWorld"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "GameWorld/ThirdParty/glfw/include"
+
+include "GameWorld/ThirdParty/glfw"
+
 project "GameWorld"
 	location "GameWorld"
 	kind "SharedLib"
@@ -29,18 +34,27 @@ project "GameWorld"
 	
 	includedirs
 	{
-		"GameWorld/ThirdParty/spdlog/include"
+		"GameWorld/ThirdParty/spdlog/include",
+		"%{IncludeDir.GLFW}",
+	}
+	
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 	
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "On"
-		systemversion "10.0.17763.0"
+		systemversion "latest"
 		
 		defines
 		{
 			"GAMEWORLD_PLATFORM_WINDOWS",
 			"GAMEWORLD_BUILD_DLL",
+			"GAMEWORLD_ENABLE_ASSERT",
+			"GLFW_INCLUDE_NONE",
 		}
 		
 		postbuildcommands
@@ -88,11 +102,12 @@ project "SandBox"
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "On"
-		systemversion "10.0.17763.0"
+		systemversion "latest"
 		
 		defines
 		{
 			"GAMEWORLD_PLATFORM_WINDOWS",
+			"GAMEWORLD_ENABLE_ASSERT",
 		}
 		
 	filter "configurations:Debug"

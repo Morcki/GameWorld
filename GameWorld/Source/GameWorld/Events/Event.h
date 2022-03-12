@@ -1,7 +1,6 @@
 #pragma once
+#include <sstream>
 
-//#include "Hazel/Debug/Instrumentor.h"
-//#include "Hazel/Core/Base.h"
 
 #define BIT(x) (1 << x)
 

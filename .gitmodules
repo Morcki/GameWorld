@@ -1,3 +1,6 @@
 [submodule "GameWorld/ThirdParty/spdlog"]
 	path = GameWorld/ThirdParty/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "GameWorld/ThirdParty/glfw"]
+	path = GameWorld/ThirdParty/glfw
+	url = https://github.com/glfw/glfw

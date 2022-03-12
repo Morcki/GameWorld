@@ -1,6 +1,6 @@
 #pragma once
 #include "Core/Core.h"
-
+#include "Core/Window.h"
 
 namespace GameWorld
 {
@@ -11,6 +11,11 @@ namespace GameWorld
 		virtual ~Application();
 
 		void Run();
+
+	private:
+		std::unique_ptr<Window> GameWorldWindow;
+		bool bGameWorldRunning = true;
+	
 	};
 
 	// To be defined in Client
