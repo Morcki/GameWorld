@@ -68,14 +68,17 @@ project "GameWorld"
 		
 	filter "configurations:Debug"
 		defines "GAMEWORLD_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 		
 	filter "configurations:Release"
 		defines "GAMEWORLD_RELEASE"
+		buildoptions "/MD"
 		symbols "On"
 	
 	filter "configurations:Dist"
 		defines "GAMEWORLD_DIST"
+		buildoptions "/MD"
 		symbols "On"
 
 project "SandBox"
@@ -116,12 +119,15 @@ project "SandBox"
 		
 	filter "configurations:Debug"
 		defines "GAMEWORLD_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 		
 	filter "configurations:Release"
 		defines "GAMEWORLD_RELEASE"
+		buildoptions "/MD"
 		symbols "On"
 	
 	filter "configurations:Dist"
 		defines "GAMEWORLD_DIST"
+		buildoptions "/MD"
 		symbols "On"
