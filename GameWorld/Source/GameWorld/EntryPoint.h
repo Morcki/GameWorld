@@ -9,8 +9,6 @@ int main(int argc, char** argv)
 
 	GAMEWORLD_CORE_INFO("Welcome to Game World!");
 
-	GAMEWORLD_CORE_WARN("app is running on sandbox");
-
 	auto app = GameWorld::CreateApplication();
 	app->Run();
 	delete app;
