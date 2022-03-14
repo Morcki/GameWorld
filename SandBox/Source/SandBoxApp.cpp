@@ -3,7 +3,7 @@
 class TestLayer : public GameWorld::Layer
 {
 public:
-	TestLayer(const std::string& name = "Example")
+	TestLayer(const std::string& name = "TestLayer")
 		: Layer(name)
 	{
 	}
@@ -13,12 +13,12 @@ public:
 
 	void OnUpdate(GameWorld::Timestep ts) override
 	{
-		GAMEWORLD_INFO("For Layer Test : update");
+		GAMEWORLD_INFO("For Test Layer : update");
 	}
 
 	void OnEvent(GameWorld::Event& event) override
 	{
-		GAMEWORLD_INFO("For Layer Test : {0}", event);
+		GAMEWORLD_INFO("For Test Layer : {0}", event);
 	}
 
 };
@@ -31,6 +31,7 @@ public:
 	{
 		GAMEWORLD_WARN("Application is running on sandbox");
 		PushLayer(new TestLayer());
+		PushOverlay(new GameWorld::ImGuiLayer());
 	};
 
 	virtual ~SandBox()
