@@ -2,9 +2,11 @@
 .vs/
 bin/
 bin-int/
+GameWorld/ThirdParty/imgui/examples/
 
 #Files
 *.user
 *.sln
 *.vcxproj
 *.vcxproj.filters
+*.ini
