@@ -12,6 +12,9 @@ namespace GameWorld
 		Application();
 		virtual ~Application();
 
+		inline static Application& GetInst() { return *ApplicationInstance; }
+		inline Window& GetWindow() const { return *GameWorldWindow; }
+
 		void Run();
 
 		void PushLayer(Layer* layer);
@@ -19,9 +22,9 @@ namespace GameWorld
 
 	private:
 		void OnEvent(Event& e);
-		bool OnWindowResize(Event& e);
 		bool OnWindowsClose(Event& e);
 	private:
+		static Application* ApplicationInstance;
 		std::unique_ptr<Window> GameWorldWindow;
 		bool bGameWorldRunning = true;
 		LayerStack m_LayerStack;

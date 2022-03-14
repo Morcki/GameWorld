@@ -1,9 +1,9 @@
 #include <PrecompiledHeader.h>
-#include "../Core/Core.h"
+#include "Core.h"
 #include "Window.h"
 
 #ifdef GAMEWORLD_PLATFORM_WINDOWS
-	#include "../Platform//WindowsWindow.h"
+	#include "../Backends/Windows/WindowsWindow.h"
 #endif
 
 namespace GameWorld

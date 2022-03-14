@@ -8,12 +8,15 @@
 
 namespace GameWorld
 {
-#define BIND_FUNCTION(func) std::bind(&Application::func, this, std::placeholders::_1)
+	Application* Application::ApplicationInstance = nullptr;
 
 	Application::Application()
 	{
+		GAMEWORLD_CORE_ASSERT(!ApplicationInstance, "Application already been created!");
+		ApplicationInstance = this;
+
 		GameWorldWindow = std::unique_ptr<Window>(Window::Create());
-		GameWorldWindow->SetEventCallback(BIND_FUNCTION(OnEvent));
+		GameWorldWindow->SetEventCallback(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnEvent));
 	}
 
 	Application::~Application()
@@ -25,13 +28,15 @@ namespace GameWorld
 	{
 		while (bGameWorldRunning)
 		{
-			glClearColor(0, 0, 1, 1);
+			// Fresh window color buffer
+			glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
 			glClear(GL_COLOR_BUFFER_BIT);
-			GameWorldWindow->OnUpdate();
+
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate(0.05);
 			}
+			GameWorldWindow->OnUpdate();
 		}
 	}
 
@@ -49,19 +54,12 @@ namespace GameWorld
 	{
 		GAMEWORLD_CORE_INFO("{0}", e);
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_FUNCTION(OnWindowsClose));
-		dispatcher.Dispatch<WindowResizeEvent>(BIND_FUNCTION(OnWindowResize));
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnWindowsClose));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
 			(*(--it))->OnEvent(e);
 		}
-	}
-
-	bool Application::OnWindowResize(Event& e)
-	{
-		
-		return true;
 	}
 
 	bool Application::OnWindowsClose(Event& e)

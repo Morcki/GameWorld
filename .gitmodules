@@ -4,3 +4,6 @@
 [submodule "GameWorld/ThirdParty/glfw"]
 	path = GameWorld/ThirdParty/glfw
 	url = https://github.com/glfw/glfw
+[submodule "GameWorld/ThirdParty/imgui"]
+	path = GameWorld/ThirdParty/imgui
+	url = https://github.com/ocornut/imgui.git

@@ -17,3 +17,6 @@
 	#define GAMEWORLD_ASSERT(x, ...)
 	#define GAMEWORLD_CORE_ASSERT(x, ...)
 #endif
+
+#define BIND_CALLBACK_FUNCTRION(func) std::bind(&func, std::placeholders::_1)
+#define BIND_CLASS_CALLBACK_FUNCTRION(ClassScopedFunc) std::bind(&ClassScopedFunc, this, std::placeholders::_1)

@@ -1,9 +1,9 @@
 #include <PrecompiledHeader.h>
 #include "WindowsWindow.h"
 
-#include "../Events/ApplicationEvent.h"
-#include "../Events/MouseEvent.h"
-#include "../Events/KeyEvent.h"
+#include "../../Events/ApplicationEvent.h"
+#include "../../Events/MouseEvent.h"
+#include "../../Events/KeyEvent.h"
 
 #include "glad/glad.h"
 
@@ -37,7 +37,7 @@ namespace GameWorld {
 		if (s_GLFWWindowCount == 0)
 		{
 			int success = glfwInit();
-			GAMEWORLD_CORE_ASSERT(success, "Could not initialize GLFW!");
+			GAMEWORLD_CORE_ASSERT(success, "Failed to initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
@@ -46,7 +46,8 @@ namespace GameWorld {
 			++s_GLFWWindowCount;
 		}
 		glfwMakeContextCurrent(m_Window);
-		gladLoadGL();
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		GAMEWORLD_CORE_ASSERT(status, "Failed to initialize GLAD!");
 		glfwSetWindowUserPointer(m_Window, &m_Data); // set the structure of data transporting between engine and glfw-window.
 		SetVSync(true);
 
@@ -154,8 +155,8 @@ namespace GameWorld {
 
 	void WindowsWindow::OnUpdate()
 	{
-		glfwGetFramebufferSize(m_Window, &static_cast<int>(m_Data.Width), &static_cast<int>(m_Data.Height));
-		glfwSwapBuffers(m_Window);
+		glfwGetFramebufferSize(m_Window, &(int)m_Data.Width, &(int)m_Data.Height);
+		glfwSwapBuffers(m_Window); // must do this at the end of render tick, swap the buffer of screen and the buffer of rendering results.
 		glfwPollEvents();
 	}
 
