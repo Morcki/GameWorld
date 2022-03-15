@@ -7,3 +7,6 @@
 [submodule "GameWorld/ThirdParty/imgui"]
 	path = GameWorld/ThirdParty/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "GameWorld/ThirdParty/glm"]
+	path = GameWorld/ThirdParty/glm
+	url = https://github.com/g-truc/glm.git
