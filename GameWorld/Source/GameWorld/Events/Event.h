@@ -41,6 +41,7 @@ namespace GameWorld {
 	public:
 		virtual ~Event() = default;
 
+		/** Whether the signaled state of the event needs to be reset manually. */
 		bool Handled = false;
 
 		virtual EventType GetEventType() const = 0;

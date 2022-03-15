@@ -2,6 +2,7 @@
 
 #include "Application.h"
 #include "Events/ApplicationEvent.h"
+#include "Input/InputSystem.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -15,7 +16,7 @@ namespace GameWorld
 		GAMEWORLD_CORE_ASSERT(!ApplicationInstance, "Application already been created!");
 		ApplicationInstance = this;
 
-		GameWorldWindow = std::unique_ptr<Window>(Window::Create());
+		GameWorldWindow = Scope<Window>(Window::Create());
 		GameWorldWindow->SetEventCallback(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnEvent));
 	}
 
@@ -36,6 +37,7 @@ namespace GameWorld
 			{
 				layer->OnUpdate(0.05);
 			}
+			//GAMEWORLD_CORE_TRACE("{0} {1}", InputSystem::GetMouseX(), InputSystem::GetMouseY());
 			GameWorldWindow->OnUpdate();
 		}
 	}
@@ -52,9 +54,10 @@ namespace GameWorld
 
 	void Application::OnEvent(Event& e)
 	{
-		GAMEWORLD_CORE_INFO("{0}", e);
+		//GAMEWORLD_CORE_INFO("{0}", e);
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnWindowsClose));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnWindowResize));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
@@ -68,5 +71,18 @@ namespace GameWorld
 		return bGameWorldRunning;
 	}
 
+	bool Application::OnWindowResize(Event& e)
+	{
+		WindowResizeEvent& event = (WindowResizeEvent&)e;
+		if (event.GetWidth() == 0 || event.GetHeight() == 0)
+		{
+			bSetMinSize = true;
+			return false;
+		}
+
+		bSetMinSize = false;
+		//Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+		return false;
+	}
 }
 

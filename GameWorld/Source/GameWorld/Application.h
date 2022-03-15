@@ -23,10 +23,12 @@ namespace GameWorld
 	private:
 		void OnEvent(Event& e);
 		bool OnWindowsClose(Event& e);
+		bool OnWindowResize(Event& e);
 	private:
 		static Application* ApplicationInstance;
-		std::unique_ptr<Window> GameWorldWindow;
+		Scope<Window> GameWorldWindow;
 		bool bGameWorldRunning = true;
+		bool bSetMinSize = true;
 		LayerStack m_LayerStack;
 	};
 
