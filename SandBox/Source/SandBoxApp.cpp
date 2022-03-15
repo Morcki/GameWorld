@@ -13,12 +13,16 @@ public:
 
 	void OnUpdate(GameWorld::Timestep ts) override
 	{
-		GAMEWORLD_INFO("For Test Layer : update");
+		//GAMEWORLD_INFO("For Test Layer : update");
 	}
 
 	void OnEvent(GameWorld::Event& event) override
 	{
-		GAMEWORLD_INFO("For Test Layer : {0}", event);
+		if (event.GetEventType() == GameWorld::EventType::KeyPressed)
+		{
+			GameWorld::KeyPressedEvent& e = (GameWorld::KeyPressedEvent&) event;
+			GAMEWORLD_INFO("For Test Layer : {0}", (char)e.GetKeyCode());
+		}
 	}
 
 };
