@@ -11,18 +11,18 @@
 
 namespace GameWorld
 {
-	Application* Application::ApplicationInstance = nullptr;
+	Application* Application::Instance = nullptr;
 
 	Application::Application()
 	{
-		GAMEWORLD_CORE_ASSERT(!ApplicationInstance, "Application already been created!");
-		ApplicationInstance = this;
+		GAMEWORLD_CORE_ASSERT(!Instance, "Application has already been created!");
+		Instance = this;
 
 		GameWorldWindow = Scope<Window>(Window::Create());
 		GameWorldWindow->SetEventCallback(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnEvent));
 
-		m_ImGuiLayer = new ImGuiLayer();
-		PushOverlay(m_ImGuiLayer);
+		ImGuiBaseRenderLayer = new ImGuiLayer();
+		PushOverlay(ImGuiBaseRenderLayer);
 	}
 
 	Application::~Application()
@@ -35,20 +35,20 @@ namespace GameWorld
 		while (bGameWorldRunning)
 		{
 			// Fresh window color buffer
-			glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+			glClearColor(WindowBackgroundColor[0], WindowBackgroundColor[1], WindowBackgroundColor[2], WindowBackgroundColor[3]);
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			for (Layer* layer : m_LayerStack)
+			for (Layer* layer : GameWorldLayerStack)
 			{
 				layer->OnUpdate(0.05);
 			}
 
-			m_ImGuiLayer->RenderTickBegin();
-			for (Layer* layer : m_LayerStack)
+			ImGuiBaseRenderLayer->RenderTickBegin();
+			for (Layer* layer : GameWorldLayerStack)
 			{
 				layer->OnImGuiRender();
 			}
-			m_ImGuiLayer->RenderTickEnd();
+			ImGuiBaseRenderLayer->RenderTickEnd();
 
 			GameWorldWindow->OnUpdate();
 		}
@@ -56,12 +56,12 @@ namespace GameWorld
 
 	void Application::PushLayer(Layer* layer)
 	{
-		m_LayerStack.PushLayer(layer);
+		GameWorldLayerStack.PushLayer(layer);
 	}
 
 	void Application::PushOverlay(Layer* layer)
 	{
-		m_LayerStack.PushOverlay(layer);
+		GameWorldLayerStack.PushOverlay(layer);
 	}
 
 	void Application::OnEvent(Event& e)
@@ -71,7 +71,7 @@ namespace GameWorld
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnWindowsClose));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnWindowResize));
 
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+		for (auto it = GameWorldLayerStack.end(); it != GameWorldLayerStack.begin();)
 		{
 			(*(--it))->OnEvent(e);
 		}

@@ -66,6 +66,11 @@ namespace GameWorld
 		ImGui::ShowDemoWindow(&show_demo_window);
 	}
 
+	void ImGuiLayer::OnUpdate(Timestep ts)
+	{
+
+	}
+
 	void ImGuiLayer::OnEvent(Event& event)
 	{
 		if (bBlockEvent)

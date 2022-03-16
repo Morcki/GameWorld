@@ -14,7 +14,7 @@ namespace GameWorld
 		Application();
 		virtual ~Application();
 
-		inline static Application& GetInst() { return *ApplicationInstance; }
+		inline static Application& GetInst() { return *Instance; }
 		inline Window& GetWindow() const { return *GameWorldWindow; }
 
 		void Run();
@@ -28,12 +28,15 @@ namespace GameWorld
 		bool OnWindowResize(Event& e);
 
 	private:
-		static Application* ApplicationInstance;
+		static Application* Instance;
 		Scope<Window> GameWorldWindow;
+		LayerStack GameWorldLayerStack;
+		ImGuiLayer* ImGuiBaseRenderLayer;
+
+		float WindowBackgroundColor[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
+
 		bool bGameWorldRunning = true;
 		bool bSetMinSize = true;
-		LayerStack m_LayerStack;
-		ImGuiLayer* m_ImGuiLayer;
 	};
 
 	// To be defined in Client
