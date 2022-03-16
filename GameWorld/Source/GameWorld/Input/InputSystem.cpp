@@ -1,8 +1,10 @@
 #include <PrecompiledHeader.h>
+
 #include "InputSystem.h"
 
-#include "../Application.h"
 #include <GLFW/glfw3.h>
+
+#include "GameWorld/Application.h"
 
 namespace GameWorld
 {

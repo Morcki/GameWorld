@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../Core/Core.h"
-#include "../Core/Timestep.h"
-#include "../Events/Event.h"
+#include "GameWorld/Core/Core.h"
+#include "GameWorld/Core/Timestep.h"
+#include "GameWorld/Events/Event.h"
 
 namespace GameWorld {
 
-	class GAMEWORLD_API Layer
+	class Layer
 	{
 	public:
 		Layer(const std::string& name = "Layer");

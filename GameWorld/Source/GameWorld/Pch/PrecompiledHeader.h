@@ -15,5 +15,5 @@
 
 #ifdef GAMEWORLD_PLATFORM_WINDOWS
 	#include <Windows.h>
-	#include "../Log/Log.h"
+	#include "GameWorld/Log/Log.h"
 #endif

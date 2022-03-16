@@ -1,36 +1,32 @@
 #pragma once
-#include "../Layer/Layer.h"
+#include "GameWorld/Layer/Layer.h"
 
-#include "../Events/ApplicationEvent.h"
-#include "../Events/MouseEvent.h"
-#include "../Events/KeyEvent.h"
+#include "GameWorld/Events/ApplicationEvent.h"
+#include "GameWorld/Events/MouseEvent.h"
+#include "GameWorld/Events/KeyEvent.h"
 namespace GameWorld
 {
-	class GAMEWORLD_API ImGuiLayer : public Layer
+	class ImGuiLayer : public Layer
 	{
 	public:
 		ImGuiLayer();
 		virtual ~ImGuiLayer();
 
-		void OnAttach() override;
-		void OnDetach() override;
+		virtual void OnAttach() override;
+		virtual void OnDetach() override;
+		virtual void OnImGuiRender() override;
+		//virtual	void OnUpdate(Timestep ts) override;
+		virtual void OnEvent(Event& event) override;
 
-		void OnUpdate(Timestep ts) override;
-		void OnEvent(Event& event) override;
+		void RenderTickBegin();
+		void RenderTickEnd();
+		void SetDarkThemeColors();
+
+		inline void SetLayerBlockEvent(bool bBlock) { bBlockEvent = bBlock; };
 
 	private:
 		float LastTickTime = 0.0f;
-
-	private:
-		bool OnMouseButtonPressEvent(MouseButtonPressedEvent& e);
-		bool OnMouseButtonReleaseEvent(MouseButtonReleasedEvent& e);
-		bool OnMouseMoveEvent(MouseMovedEvent& e);
-		bool OnMouseScrolledEvent(MouseScrolledEvent& e);
-		bool OnKeyPressedEvent(KeyPressedEvent& e);
-		bool OnKeyReleasedEvent(KeyReleasedEvent& e);
-		//bool OnKeyTypedEvent(KeyTypedEvent& e);
-		bool OnWindowResizeEvent(WindowResizeEvent& e);
-
+		bool bBlockEvent = false;
 	};
 }
 

@@ -1,6 +1,8 @@
-#include <PrecompiledHeader.h>
-#include "Core.h"
 #include "Window.h"
+
+#include <PrecompiledHeader.h>
+
+#include "Core.h"
 
 #ifdef GAMEWORLD_PLATFORM_WINDOWS
 	#include "../Backends/Windows/WindowsWindow.h"

@@ -1,8 +1,8 @@
 #pragma once
-#include <glm/glm.hpp>
+#include "GameWorld/Events/KeyCodes.h"
+#include "GameWorld/Events/MouseCodes.h"
 
-#include "../Events/KeyCodes.h"
-#include "../Events/MouseCodes.h"
+#include <glm/glm.hpp>
 
 namespace GameWorld
 {

@@ -1,11 +1,13 @@
 #include "PrecompiledHeader.h"
 
 #include "Application.h"
-#include "Events/ApplicationEvent.h"
-#include "Input/InputSystem.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#include "Events/ApplicationEvent.h"
+#include "Input/InputSystem.h"
+#include "GameWorld/GUI/ImGuiLayer.h"
 
 namespace GameWorld
 {
@@ -18,6 +20,9 @@ namespace GameWorld
 
 		GameWorldWindow = Scope<Window>(Window::Create());
 		GameWorldWindow->SetEventCallback(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnEvent));
+
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 	}
 
 	Application::~Application()
@@ -37,7 +42,14 @@ namespace GameWorld
 			{
 				layer->OnUpdate(0.05);
 			}
-			//GAMEWORLD_CORE_TRACE("{0} {1}", InputSystem::GetMouseX(), InputSystem::GetMouseY());
+
+			m_ImGuiLayer->RenderTickBegin();
+			for (Layer* layer : m_LayerStack)
+			{
+				layer->OnImGuiRender();
+			}
+			m_ImGuiLayer->RenderTickEnd();
+
 			GameWorldWindow->OnUpdate();
 		}
 	}

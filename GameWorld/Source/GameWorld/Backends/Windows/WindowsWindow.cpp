@@ -1,11 +1,12 @@
 #include <PrecompiledHeader.h>
+
 #include "WindowsWindow.h"
 
-#include "../../Events/ApplicationEvent.h"
-#include "../../Events/MouseEvent.h"
-#include "../../Events/KeyEvent.h"
-
 #include "glad/glad.h"
+
+#include "GameWorld/Events/ApplicationEvent.h"
+#include "GameWorld/Events/MouseEvent.h"
+#include "GameWorld/Events/KeyEvent.h"
 
 namespace GameWorld {
 

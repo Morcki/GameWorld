@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../../Core/Window.h"
 #include <GLFW/glfw3.h>
+
+#include "GameWorld/Core/Window.h"
 
 namespace GameWorld {
 

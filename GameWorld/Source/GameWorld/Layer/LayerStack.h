@@ -1,8 +1,8 @@
 #pragma once
-#include "../Core/Core.h"
-#include "Layer.h"
-
 #include <vector>
+
+#include "Layer.h"
+#include "GameWorld/Core/Core.h"
 
 namespace GameWorld {
 

@@ -1,7 +1,8 @@
 #pragma once
-#include "../Core/Core.h"
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
+
+#include "GameWorld/Core/Core.h"
 
 namespace GameWorld
 {
@@ -10,12 +11,12 @@ namespace GameWorld
 	public:
 		static void Init();
 
-		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return sptrCoreLogger; };
-		inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return sptrClientLogger; };
+		inline static Ref<spdlog::logger>& GetCoreLogger() { return sptrCoreLogger; };
+		inline static Ref<spdlog::logger>& GetClientLogger() { return sptrClientLogger; };
 	
 	private:
-		static std::shared_ptr<spdlog::logger> sptrCoreLogger;
-		static std::shared_ptr<spdlog::logger> sptrClientLogger;
+		static Ref<spdlog::logger> sptrCoreLogger;
+		static Ref<spdlog::logger> sptrClientLogger;
 
 	};
 }

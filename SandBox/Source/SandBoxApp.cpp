@@ -31,11 +31,10 @@ class SandBox : public GameWorld::Application
 {
 public:
 
-	SandBox() 
+	SandBox()
 	{
 		GAMEWORLD_WARN("Application is running on sandbox");
 		PushLayer(new TestLayer());
-		PushOverlay(new GameWorld::ImGuiLayer());
 	};
 
 	virtual ~SandBox()

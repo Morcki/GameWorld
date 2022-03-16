@@ -1,12 +1,14 @@
 #pragma once
-#include "Core/Core.h"
-#include "Core/Window.h"
-#include "Events/Event.h"
-#include "Layer/LayerStack.h"
+
+#include "GameWorld/GUI/ImGuiLayer.h"
+#include "GameWorld/Layer/LayerStack.h"
+#include "GameWorld/Core/Window.h"
+#include "GameWorld/Events/Event.h"
+#include "GameWorld/Core/Core.h"
 
 namespace GameWorld
 {
-	class GAMEWORLD_API Application
+	class Application
 	{
 	public:
 		Application();
@@ -24,12 +26,14 @@ namespace GameWorld
 		void OnEvent(Event& e);
 		bool OnWindowsClose(Event& e);
 		bool OnWindowResize(Event& e);
+
 	private:
 		static Application* ApplicationInstance;
 		Scope<Window> GameWorldWindow;
 		bool bGameWorldRunning = true;
 		bool bSetMinSize = true;
 		LayerStack m_LayerStack;
+		ImGuiLayer* m_ImGuiLayer;
 	};
 
 	// To be defined in Client
