@@ -4,10 +4,12 @@
 
 > Learning Stage Now (Refering Others' Code Project)
 
-1. Third-Party Library Instruction:
-	- As for [imgui library](https://github.com/ocornut/imgui.git)
-	> Choose to use the docking branch.
+## Generate VisualStudio2017 Project Solution
+
+Just run `GenerateProjects.bat`
+
+## Third-Party Library Instruction:
+	1. Brief instruction of the Library used in this project
+		- As for [imgui library](https://github.com/ocornut/imgui.git)
+		> Choose to use the docking branch.
 	
-
-
-
