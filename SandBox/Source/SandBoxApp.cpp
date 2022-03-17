@@ -41,8 +41,6 @@ public:
 		float tmp_color[4] = { background_color[0], background_color[1], background_color[2], background_color[3] };
 		ImGui::ColorEdit4("Color", tmp_color);
 
-		GAMEWORLD_TRACE("{0}, {1}, {2}, {3}", tmp_color[0], tmp_color[1], tmp_color[2], tmp_color[3]);
-
 		GameWorld::Application::GetInst().SetBackgroundColor(tmp_color);
 
 		// Plot some values
