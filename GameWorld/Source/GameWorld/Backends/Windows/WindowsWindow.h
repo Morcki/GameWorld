@@ -4,6 +4,8 @@
 
 #include "GameWorld/Core/Window.h"
 
+#include "GameWorld/Render/RenderContext.h"
+
 namespace GameWorld {
 
 	class WindowsWindow : public Window
@@ -28,6 +30,7 @@ namespace GameWorld {
 		virtual void Shutdown();
 	private:
 		GLFWwindow* m_Window;
+		RenderContext* RenderGraphicsContext;
 
 		struct WindowData
 		{

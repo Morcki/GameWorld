@@ -5,8 +5,8 @@
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
 #include "imgui.h"
-#include "GameWorld/Backends/OpenGL/imgui_impl_glfw.h"
-#include "GameWorld/Backends/OpenGL/imgui_impl_opengl3.h"
+#include "GameWorld/Backends/OpenGL/ImGuiAPI/imgui_impl_glfw.h"
+#include "GameWorld/Backends/OpenGL/ImGuiAPI/imgui_impl_opengl3.h"
 
 #include "GameWorld/Application.h"
 
@@ -62,6 +62,7 @@ namespace GameWorld
 
 	void ImGuiLayer::OnImGuiRender()
 	{
+		static bool bShowDemoWindow = true;
 		ImGui::ShowDemoWindow(&bShowDemoWindow);
 	}
 

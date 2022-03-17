@@ -8,6 +8,8 @@
 #include "GameWorld/Events/MouseEvent.h"
 #include "GameWorld/Events/KeyEvent.h"
 
+#include "GameWorld/Backends/OpenGL/RenderAPI/OpenGLContext.h"
+
 namespace GameWorld {
 
 	static uint8_t s_GLFWWindowCount = 0;
@@ -46,9 +48,10 @@ namespace GameWorld {
 			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;
 		}
-		glfwMakeContextCurrent(m_Window);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		GAMEWORLD_CORE_ASSERT(status, "Failed to initialize GLAD!");
+
+		RenderGraphicsContext = new OpenGLContext(m_Window);
+		RenderGraphicsContext->Init();
+
 		glfwSetWindowUserPointer(m_Window, &m_Data); // set the structure of data transporting between engine and glfw-window.
 		SetVSync(true);
 
@@ -144,7 +147,6 @@ namespace GameWorld {
 
 	void WindowsWindow::Shutdown()
 	{
-
 		glfwDestroyWindow(m_Window);
 		--s_GLFWWindowCount;
 
@@ -156,9 +158,8 @@ namespace GameWorld {
 
 	void WindowsWindow::OnUpdate()
 	{
-		glfwGetFramebufferSize(m_Window, &(int)m_Data.Width, &(int)m_Data.Height);
-		glfwSwapBuffers(m_Window); // must do this at the end of render tick, swap the buffer of screen and the buffer of rendering results.
 		glfwPollEvents();
+		RenderGraphicsContext->SwapBuffers(); // must do this at the end of render tick, swap the buffer of screen and the buffer of rendering results.
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
