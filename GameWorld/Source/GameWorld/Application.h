@@ -22,6 +22,10 @@ namespace GameWorld
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
+
+		inline const float* GetBackgroundColor() const { return WindowBackgroundColor; };
+		inline void SetBackgroundColor(float color[4]) { memcpy(WindowBackgroundColor, color, sizeof(float) * 4); };
+
 	private:
 		void OnEvent(Event& e);
 		bool OnWindowsClose(Event& e);

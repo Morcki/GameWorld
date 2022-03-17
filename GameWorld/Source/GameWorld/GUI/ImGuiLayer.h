@@ -25,6 +25,7 @@ namespace GameWorld
 		inline void SetLayerBlockEvent(bool bBlock) { bBlockEvent = bBlock; };
 
 	private:
+		inline static bool bShowDemoWindow = true;
 		float LastTickTime = 0.0f;
 		bool bBlockEvent = false;
 	};

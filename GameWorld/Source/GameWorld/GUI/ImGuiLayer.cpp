@@ -62,8 +62,7 @@ namespace GameWorld
 
 	void ImGuiLayer::OnImGuiRender()
 	{
-		static bool show_demo_window = true;
-		ImGui::ShowDemoWindow(&show_demo_window);
+		ImGui::ShowDemoWindow(&bShowDemoWindow);
 	}
 
 	void ImGuiLayer::OnUpdate(Timestep ts)

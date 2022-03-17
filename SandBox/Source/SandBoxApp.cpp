@@ -1,5 +1,8 @@
 #include <GameWorld.h>
+
 #include "imgui/imgui.h"
+#include "glm/glm.hpp"
+
 class TestLayer : public GameWorld::Layer
 {
 public:
@@ -20,7 +23,6 @@ public:
 	void  OnImGuiRender()
 	{
 		static bool my_tool_active;
-		static float my_color[4] = { 0 };
 		ImGui::Begin("My First Tool", &my_tool_active, ImGuiWindowFlags_MenuBar);
 		if (ImGui::BeginMenuBar())
 		{
@@ -33,9 +35,15 @@ public:
 			}
 			ImGui::EndMenuBar();
 		}
-
+		
 		// Edit a color (stored as ~4 floats)
-		ImGui::ColorEdit4("Color", my_color);
+		const float* background_color = GameWorld::Application::GetInst().GetBackgroundColor();
+		float tmp_color[4] = { background_color[0], background_color[1], background_color[2], background_color[3] };
+		ImGui::ColorEdit4("Color", tmp_color);
+
+		GAMEWORLD_TRACE("{0}, {1}, {2}, {3}", tmp_color[0], tmp_color[1], tmp_color[2], tmp_color[3]);
+
+		GameWorld::Application::GetInst().SetBackgroundColor(tmp_color);
 
 		// Plot some values
 		const float my_values[] = { 0.2f, 0.1f, 1.0f, 0.5f, 0.9f, 2.2f };

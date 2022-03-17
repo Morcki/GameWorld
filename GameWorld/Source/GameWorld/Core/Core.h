@@ -3,10 +3,14 @@
 #include <memory>
 
 #ifdef GAMEWORLD_PLATFORM_WINDOWS
-	#ifdef GAMEWORLD_BUILD_DLL
-		#define GAMEWORLD_API __declspec(dllexport)
+	#ifdef GAMEWORLD_DYNAMIC_LINKING 
+		#ifdef GAMEWORLD_BUILD_DLL
+			#define GAMEWORLD_API __declspec(dllexport)
+		#else
+			#define GAMEWORLD_API __declspec(dllimport)
+		#endif
 	#else
-		#define GAMEWORLD_API __declspec(dllimport)
+		#define GAMEWORLD_API
 	#endif
 #else
 	#error GameWorld only supports Windows Now!

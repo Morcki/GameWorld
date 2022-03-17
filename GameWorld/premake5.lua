@@ -50,7 +50,6 @@ project "GameWorld"
 		defines
 		{
 			"GAMEWORLD_PLATFORM_WINDOWS",
-			"GAMEWORLD_BUILD_DLL",
 			"GAMEWORLD_ENABLE_ASSERT",
 			"GLFW_INCLUDE_NONE",
 		}
