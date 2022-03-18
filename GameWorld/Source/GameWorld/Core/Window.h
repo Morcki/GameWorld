@@ -10,12 +10,12 @@ namespace GameWorld {
 	struct WindowProps
 	{
 		std::string Title;
-		uint32_t Width;
-		uint32_t Height;
+		GW_UINT32 Width;
+		GW_UINT32 Height;
 
 		WindowProps(const std::string& title = "GameWorld Engine",
-			uint32_t width = 1280,
-			uint32_t height = 720)
+			GW_UINT32 width = 1280,
+			GW_UINT32 height = 720)
 			: Title(title), Width(width), Height(height)
 		{
 		}
@@ -31,13 +31,13 @@ namespace GameWorld {
 
 		virtual void OnUpdate() = 0;
 
-		virtual uint32_t GetWidth() const = 0;
-		virtual uint32_t GetHeight() const = 0;
+		virtual GW_UINT32 GetWidth() const = 0;
+		virtual GW_UINT32 GetHeight() const = 0;
 
 		// Window attributes
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetVSync(bool enabled) = 0;
-		virtual bool IsVSync() const = 0;
+		virtual GW_BOOL IsVSync() const = 0;
 
 		virtual void* GetNativeWindow() const = 0;
 

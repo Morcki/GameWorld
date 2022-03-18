@@ -5,7 +5,7 @@ namespace GameWorld
 	class Timestep
 	{
 	public:
-		Timestep(float time = 0.0f)
+		Timestep(GW_FLOAT32 time = 0.0f)
 			: m_Time(time)
 		{
 		}
@@ -15,7 +15,7 @@ namespace GameWorld
 		float GetSeconds() const { return m_Time; }
 		float GetMilliseconds() const { return m_Time * 1000.0f; }
 	private:
-		float m_Time;
+		GW_FLOAT32 m_Time;
 	};
 
 }

@@ -22,12 +22,12 @@ namespace GameWorld
 		void RenderTickEnd();
 		void SetDarkThemeColors();
 
-		inline void SetLayerBlockEvent(bool bBlock) { bBlockEvent = bBlock; };
+		inline void SetLayerBlockEvent(GW_BOOL bBlock) { bBlockEvent = bBlock; };
 
 	private:
 		
-		float LastTickTime = 0.0f;
-		bool bBlockEvent = false;
+		GW_FLOAT32 LastTickTime = 0.0f;
+		GW_BOOL bBlockEvent = false;
 	};
 }
 

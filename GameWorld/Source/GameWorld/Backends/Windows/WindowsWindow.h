@@ -16,13 +16,13 @@ namespace GameWorld {
 
 		void OnUpdate() override;
 
-		unsigned int GetWidth() const override { return m_Data.Width; }
-		unsigned int GetHeight() const override { return m_Data.Height; }
+		GW_UINT32 GetWidth() const override { return m_Data.Width; }
+		GW_UINT32 GetHeight() const override { return m_Data.Height; }
 
 		// Window attributes
 		void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled) override;
-		bool IsVSync() const override;
+		GW_BOOL IsVSync() const override;
 
 		virtual void* GetNativeWindow() const { return m_Window; }
 	private:
@@ -35,8 +35,8 @@ namespace GameWorld {
 		struct WindowData
 		{
 			std::string Title;
-			unsigned int Width, Height;
-			bool bVerticalSync;
+			GW_UINT32 Width, Height;
+			GW_BOOL bVerticalSync;
 
 			EventCallbackFn EventCallback;
 		};

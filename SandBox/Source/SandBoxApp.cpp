@@ -37,14 +37,14 @@ public:
 		}
 		
 		// Edit a color (stored as ~4 floats)
-		const float* background_color = GameWorld::Application::GetInst().GetBackgroundColor();
-		float tmp_color[4] = { background_color[0], background_color[1], background_color[2], background_color[3] };
+		const GW_FLOAT32* background_color = GameWorld::Application::GetInst().GetBackgroundColor();
+		GW_FLOAT32 tmp_color[4] = { background_color[0], background_color[1], background_color[2], background_color[3] };
 		ImGui::ColorEdit4("Color", tmp_color);
 
 		GameWorld::Application::GetInst().SetBackgroundColor(tmp_color);
 
 		// Plot some values
-		const float my_values[] = { 0.2f, 0.1f, 1.0f, 0.5f, 0.9f, 2.2f };
+		const GW_FLOAT32 my_values[] = { 0.2f, 0.1f, 1.0f, 0.5f, 0.9f, 2.2f };
 		ImGui::PlotLines("Frame Times", my_values, IM_ARRAYSIZE(my_values));
 
 		// Display contents in a scrolling region

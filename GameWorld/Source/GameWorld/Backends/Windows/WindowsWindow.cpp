@@ -12,7 +12,7 @@
 
 namespace GameWorld {
 
-	static uint8_t s_GLFWWindowCount = 0;
+	static GW_UINT8 s_GLFWWindowCount = 0;
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{

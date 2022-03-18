@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "Const.h"
+
 #ifdef GAMEWORLD_PLATFORM_WINDOWS
 	#ifdef GAMEWORLD_DYNAMIC_LINKING 
 		#ifdef GAMEWORLD_BUILD_DLL
