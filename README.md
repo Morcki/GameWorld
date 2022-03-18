@@ -17,4 +17,4 @@ Just run `GenerateProjects.bat`
 
 ## Always Remember My First Triangle
 
-	![GameWorld First Triangle](https://github.com/Morcki/GameWorld/ResultCapture/GameWorldFirstTriangle.jpg)
+	![avatar](https://github.com/Morcki/GameWorld/raw/main/ResultCapture/GameWorldFirstTriangle.jpg "First Triangle Created by GameWorld.")
