@@ -1,10 +1,11 @@
 #pragma once
 
-#include "GameWorld/GUI/ImGuiLayer.h"
-#include "GameWorld/Layer/LayerStack.h"
+#include "GameWorld/Core/Core.h"
 #include "GameWorld/Core/Window.h"
 #include "GameWorld/Events/Event.h"
-#include "GameWorld/Core/Core.h"
+#include "GameWorld/Layer/LayerStack.h"
+#include "GameWorld/GUI/ImGuiLayer.h"
+#include "GameWorld/Render/ShaderBase.h"
 
 namespace GameWorld
 {
@@ -23,8 +24,8 @@ namespace GameWorld
 		void PushOverlay(Layer* layer);
 
 
-		inline const float* GetBackgroundColor() const { return WindowBackgroundColor; };
-		inline void SetBackgroundColor(float color[4]) { memcpy(WindowBackgroundColor, color, sizeof(float) * 4); };
+		inline const GW_FLOAT32* GetBackgroundColor() const { return WindowBackgroundColor; };
+		inline void SetBackgroundColor(GW_FLOAT32 color[4]) { memcpy(WindowBackgroundColor, color, sizeof(GW_FLOAT32) * 4); };
 
 	private:
 		void OnEvent(Event& e);
@@ -36,6 +37,7 @@ namespace GameWorld
 		Scope<Window> GameWorldWindow;
 		LayerStack GameWorldLayerStack;
 		ImGuiLayer* ImGuiBaseRenderLayer;
+		Scope<ShaderBase> ShaderProgram;
 
 		float WindowBackgroundColor[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
 

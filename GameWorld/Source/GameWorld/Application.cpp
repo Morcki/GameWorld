@@ -8,6 +8,7 @@
 #include "Events/ApplicationEvent.h"
 #include "Input/InputSystem.h"
 #include "GameWorld/GUI/ImGuiLayer.h"
+#include "GameWorld/Render/ShaderBase.h"
 
 namespace GameWorld
 {
@@ -48,6 +49,11 @@ namespace GameWorld
 
 		unsigned int indices[3] = { 0, 1, 2 };
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+
+		ShaderProgram = CreateScope<ShaderBase>();
+		ShaderProgram->LinkShaderFile("F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.vs", "F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.fs");
+		ShaderProgram->UseShader();
 	}
 
 	Application::~Application()
