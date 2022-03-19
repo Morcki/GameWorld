@@ -15,6 +15,6 @@ Just run `GenerateProjects.bat`
 - As for [imgui library](https://github.com/ocornut/imgui.git)
 	> Choose to use the docking branch.
 
-## Always Remember My First Triangle
+## GameWorld's First Triangle
 
 ![First Triangle](https://github.com/Morcki/GameWorld/raw/main/ResultCapture/GameWorldFirstTriangle.jpg "First Triangle Created by GameWorld.")
