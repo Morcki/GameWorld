@@ -6,6 +6,8 @@
 #include "GameWorld/Layer/LayerStack.h"
 #include "GameWorld/GUI/ImGuiLayer.h"
 #include "GameWorld/Render/ShaderBase.h"
+#include "GameWorld/Render/RenderBuffer.h"
+#include "GameWorld/Render/RenderArray.h"
 
 namespace GameWorld
 {
@@ -33,18 +35,20 @@ namespace GameWorld
 		bool OnWindowResize(Event& e);
 
 	private:
-		static Application* Instance;
-		Scope<Window> GameWorldWindow;
-		LayerStack GameWorldLayerStack;
-		ImGuiLayer* ImGuiBaseRenderLayer;
-		Scope<ShaderBase> ShaderProgram;
+		static Application*  Instance;
+		Scope<Window>        GameWorldWindow;
+		LayerStack           GameWorldLayerStack;
+		ImGuiLayer*          ImGuiBaseRenderLayer;
+							 
+		Ref<ShaderBase>      ShaderProgram;
+		Ref<RenderArray>     ShaderVertexArray;
+		Ref<ShaderBase>      squad_ShaderProgram;
+		Ref<RenderArray>     squad_ShaderVertexArray;
 
 		float WindowBackgroundColor[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
 
 		bool bGameWorldRunning = true;
 		bool bSetMinSize = true;
-
-		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
 	};
 
 	// To be defined in Client

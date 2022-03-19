@@ -9,6 +9,11 @@
 #include "Input/InputSystem.h"
 #include "GameWorld/GUI/ImGuiLayer.h"
 #include "GameWorld/Render/ShaderBase.h"
+#include "GameWorld/Render/RenderBuffer.h"
+#include "GameWorld/Backends/OpenGL/RenderAPI/OpenGLRenderBuffer.h"
+
+#include "GameWorld/Render/ShaderTool.h"
+#include "GameWorld/Render/RenderCommand.h"
 
 namespace GameWorld
 {
@@ -25,35 +30,66 @@ namespace GameWorld
 		ImGuiBaseRenderLayer = new ImGuiLayer();
 		PushOverlay(ImGuiBaseRenderLayer);
 
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		ShaderVertexArray.reset(RenderArray::CreateRenderArray());
+		squad_ShaderVertexArray.reset(RenderArray::CreateRenderArray());
 
-		glGenBuffers(1, &m_VertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-
-		float vertices[3 * 3] =
 		{
-			-0.25f,  0.5f, 0.0f,
-			-0.25f, -0.5f, 0.0f,
-			 0.28f,  0.0f, 0.0f,
-		};
+			GW_FLOAT32 vertices[3 * 7] =
+			{
+				-0.25f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+				-0.25f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+				 0.28f,  0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+			};
 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+			auto vertexBuffer = CreateAbstractRef<VertexBuffer>(VertexBuffer::CreateVertexBuffer(vertices, sizeof(vertices)));
+			vertexBuffer->SetLayout
+			({
+				{ShaderDataType::Float3, "a_Position"},
+				{ShaderDataType::Float4, "a_Color"},
+				});
+			ShaderVertexArray->AddVertexBuffer(vertexBuffer);
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+			GW_UINT32 indices[3] = { 0, 1, 2 };
+			auto indexBuffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(indices, sizeof(indices) / sizeof(GW_UINT32)));
+			ShaderVertexArray->SetIndexBuffer(indexBuffer);
 
-		glGenBuffers(1, &m_IndexBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
+			ShaderProgram = CreateScope<ShaderBase>();
+			ShaderProgram->LinkShaderFile
+			(
+				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.vs",
+				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.fs"
+			);
+			ShaderProgram->UseShader();
+		}
+	
+		{
+			GW_FLOAT32 squad_vertices[4 * 3] =
+			{
+				-0.35f, -0.5f, 0.0f,
+				-0.35f,  0.5f, 0.0f,
+				 0.30f, -0.5f, 0.0f,
+				 0.30f,  0.5f, 0.0f,
+			};
+			auto squad_VertexBuffer = CreateAbstractRef<VertexBuffer>(VertexBuffer::CreateVertexBuffer(squad_vertices, sizeof(squad_vertices)));
+			squad_VertexBuffer->SetLayout
+			({
+				{ShaderDataType::Float3, "aPos"},
+			});
+			squad_ShaderVertexArray->AddVertexBuffer(squad_VertexBuffer);
+			GW_UINT32 squad_indices[] = { 0, 1, 2, 1, 2, 3 };
+			auto squad_IndexBuffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(squad_indices, sizeof(squad_indices) / sizeof(GW_UINT32)));
+			squad_ShaderVertexArray->SetIndexBuffer(squad_IndexBuffer);
 
+			squad_ShaderProgram = CreateScope<ShaderBase>();
+			squad_ShaderProgram->LinkShaderFile
+			(
+				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/squad.vs",
+				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/squad.fs"
+			);
+			squad_ShaderProgram->UseShader();
+		}
 
-		unsigned int indices[3] = { 0, 1, 2 };
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-
-		ShaderProgram = CreateScope<ShaderBase>();
-		ShaderProgram->LinkShaderFile("F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.vs", "F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.fs");
-		ShaderProgram->UseShader();
+		
 	}
 
 	Application::~Application()
@@ -66,11 +102,16 @@ namespace GameWorld
 		while (bGameWorldRunning)
 		{
 			// Fresh window color buffer
-			glClearColor(WindowBackgroundColor[0], WindowBackgroundColor[1], WindowBackgroundColor[2], WindowBackgroundColor[3]);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::ClearColor({ WindowBackgroundColor[0], WindowBackgroundColor[1], WindowBackgroundColor[2], WindowBackgroundColor[3] });
+			RenderCommand::ClearBuffer();
 
-			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			squad_ShaderProgram->UseShader();
+			squad_ShaderVertexArray->Bind();
+			RenderCommand::DrawElements(squad_ShaderVertexArray);
+
+			ShaderProgram->UseShader();
+			ShaderVertexArray->Bind();
+			RenderCommand::DrawElements(ShaderVertexArray);
 
 			for (Layer* layer : GameWorldLayerStack)
 			{
@@ -131,4 +172,3 @@ namespace GameWorld
 		return false;
 	}
 }
-
