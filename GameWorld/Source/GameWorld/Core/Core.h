@@ -47,5 +47,14 @@ namespace GameWorld
 	{
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
-
+	
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+	template<typename T, typename ... Args>
+	constexpr Ref<T> CreateAbstractRef(Args&& ... args)
+	{// Create reference for abstract class
+		Ref<T> ref;
+		ref.reset(std::forward<Args>(args)...);
+		return ref;
+	}
 }
