@@ -42,7 +42,7 @@ namespace GameWorld {
 		virtual ~Event() = default;
 
 		/** Whether the signaled state of the event needs to be reset manually. */
-		bool Handled = false;
+		bool b_handled_ = false;
 
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
@@ -59,7 +59,7 @@ namespace GameWorld {
 	{
 	public:
 		EventDispatcher(Event& event)
-			: m_Event(event)
+			: event_(event)
 		{
 		}
 
@@ -67,15 +67,15 @@ namespace GameWorld {
 		template<typename T, typename F>
 		bool Dispatch(const F& func)
 		{
-			if (m_Event.GetEventType() == T::GetStaticType())
+			if (event_.GetEventType() == T::GetStaticType())
 			{
-				m_Event.Handled |= func(static_cast<T&>(m_Event));
+				event_.b_handled_ |= func(static_cast<T&>(event_));
 				return true;
 			}
 			return false;
 		}
 	private:
-		Event& m_Event;
+		Event& event_;
 	};
 
 	inline std::ostream& operator<<(std::ostream& os, const Event& e)

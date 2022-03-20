@@ -7,34 +7,34 @@ namespace GameWorld {
 	class KeyEvent : public Event
 	{
 	public:
-		KeyCode GetKeyCode() const { return m_KeyCode; }
+		KeyCode GetKeyCode() const { return keycode_; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 	protected:
 		KeyEvent(const KeyCode keycode)
-			: m_KeyCode(keycode) {}
+			: keycode_(keycode) {}
 
-		KeyCode m_KeyCode;
+		KeyCode keycode_;
 	};
 
 	class KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(const KeyCode keycode, const uint16_t repeatCount)
-			: KeyEvent(keycode), m_RepeatCount(repeatCount) {}
+			: KeyEvent(keycode), repeat_count_(repeatCount) {}
 
-		uint16_t GetRepeatCount() const { return m_RepeatCount; }
+		uint16_t GetRepeatCount() const { return repeat_count_; }
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyPressedEvent: " << m_KeyCode << " (" << m_RepeatCount << " repeats)";
+			ss << "KeyPressedEvent: " << keycode_ << " (" << repeat_count_ << " repeats)";
 			return ss.str();
 		}
 
 		EVENT_CLASS_TYPE(KeyPressed)
 	private:
-		uint16_t m_RepeatCount;
+		uint16_t repeat_count_;
 	};
 
 	class KeyReleasedEvent : public KeyEvent
@@ -46,7 +46,7 @@ namespace GameWorld {
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyReleasedEvent: " << m_KeyCode;
+			ss << "KeyReleasedEvent: " << keycode_;
 			return ss.str();
 		}
 
@@ -62,7 +62,7 @@ namespace GameWorld {
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyTypedEvent: " << m_KeyCode;
+			ss << "KeyTypedEvent: " << keycode_;
 			return ss.str();
 		}
 

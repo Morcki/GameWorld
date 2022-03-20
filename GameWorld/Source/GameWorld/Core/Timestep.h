@@ -6,16 +6,16 @@ namespace GameWorld
 	{
 	public:
 		Timestep(GW_FLOAT32 time = 0.0f)
-			: m_Time(time)
+			: time_(time)
 		{
 		}
 
-		operator float() const { return m_Time; }
+		operator float() const { return time_; }
 
-		float GetSeconds() const { return m_Time; }
-		float GetMilliseconds() const { return m_Time * 1000.0f; }
+		float GetSeconds() const { return time_; }
+		float GetMilliseconds() const { return time_ * 1000.0f; }
 	private:
-		GW_FLOAT32 m_Time;
+		GW_FLOAT32 time_;
 	};
 
 }

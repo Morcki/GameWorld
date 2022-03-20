@@ -3,8 +3,8 @@
 
 namespace GameWorld {
 
-	Layer::Layer(const std::string& debugName)
-		: m_DebugName(debugName)
+	Layer::Layer(const std::string& name)
+		: layer_name_(name)
 	{
 	}
 

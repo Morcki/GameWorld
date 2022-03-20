@@ -18,9 +18,9 @@ namespace GameWorld {
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 
-		const std::string& GetName() const { return m_DebugName; }
+		const std::string& GetName() const { return layer_name_; }
 	protected:
-		std::string m_DebugName;
+		std::string layer_name_;
 	};
 
 }

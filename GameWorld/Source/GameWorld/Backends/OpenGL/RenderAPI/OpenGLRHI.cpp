@@ -26,9 +26,9 @@ namespace GameWorld
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void OpenGLRHI::DrawElements(const Ref<RenderArray>& vertexArray, GW_UINT32 indexCount)
+	void OpenGLRHI::DrawElements(const Ref<RenderArray>& vertex_array, GW_UINT32 index_count)
 	{
-		GW_UINT32 count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->Count();
+		GW_UINT32 count = index_count ? index_count : vertex_array->GetIndexBuffer()->Count();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 }

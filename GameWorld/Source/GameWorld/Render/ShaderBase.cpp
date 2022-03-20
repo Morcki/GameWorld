@@ -19,16 +19,16 @@ namespace GameWorld
 
 	void ShaderBase::LinkShaderFile(const GW_CHAR* vertexPath, const GW_CHAR* fragmentPath, const GW_CHAR* geometryPath)
 	{
-		GW_BOOL bCompileOk = LoadShaderFile(vertexPath, ShaderConst::VERTEX) & LoadShaderFile(fragmentPath, ShaderConst::FRAGMENT);
+		GW_BOOL bCompileOk = LoadShaderFile(vertexPath, ShaderConst::kVertex) & LoadShaderFile(fragmentPath, ShaderConst::kFragment);
 		if (geometryPath != nullptr)
 		{
-			bCompileOk &= LoadShaderFile(geometryPath, ShaderConst::GEOMETRY);
+			bCompileOk &= LoadShaderFile(geometryPath, ShaderConst::kGeometry);
 		}
 
 		if (!bCompileOk) return;
 		
 		glLinkProgram(ShaderProgramID);
-		bCompileOk &= CheckShaderCompile(ShaderProgramID, ShaderConst::PROGRAM);
+		bCompileOk &= CheckShaderCompile(ShaderProgramID, ShaderConst::kProgram);
 
 		if (!bCompileOk) return;
 
@@ -81,7 +81,7 @@ namespace GameWorld
 		GW_BOOL bCompileSuccess = false;
 		switch(type)
 		{
-			case ShaderConst::VERTEX:
+			case ShaderConst::kVertex:
 			{
 				ShaderVertexID = glCreateShader(GL_VERTEX_SHADER);
 				glShaderSource(ShaderVertexID, 1, &code, NULL);
@@ -90,7 +90,7 @@ namespace GameWorld
 				glAttachShader(ShaderProgramID, ShaderVertexID);
 				break;
 			}
-			case ShaderConst::FRAGMENT:
+			case ShaderConst::kFragment:
 			{
 				ShaderFragmentID = glCreateShader(GL_FRAGMENT_SHADER);
 				glShaderSource(ShaderFragmentID, 1, &code, NULL);
@@ -99,7 +99,7 @@ namespace GameWorld
 				glAttachShader(ShaderProgramID, ShaderFragmentID);
 				break;
 			}
-			case ShaderConst::GEOMETRY:
+			case ShaderConst::kGeometry:
 			{
 				ShaderGeometryID = glCreateShader(GL_GEOMETRY_SHADER);
 				glShaderSource(ShaderGeometryID, 1, &code, NULL);
@@ -121,7 +121,7 @@ namespace GameWorld
 	{
 		int success;
 		char infoLog[1024];
-		if (type != ShaderConst::PROGRAM)
+		if (type != ShaderConst::kProgram)
 		{
 			glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 			if (!success)

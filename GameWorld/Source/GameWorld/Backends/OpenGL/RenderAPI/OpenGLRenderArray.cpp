@@ -29,17 +29,17 @@ namespace GameWorld
 
 	OpenGLRenderArray::OpenGLRenderArray()
 	{
-		glGenVertexArrays(1, &RenderArrayID);
+		glGenVertexArrays(1, &render_array_id_);
 	}
 
 	OpenGLRenderArray::~OpenGLRenderArray()
 	{
-		glDeleteVertexArrays(1, &RenderArrayID);
+		glDeleteVertexArrays(1, &render_array_id_);
 	}
 
 	void OpenGLRenderArray::Bind() const
 	{
-		glBindVertexArray(RenderArrayID);
+		glBindVertexArray(render_array_id_);
 	}
 
 	void OpenGLRenderArray::UnBind() const
@@ -47,13 +47,13 @@ namespace GameWorld
 		glBindVertexArray(0);
 	}
 
-	void OpenGLRenderArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
+	void OpenGLRenderArray::AddVertexBuffer(const Ref<VertexBuffer>& vertex_buffer)
 	{
-		RenderBufferLayout& layout = vertexBuffer->GetLayout();
+		RenderBufferLayout& layout = vertex_buffer->GetLayout();
 		GAMEWORLD_CORE_ASSERT(layout.GetElements().size(), "Vertex Buffer Layout is Empty!");
 
-		glBindVertexArray(RenderArrayID);
-		vertexBuffer->Bind();
+		glBindVertexArray(render_array_id_);
+		vertex_buffer->Bind();
 
 		
 
@@ -62,23 +62,23 @@ namespace GameWorld
 		{
 			glEnableVertexAttribArray(index);
 			glVertexAttribPointer(index,
-				element.Count,
-				ShaderDataTypeToOpenGLBaseType(element.Type),
-				element.Normalized ? GL_TRUE : GL_FALSE,
+				element.count,
+				ShaderDataTypeToOpenGLBaseType(element.type),
+				element.normalized ? GL_TRUE : GL_FALSE,
 				layout.GetStride(),
-				(void*)element.Offset);
+				(void*)element.offset);
 			++index;
 		}
 
-		VertexBufferVector.push_back(vertexBuffer);
+		vertex_buffer_vec_.push_back(vertex_buffer);
 	}
 
-	void OpenGLRenderArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
+	void OpenGLRenderArray::SetIndexBuffer(const Ref<IndexBuffer>& index_buffer)
 	{
-		glBindVertexArray(RenderArrayID);
-		indexBuffer->Bind();
+		glBindVertexArray(render_array_id_);
+		index_buffer->Bind();
 
-		IndexBufferSingle = indexBuffer;
+		index_buffer_ = index_buffer;
 	}
 
 }

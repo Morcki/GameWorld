@@ -9,11 +9,11 @@ namespace GameWorld
 	{
 		enum ShaderType
 		{
-			VERTEX,
-			FRAGMENT,
-			GEOMETRY,
+			kVertex,
+			kFragment,
+			kGeometry,
 
-			PROGRAM
+			kProgram
 		};
 
 	}
@@ -25,27 +25,27 @@ namespace GameWorld
 	{
 		static const std::string ShaderTypeToString(ShaderType type)
 		{
-			std::string shaderTypeString;
+			std::string shader_type_string;
 			switch(type)
 			{
-			case ShaderConst::VERTEX:
-				shaderTypeString = "Vertex";
+			case ShaderConst::kVertex:
+				shader_type_string = "Vertex";
 				break;
-			case ShaderConst::FRAGMENT:
-				shaderTypeString = "Fragment";
+			case ShaderConst::kFragment:
+				shader_type_string = "Fragment";
 				break;
-			case ShaderConst::GEOMETRY:
-				shaderTypeString = "Geometry";
+			case ShaderConst::kGeometry:
+				shader_type_string = "Geometry";
 				break;
-			case ShaderConst::PROGRAM:
-				shaderTypeString = "Program";
+			case ShaderConst::kProgram:
+				shader_type_string = "Program";
 				break;
 			default:
 				GAMEWORLD_CORE_ERROR("shader::wrong shader type!");
-				shaderTypeString = "";
+				shader_type_string = "";
 				break;
 			}
-			return shaderTypeString;
+			return shader_type_string;
 		}
 
 		/*

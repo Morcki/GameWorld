@@ -6,7 +6,7 @@ namespace GameWorld {
 
 	LayerStack::~LayerStack()
 	{
-		for (Layer* layer : m_Layers)
+		for (Layer* layer : layer_vec_)
 		{
 			layer->OnDetach();
 			delete layer;
@@ -15,35 +15,35 @@ namespace GameWorld {
 
 	void LayerStack::PushLayer(Layer* layer)
 	{
-		m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer);
-		m_LayerInsertIndex++;
+		layer_vec_.emplace(layer_vec_.begin() + layer_insert_index_, layer);
+		layer_insert_index_++;
 		layer->OnAttach();
 	}
 
 	void LayerStack::PushOverlay(Layer* overlay)
 	{
-		m_Layers.emplace_back(overlay);
+		layer_vec_.emplace_back(overlay);
 		overlay->OnAttach();
 	}
 
 	void LayerStack::PopLayer(Layer* layer)
 	{
-		auto it = std::find(m_Layers.begin(), m_Layers.begin() + m_LayerInsertIndex, layer);
-		if (it != m_Layers.begin() + m_LayerInsertIndex)
+		auto it = std::find(layer_vec_.begin(), layer_vec_.begin() + layer_insert_index_, layer);
+		if (it != layer_vec_.begin() + layer_insert_index_)
 		{
 			layer->OnDetach();
-			m_Layers.erase(it);
-			m_LayerInsertIndex--;
+			layer_vec_.erase(it);
+			layer_insert_index_--;
 		}
 	}
 
 	void LayerStack::PopOverlay(Layer* overlay)
 	{
-		auto it = std::find(m_Layers.begin() + m_LayerInsertIndex, m_Layers.end(), overlay);
-		if (it != m_Layers.end())
+		auto it = std::find(layer_vec_.begin() + layer_insert_index_, layer_vec_.end(), overlay);
+		if (it != layer_vec_.end())
 		{
 			overlay->OnDetach();
-			m_Layers.erase(it);
+			layer_vec_.erase(it);
 		}
 	}
 

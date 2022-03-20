@@ -16,32 +16,32 @@ namespace GameWorld {
 
 		void OnUpdate() override;
 
-		GW_UINT32 GetWidth() const override { return m_Data.Width; }
-		GW_UINT32 GetHeight() const override { return m_Data.Height; }
+		GW_UINT32 GetWidth() const override { return window_info_.width; }
+		GW_UINT32 GetHeight() const override { return window_info_.height; }
 
 		// Window attributes
-		void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
+		void SetEventCallback(const CallbackFunction& callback) override { window_info_.callback_function = callback; }
 		void SetVSync(bool enabled) override;
 		GW_BOOL IsVSync() const override;
 
-		virtual void* GetNativeWindow() const { return m_Window; }
+		virtual void* GetNativeWindow() const { return window_; }
 	private:
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
 	private:
-		GLFWwindow* m_Window;
-		RenderContext* RenderGraphicsContext;
+		GLFWwindow* window_;
+		RenderContext* render_graphics_context_;
 
-		struct WindowData
+		struct WindowInfo
 		{
-			std::string Title;
-			GW_UINT32 Width, Height;
-			GW_BOOL bVerticalSync;
+			std::string title;
+			GW_UINT32 width, height;
+			GW_BOOL b_vertical_sync;
 
-			EventCallbackFn EventCallback;
+			CallbackFunction callback_function;
 		};
 
-		WindowData m_Data;
+		WindowInfo window_info_;
 	};
 
 }

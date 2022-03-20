@@ -17,8 +17,8 @@ namespace GameWorld
 		Application();
 		virtual ~Application();
 
-		inline static Application& GetInst() { return *Instance; }
-		inline Window& GetWindow() const { return *GameWorldWindow; }
+		inline static Application& GetInst() { return *s_instance_; }
+		inline Window& GetWindow() const { return *ptr_window_; }
 
 		void Run();
 
@@ -26,8 +26,8 @@ namespace GameWorld
 		void PushOverlay(Layer* layer);
 
 
-		inline const GW_FLOAT32* GetBackgroundColor() const { return WindowBackgroundColor; };
-		inline void SetBackgroundColor(GW_FLOAT32 color[4]) { memcpy(WindowBackgroundColor, color, sizeof(GW_FLOAT32) * 4); };
+		inline const GW_FLOAT32* GetBackgroundColor() const { return window_background_color_; };
+		inline void SetBackgroundColor(GW_FLOAT32 color[4]) { memcpy(window_background_color_, color, sizeof(GW_FLOAT32) * 4); };
 
 	private:
 		void OnEvent(Event& e);
@@ -35,20 +35,20 @@ namespace GameWorld
 		bool OnWindowResize(Event& e);
 
 	private:
-		static Application*  Instance;
-		Scope<Window>        GameWorldWindow;
-		LayerStack           GameWorldLayerStack;
-		ImGuiLayer*          ImGuiBaseRenderLayer;
+		static Application*  s_instance_;
+		Scope<Window>        ptr_window_;
+		LayerStack           layerstack_;
+		ImGuiLayer*          imgui_base_render_layer_;
 							 
-		Ref<ShaderBase>      ShaderProgram;
-		Ref<RenderArray>     ShaderVertexArray;
-		Ref<ShaderBase>      squad_ShaderProgram;
-		Ref<RenderArray>     squad_ShaderVertexArray;
+		Ref<ShaderBase>      shader_program_;
+		Ref<RenderArray>     shader_vertex_array_;
+		Ref<ShaderBase>      squad_shader_program_;
+		Ref<RenderArray>     squad_shader_vertex_array_;
 
-		float WindowBackgroundColor[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
+		float window_background_color_[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
 
-		bool bGameWorldRunning = true;
-		bool bSetMinSize = true;
+		bool b_gameworld_running = true;
+		bool b_set_minSize = true;
 	};
 
 	// To be defined in Client

@@ -11,12 +11,12 @@ namespace GameWorld
 	public:
 		static void Init();
 
-		inline static Ref<spdlog::logger>& GetCoreLogger() { return sptrCoreLogger; };
-		inline static Ref<spdlog::logger>& GetClientLogger() { return sptrClientLogger; };
+		inline static Ref<spdlog::logger>& GetCoreLogger() { return s_ptr_core_logger_; };
+		inline static Ref<spdlog::logger>& GetClientLogger() { return s_ptr_client_logger_; };
 	
 	private:
-		static Ref<spdlog::logger> sptrCoreLogger;
-		static Ref<spdlog::logger> sptrClientLogger;
+		static Ref<spdlog::logger> s_ptr_core_logger_;
+		static Ref<spdlog::logger> s_ptr_client_logger_;
 
 	};
 }

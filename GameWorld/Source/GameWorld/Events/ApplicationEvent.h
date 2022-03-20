@@ -8,22 +8,22 @@ namespace GameWorld {
 	{
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height)
-			: m_Width(width), m_Height(height) {}
+			: width_(width), height_(height) {}
 
-		unsigned int GetWidth() const { return m_Width; }
-		unsigned int GetHeight() const { return m_Height; }
+		unsigned int GetWidth() const { return width_; }
+		unsigned int GetHeight() const { return height_; }
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "WindowResizeEvent: " << m_Width << ", " << m_Height;
+			ss << "WindowResizeEvent: " << width_ << ", " << height_;
 			return ss.str();
 		}
 
 		EVENT_CLASS_TYPE(WindowResize)
 			EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	private:
-		unsigned int m_Width, m_Height;
+		unsigned int width_, height_;
 	};
 
 	class WindowCloseEvent : public Event

@@ -12,7 +12,7 @@
 
 namespace GameWorld {
 
-	static GW_UINT8 s_GLFWWindowCount = 0;
+	static GW_UINT8 s_GLFW_window_count = 0;
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
@@ -31,13 +31,13 @@ namespace GameWorld {
 
 	void WindowsWindow::Init(const WindowProps& props)
 	{
-		m_Data.Title = props.Title;
-		m_Data.Width = props.Width;
-		m_Data.Height = props.Height;
+		window_info_.title = props.title;
+		window_info_.width = props.width;
+		window_info_.height = props.height;
 
-		GAMEWORLD_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
+		GAMEWORLD_CORE_INFO("Creating window {0} ({1}, {2})", props.title, props.width, props.height);
 
-		if (s_GLFWWindowCount == 0)
+		if (s_GLFW_window_count == 0)
 		{
 			int success = glfwInit();
 			GAMEWORLD_CORE_ASSERT(success, "Failed to initialize GLFW!");
@@ -45,112 +45,112 @@ namespace GameWorld {
 		}
 
 		{
-			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
-			++s_GLFWWindowCount;
+			window_ = glfwCreateWindow((int)props.width, (int)props.height, window_info_.title.c_str(), nullptr, nullptr);
+			++s_GLFW_window_count;
 		}
 
-		RenderGraphicsContext = new OpenGLContext(m_Window);
-		RenderGraphicsContext->Init();
+		render_graphics_context_ = new OpenGLContext(window_);
+		render_graphics_context_->Init();
 
-		glfwSetWindowUserPointer(m_Window, &m_Data); // set the structure of data transporting between engine and glfw-window.
+		glfwSetWindowUserPointer(window_, &window_info_); // set the structure of data transporting between engine and glfw-window.
 		SetVSync(true);
 
-		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+		glfwSetWindowSizeCallback(window_, [](GLFWwindow* window, int width, int height)
 			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-				data.Width = width;
-				data.Height = height;
+				WindowInfo& data = *(WindowInfo*)glfwGetWindowUserPointer(window);
+				data.width = width;
+				data.height = height;
 
 				WindowResizeEvent event(width, height);
-				data.EventCallback(event);
+				data.callback_function(event);
 			});
 
-		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
+		glfwSetWindowCloseCallback(window_, [](GLFWwindow* window)
 			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				WindowInfo& data = *(WindowInfo*)glfwGetWindowUserPointer(window);
 				WindowCloseEvent event;
-				data.EventCallback(event);
+				data.callback_function(event);
 			});
 		
-		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+		glfwSetKeyCallback(window_, [](GLFWwindow* window, int key, int scancode, int action, int mods)
 			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				WindowInfo& data = *(WindowInfo*)glfwGetWindowUserPointer(window);
 
 				switch (action)
 				{
 				case GLFW_PRESS:
 				{
 					KeyPressedEvent event(key, 0);
-					data.EventCallback(event);
+					data.callback_function(event);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
 					KeyReleasedEvent event(key);
-					data.EventCallback(event);
+					data.callback_function(event);
 					break;
 				}
 				case GLFW_REPEAT:
 				{
 					KeyPressedEvent event(key, 1);
-					data.EventCallback(event);
+					data.callback_function(event);
 					break;
 				}
 				}
 			});
 
-		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+		glfwSetCharCallback(window_, [](GLFWwindow* window, unsigned int keycode)
 			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				WindowInfo& data = *(WindowInfo*)glfwGetWindowUserPointer(window);
 
 				KeyTypedEvent event(keycode);
-				data.EventCallback(event);
+				data.callback_function(event);
 			});
 
-		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
+		glfwSetMouseButtonCallback(window_, [](GLFWwindow* window, int button, int action, int mods)
 			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				WindowInfo& data = *(WindowInfo*)glfwGetWindowUserPointer(window);
 
 				switch (action)
 				{
 				case GLFW_PRESS:
 				{
 					MouseButtonPressedEvent event(button);
-					data.EventCallback(event);
+					data.callback_function(event);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
 					MouseButtonReleasedEvent event(button);
-					data.EventCallback(event);
+					data.callback_function(event);
 					break;
 				}
 				}
 			});
 
-		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
+		glfwSetScrollCallback(window_, [](GLFWwindow* window, double xOffset, double yOffset)
 			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				WindowInfo& data = *(WindowInfo*)glfwGetWindowUserPointer(window);
 
 				MouseScrolledEvent event((float)xOffset, (float)yOffset);
-				data.EventCallback(event);
+				data.callback_function(event);
 			});
 
-		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos)
+		glfwSetCursorPosCallback(window_, [](GLFWwindow* window, double xPos, double yPos)
 			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				WindowInfo& data = *(WindowInfo*)glfwGetWindowUserPointer(window);
 
 				MouseMovedEvent event((float)xPos, (float)yPos);
-				data.EventCallback(event);
+				data.callback_function(event);
 			});
 	}
 
 	void WindowsWindow::Shutdown()
 	{
-		glfwDestroyWindow(m_Window);
-		--s_GLFWWindowCount;
+		glfwDestroyWindow(window_);
+		--s_GLFW_window_count;
 
-		if (s_GLFWWindowCount == 0)
+		if (s_GLFW_window_count == 0)
 		{
 			glfwTerminate();
 		}
@@ -159,7 +159,7 @@ namespace GameWorld {
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		RenderGraphicsContext->SwapBuffers(); // must do this at the end of render tick, swap the buffer of screen and the buffer of rendering results.
+		render_graphics_context_->SwapBuffers(); // must do this at the end of render tick, swap the buffer of screen and the buffer of rendering results.
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
@@ -170,12 +170,12 @@ namespace GameWorld {
 		else
 			glfwSwapInterval(0);
 
-		m_Data.bVerticalSync = enabled;
+		window_info_.b_vertical_sync = enabled;
 	}
 
 	bool WindowsWindow::IsVSync() const
 	{
-		return m_Data.bVerticalSync;
+		return window_info_.b_vertical_sync;
 	}
 
 }

@@ -6,18 +6,18 @@
 
 namespace GameWorld
 {
-	std::shared_ptr<spdlog::logger> Log::sptrCoreLogger;
-	std::shared_ptr<spdlog::logger> Log::sptrClientLogger;
+	std::shared_ptr<spdlog::logger> Log::s_ptr_core_logger_;
+	std::shared_ptr<spdlog::logger> Log::s_ptr_client_logger_;
 
 	void Log::Init()
 	{
 		spdlog::set_pattern("%^[%T] %n: %v%$");
 		
-		sptrCoreLogger = spdlog::stdout_color_mt("GameWorld");
-		sptrCoreLogger->set_level(spdlog::level::trace);
+		s_ptr_core_logger_ = spdlog::stdout_color_mt("GameWorld");
+		s_ptr_core_logger_->set_level(spdlog::level::trace);
 
-		sptrClientLogger = spdlog::stdout_color_mt("Application");
-		sptrClientLogger->set_level(spdlog::level::trace);
+		s_ptr_client_logger_ = spdlog::stdout_color_mt("Application");
+		s_ptr_client_logger_->set_level(spdlog::level::trace);
 	}
 
 }

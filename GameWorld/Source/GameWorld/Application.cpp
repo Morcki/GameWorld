@@ -17,21 +17,21 @@
 
 namespace GameWorld
 {
-	Application* Application::Instance = nullptr;
+	Application* Application::s_instance_ = nullptr;
 
 	Application::Application()
 	{
-		GAMEWORLD_CORE_ASSERT(!Instance, "Application has already been created!");
-		Instance = this;
+		GAMEWORLD_CORE_ASSERT(!s_instance_, "Application has already been created!");
+		s_instance_ = this;
 
-		GameWorldWindow = Scope<Window>(Window::Create());
-		GameWorldWindow->SetEventCallback(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnEvent));
+		ptr_window_ = Scope<Window>(Window::Create());
+		ptr_window_->SetEventCallback(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnEvent));
 
-		ImGuiBaseRenderLayer = new ImGuiLayer();
-		PushOverlay(ImGuiBaseRenderLayer);
+		imgui_base_render_layer_ = new ImGuiLayer();
+		PushOverlay(imgui_base_render_layer_);
 
-		ShaderVertexArray.reset(RenderArray::CreateRenderArray());
-		squad_ShaderVertexArray.reset(RenderArray::CreateRenderArray());
+		shader_vertex_array_.reset(RenderArray::CreateRenderArray());
+		squad_shader_vertex_array_.reset(RenderArray::CreateRenderArray());
 
 		{
 			GW_FLOAT32 vertices[3 * 7] =
@@ -41,25 +41,25 @@ namespace GameWorld
 				 0.28f,  0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
 			};
 
-			auto vertexBuffer = CreateAbstractRef<VertexBuffer>(VertexBuffer::CreateVertexBuffer(vertices, sizeof(vertices)));
-			vertexBuffer->SetLayout
+			auto vertex_buffer = CreateAbstractRef<VertexBuffer>(VertexBuffer::CreateVertexBuffer(vertices, sizeof(vertices)));
+			vertex_buffer->SetLayout
 			({
 				{ShaderDataType::Float3, "a_Position"},
 				{ShaderDataType::Float4, "a_Color"},
 				});
-			ShaderVertexArray->AddVertexBuffer(vertexBuffer);
+			shader_vertex_array_->AddVertexBuffer(vertex_buffer);
 
 			GW_UINT32 indices[3] = { 0, 1, 2 };
-			auto indexBuffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(indices, sizeof(indices) / sizeof(GW_UINT32)));
-			ShaderVertexArray->SetIndexBuffer(indexBuffer);
+			auto index_buffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(indices, sizeof(indices) / sizeof(GW_UINT32)));
+			shader_vertex_array_->SetIndexBuffer(index_buffer);
 
-			ShaderProgram = CreateScope<ShaderBase>();
-			ShaderProgram->LinkShaderFile
+			shader_program_ = CreateScope<ShaderBase>();
+			shader_program_->LinkShaderFile
 			(
 				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.vs",
 				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.fs"
 			);
-			ShaderProgram->UseShader();
+			shader_program_->UseShader();
 		}
 	
 		{
@@ -70,23 +70,23 @@ namespace GameWorld
 				 0.30f, -0.5f, 0.0f,
 				 0.30f,  0.5f, 0.0f,
 			};
-			auto squad_VertexBuffer = CreateAbstractRef<VertexBuffer>(VertexBuffer::CreateVertexBuffer(squad_vertices, sizeof(squad_vertices)));
-			squad_VertexBuffer->SetLayout
+			auto squad_vertex_buffer = CreateAbstractRef<VertexBuffer>(VertexBuffer::CreateVertexBuffer(squad_vertices, sizeof(squad_vertices)));
+			squad_vertex_buffer->SetLayout
 			({
 				{ShaderDataType::Float3, "aPos"},
 			});
-			squad_ShaderVertexArray->AddVertexBuffer(squad_VertexBuffer);
+			squad_shader_vertex_array_->AddVertexBuffer(squad_vertex_buffer);
 			GW_UINT32 squad_indices[] = { 0, 1, 2, 1, 2, 3 };
-			auto squad_IndexBuffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(squad_indices, sizeof(squad_indices) / sizeof(GW_UINT32)));
-			squad_ShaderVertexArray->SetIndexBuffer(squad_IndexBuffer);
+			auto squad_index_buffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(squad_indices, sizeof(squad_indices) / sizeof(GW_UINT32)));
+			squad_shader_vertex_array_->SetIndexBuffer(squad_index_buffer);
 
-			squad_ShaderProgram = CreateScope<ShaderBase>();
-			squad_ShaderProgram->LinkShaderFile
+			squad_shader_program_ = CreateScope<ShaderBase>();
+			squad_shader_program_->LinkShaderFile
 			(
 				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/squad.vs",
 				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/squad.fs"
 			);
-			squad_ShaderProgram->UseShader();
+			squad_shader_program_->UseShader();
 		}
 
 		
@@ -99,44 +99,50 @@ namespace GameWorld
 
 	void Application::Run()
 	{
-		while (bGameWorldRunning)
+		while (b_gameworld_running)
 		{
 			// Fresh window color buffer
-			RenderCommand::ClearColor({ WindowBackgroundColor[0], WindowBackgroundColor[1], WindowBackgroundColor[2], WindowBackgroundColor[3] });
+			RenderCommand::ClearColor
+			({ 
+				window_background_color_[0], 
+				window_background_color_[1], 
+				window_background_color_[2],
+				window_background_color_[3]
+			});
 			RenderCommand::ClearBuffer();
 
-			squad_ShaderProgram->UseShader();
-			squad_ShaderVertexArray->Bind();
-			RenderCommand::DrawElements(squad_ShaderVertexArray);
+			squad_shader_program_->UseShader();
+			squad_shader_vertex_array_->Bind();
+			RenderCommand::DrawElements(squad_shader_vertex_array_);
 
-			ShaderProgram->UseShader();
-			ShaderVertexArray->Bind();
-			RenderCommand::DrawElements(ShaderVertexArray);
+			shader_program_->UseShader();
+			shader_vertex_array_->Bind();
+			RenderCommand::DrawElements(shader_vertex_array_);
 
-			for (Layer* layer : GameWorldLayerStack)
+			for (Layer* layer : layerstack_)
 			{
 				layer->OnUpdate(0.05);
 			}
 
-			ImGuiBaseRenderLayer->RenderTickBegin();
-			for (Layer* layer : GameWorldLayerStack)
+			imgui_base_render_layer_->RenderTickBegin(); 
+			for (Layer* layer : layerstack_)
 			{
 				layer->OnImGuiRender();
 			}
-			ImGuiBaseRenderLayer->RenderTickEnd();
+			imgui_base_render_layer_->RenderTickEnd();
 
-			GameWorldWindow->OnUpdate();
+			ptr_window_->OnUpdate();
 		}
 	}
 
 	void Application::PushLayer(Layer* layer)
 	{
-		GameWorldLayerStack.PushLayer(layer);
+		layerstack_.PushLayer(layer);
 	}
 
 	void Application::PushOverlay(Layer* layer)
 	{
-		GameWorldLayerStack.PushOverlay(layer);
+		layerstack_.PushOverlay(layer);
 	}
 
 	void Application::OnEvent(Event& e)
@@ -146,7 +152,7 @@ namespace GameWorld
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnWindowsClose));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnWindowResize));
 
-		for (auto it = GameWorldLayerStack.end(); it != GameWorldLayerStack.begin();)
+		for (auto it = layerstack_.end(); it != layerstack_.begin();)
 		{
 			(*(--it))->OnEvent(e);
 		}
@@ -154,8 +160,8 @@ namespace GameWorld
 
 	bool Application::OnWindowsClose(Event& e)
 	{
-		bGameWorldRunning = false;
-		return bGameWorldRunning;
+		b_gameworld_running = false;
+		return b_gameworld_running;
 	}
 
 	bool Application::OnWindowResize(Event& e)
@@ -163,11 +169,11 @@ namespace GameWorld
 		WindowResizeEvent& event = (WindowResizeEvent&)e;
 		if (event.GetWidth() == 0 || event.GetHeight() == 0)
 		{
-			bSetMinSize = true;
+			b_set_minSize = true;
 			return false;
 		}
 
-		bSetMinSize = false;
+		b_set_minSize = false;
 		//Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 		return false;
 	}

@@ -11,8 +11,8 @@ namespace GameWorld
 {
 	enum class RenderAPIType
 	{
-		NONE = 0,
-		OPENGL = 1,
+		kNone   = 0,
+		kOpenGl = 1,
 	};
 
 	class RHI
@@ -23,14 +23,14 @@ namespace GameWorld
 		virtual void SetClearColor(glm::vec4 color) = 0;
 		virtual void ClearBuffer() = 0;
 
-		virtual void DrawElements(const Ref<RenderArray>& vertexArray, GW_UINT32 indexCount = 0) = 0;
+		virtual void DrawElements(const Ref<RenderArray>& vertex_array, GW_UINT32 index_count = 0) = 0;
 
-		static RenderAPIType GetAPIType() { return RenderAPI; }
+		static RenderAPIType GetAPIType() { return render_api_; }
 
 		static Scope<RHI> CreateRHI();
 
 	private:
-		static RenderAPIType RenderAPI;
+		static RenderAPIType render_api_;
 	};
 }
 

@@ -16,7 +16,7 @@ namespace GameWorld
 
 
 	private:
-		GLFWwindow* WindowHandle;
+		GLFWwindow* window_handle_;
 	};
 
 }

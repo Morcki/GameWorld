@@ -9,7 +9,7 @@ namespace GameWorld
 {
 
 	OpenGLContext::OpenGLContext(GLFWwindow* window)
-		: WindowHandle(window)
+		: window_handle_(window)
 	{
 		GAMEWORLD_CORE_ASSERT(window, "Window is nullptr!");
 	}
@@ -20,7 +20,7 @@ namespace GameWorld
 
 	void OpenGLContext::Init()
 	{
-		glfwMakeContextCurrent(WindowHandle);
+		glfwMakeContextCurrent(window_handle_);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		GAMEWORLD_CORE_ASSERT(status, "Failed to initialize GLAD!");
 		
@@ -34,7 +34,7 @@ namespace GameWorld
 
 	void OpenGLContext::SwapBuffers()
 	{
-		glfwSwapBuffers(WindowHandle); // must do this at the end of render tick, swap the buffer of screen and the buffer of rendering results.
+		glfwSwapBuffers(window_handle_); // must do this at the end of render tick, swap the buffer of screen and the buffer of rendering results.
 	}
 
 }

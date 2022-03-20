@@ -8,32 +8,32 @@ namespace GameWorld {
 	{
 	public:
 		MouseMovedEvent(const float x, const float y)
-			: m_MouseX(x), m_MouseY(y) {}
+			: mouse_x_(x), mouse_y(y) {}
 
-		float GetX() const { return m_MouseX; }
-		float GetY() const { return m_MouseY; }
+		float GetX() const { return mouse_x_; }
+		float GetY() const { return mouse_y; }
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseMovedEvent: " << m_MouseX << ", " << m_MouseY;
+			ss << "MouseMovedEvent: " << mouse_x_ << ", " << mouse_y;
 			return ss.str();
 		}
 
 		EVENT_CLASS_TYPE(MouseMoved)
 			EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	private:
-		float m_MouseX, m_MouseY;
+		float mouse_x_, mouse_y;
 	};
 
 	class MouseScrolledEvent : public Event
 	{
 	public:
-		MouseScrolledEvent(const float xOffset, const float yOffset)
-			: m_XOffset(xOffset), m_YOffset(yOffset) {}
+		MouseScrolledEvent(const float x_offset, const float y_offset)
+			: x_offset_(x_offset), y_offset_(y_offset) {}
 
-		float GetXOffset() const { return m_XOffset; }
-		float GetYOffset() const { return m_YOffset; }
+		float GetXOffset() const { return x_offset_; }
+		float GetYOffset() const { return y_offset_; }
 
 		std::string ToString() const override
 		{
@@ -45,20 +45,20 @@ namespace GameWorld {
 		EVENT_CLASS_TYPE(MouseScrolled)
 			EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	private:
-		float m_XOffset, m_YOffset;
+		float x_offset_, y_offset_;
 	};
 
 	class MouseButtonEvent : public Event
 	{
 	public:
-		MouseCode GetMouseButton() const { return m_Button; }
+		MouseCode GetMouseButton() const { return button_; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput | EventCategoryMouseButton)
 	protected:
 		MouseButtonEvent(const MouseCode button)
-			: m_Button(button) {}
+			: button_(button) {}
 
-		MouseCode m_Button;
+		MouseCode button_;
 	};
 
 	class MouseButtonPressedEvent : public MouseButtonEvent
@@ -70,7 +70,7 @@ namespace GameWorld {
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseButtonPressedEvent: " << m_Button;
+			ss << "MouseButtonPressedEvent: " << button_;
 			return ss.str();
 		}
 
@@ -86,7 +86,7 @@ namespace GameWorld {
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseButtonReleasedEvent: " << m_Button;
+			ss << "MouseButtonReleasedEvent: " << button_;
 			return ss.str();
 		}
 

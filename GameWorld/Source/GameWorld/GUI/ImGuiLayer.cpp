@@ -62,8 +62,8 @@ namespace GameWorld
 
 	void ImGuiLayer::OnImGuiRender()
 	{
-		static bool bShowDemoWindow = true;
-		ImGui::ShowDemoWindow(&bShowDemoWindow);
+		static bool b_show_demowindow = true;
+		ImGui::ShowDemoWindow(&b_show_demowindow);
 	}
 
 	void ImGuiLayer::OnUpdate(Timestep ts)
@@ -73,11 +73,11 @@ namespace GameWorld
 
 	void ImGuiLayer::OnEvent(Event& event)
 	{
-		if (bBlockEvent)
+		if (b_blockevent_)
 		{
 			ImGuiIO& io = ImGui::GetIO();
-			event.Handled |= event.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
-			event.Handled |= event.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+			event.b_handled_ |= event.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+			event.b_handled_ |= event.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
 		}
 	}
 	

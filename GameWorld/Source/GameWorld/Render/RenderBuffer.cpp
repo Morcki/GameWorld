@@ -12,8 +12,8 @@ namespace GameWorld
 	{
 		switch (RenderBase::GetRenderAPI())
 		{
-		case RenderAPIType::NONE: break;
-		case RenderAPIType::OPENGL: return new OpenGLVertexBuffer(buff, size);
+		case RenderAPIType::kNone: break;
+		case RenderAPIType::kOpenGl: return new OpenGLVertexBuffer(buff, size);
 		}
 		GAMEWORLD_CORE_ASSERT(false, "No Supported Render API Finded!");
 		return nullptr;
@@ -23,8 +23,8 @@ namespace GameWorld
 	{
 		switch (RenderBase::GetRenderAPI())
 		{
-		case RenderAPIType::NONE: break;
-		case RenderAPIType::OPENGL: return new OpenGLIndexBuffer(buff, count);
+		case RenderAPIType::kNone: break;
+		case RenderAPIType::kOpenGl: return new OpenGLIndexBuffer(buff, count);
 		}
 		GAMEWORLD_CORE_ASSERT(false, "No Supported Render API Finded!");
 		return nullptr;

@@ -6,14 +6,14 @@
 
 namespace GameWorld
 {
-	RenderAPIType RHI::RenderAPI = RenderAPIType::OPENGL;
+	RenderAPIType RHI::render_api_ = RenderAPIType::kOpenGl;
 
 	Scope<RHI> RHI::CreateRHI()
 	{
-		switch (RenderAPI)
+		switch (render_api_)
 		{
-		case RenderAPIType::NONE:break;
-		case RenderAPIType::OPENGL: return CreateScope<OpenGLRHI>();
+		case RenderAPIType::kNone:   break;
+		case RenderAPIType::kOpenGl: return CreateScope<OpenGLRHI>();
 		}
 		GAMEWORLD_CORE_ASSERT(false, "Unkown Render API");
 	}
