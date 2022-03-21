@@ -30,6 +30,10 @@ namespace GameWorld
 		imgui_base_render_layer_ = new ImGuiLayer();
 		PushOverlay(imgui_base_render_layer_);
 
+		camera_ = CreateScope<Camera2DOrtho>(-1.0f, 1.0f, -1.0f, 1.0f);
+		//camera_->SetPosition({ 0.5f, -0.5f, 0.0f });
+		camera_->SetRotation(10.f);
+
 		shader_vertex_array_.reset(RenderArray::CreateRenderArray());
 		squad_shader_vertex_array_.reset(RenderArray::CreateRenderArray());
 
@@ -54,6 +58,7 @@ namespace GameWorld
 			shader_vertex_array_->SetIndexBuffer(index_buffer);
 
 			shader_program_ = CreateScope<ShaderBase>();
+
 			shader_program_->LinkShaderFile
 			(
 				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.vs",
@@ -81,6 +86,7 @@ namespace GameWorld
 			squad_shader_vertex_array_->SetIndexBuffer(squad_index_buffer);
 
 			squad_shader_program_ = CreateScope<ShaderBase>();
+
 			squad_shader_program_->LinkShaderFile
 			(
 				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/squad.vs",
@@ -89,7 +95,6 @@ namespace GameWorld
 			squad_shader_program_->UseShader();
 		}
 
-		
 	}
 
 	Application::~Application()
@@ -112,10 +117,12 @@ namespace GameWorld
 			RenderCommand::ClearBuffer();
 
 			squad_shader_program_->UseShader();
+			ShaderTool::SetMat4Uniform(squad_shader_program_->GetProgramID(), "uVPmat", camera_->GetViewProjectionMatrix());
 			squad_shader_vertex_array_->Bind();
 			RenderCommand::DrawElements(squad_shader_vertex_array_);
 
 			shader_program_->UseShader();
+			ShaderTool::SetMat4Uniform(shader_program_->GetProgramID(), "uVPmat", camera_->GetViewProjectionMatrix());
 			shader_vertex_array_->Bind();
 			RenderCommand::DrawElements(shader_vertex_array_);
 

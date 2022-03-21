@@ -8,6 +8,7 @@
 #include "GameWorld/Render/ShaderBase.h"
 #include "GameWorld/Render/RenderBuffer.h"
 #include "GameWorld/Render/RenderArray.h"
+#include "GameWorld/Camera/CameraScene.h"
 
 namespace GameWorld
 {
@@ -24,7 +25,6 @@ namespace GameWorld
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
-
 
 		inline const GW_FLOAT32* GetBackgroundColor() const { return window_background_color_; };
 		inline void SetBackgroundColor(GW_FLOAT32 color[4]) { memcpy(window_background_color_, color, sizeof(GW_FLOAT32) * 4); };
@@ -44,6 +44,7 @@ namespace GameWorld
 		Ref<RenderArray>     shader_vertex_array_;
 		Ref<ShaderBase>      squad_shader_program_;
 		Ref<RenderArray>     squad_shader_vertex_array_;
+		Scope<Camera2DOrtho> camera_;
 
 		float window_background_color_[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
 

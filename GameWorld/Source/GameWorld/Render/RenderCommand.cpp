@@ -5,6 +5,6 @@
 namespace GameWorld
 {
 	
-	Scope<RHI> RenderCommand::RenderHardwareAPI = RHI::CreateRHI();
+	Scope<RHI> RenderCommand::RenderHardwareAPI = std::unique_ptr<RHI>(RHI::CreateRHI());
 
 }

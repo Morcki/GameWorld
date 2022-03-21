@@ -14,6 +14,8 @@ namespace GameWorld
 		ShaderBase();
 		~ShaderBase();
 
+		inline GW_UINT32 GetProgramID() { return ShaderProgramID; };
+
 		virtual void LinkShaderFile(const GW_CHAR* vertexPath, const GW_CHAR* fragmentPath, const GW_CHAR* geometryPath = nullptr);
 
 		virtual void UseShader();
