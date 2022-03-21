@@ -5,10 +5,6 @@
 #include "GameWorld/Events/Event.h"
 #include "GameWorld/Layer/LayerStack.h"
 #include "GameWorld/GUI/ImGuiLayer.h"
-#include "GameWorld/Render/ShaderBase.h"
-#include "GameWorld/Render/RenderBuffer.h"
-#include "GameWorld/Render/RenderArray.h"
-#include "GameWorld/Camera/CameraScene.h"
 
 namespace GameWorld
 {
@@ -39,12 +35,6 @@ namespace GameWorld
 		Scope<Window>        ptr_window_;
 		LayerStack           layerstack_;
 		ImGuiLayer*          imgui_base_render_layer_;
-							 
-		Ref<ShaderBase>      shader_program_;
-		Ref<RenderArray>     shader_vertex_array_;
-		Ref<ShaderBase>      squad_shader_program_;
-		Ref<RenderArray>     squad_shader_vertex_array_;
-		Scope<Camera2DOrtho> camera_;
 
 		float window_background_color_[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
 

@@ -3,21 +3,99 @@
 #include "imgui/imgui.h"
 #include "glm/glm.hpp"
 
-class TestLayer : public GameWorld::Layer
+using namespace GameWorld;
+
+class Game2DLayer : public GameWorld::Layer
 {
+private:
+	Ref<ShaderBase>      shader_program_;
+	Ref<RenderArray>     shader_vertex_array_;
+	Ref<ShaderBase>      squad_shader_program_;
+	Ref<RenderArray>     squad_shader_vertex_array_;
+	Scope<Camera2DOrthoController> camera_controller_;
 public:
-	TestLayer(const std::string& name = "TestLayer")
+	Game2DLayer(const std::string& name = "TestLayer")
 		: Layer(name)
 	{
+		camera_controller_ = CreateScope<Camera2DOrthoController>(1.0f, true);
+		shader_vertex_array_.reset(RenderArray::CreateRenderArray());
+		squad_shader_vertex_array_.reset(RenderArray::CreateRenderArray());
+
+		{
+			GW_FLOAT32 vertices[3 * 7] =
+			{
+				-0.25f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+				-0.25f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+				 0.28f,  0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+			};
+
+			auto vertex_buffer = CreateAbstractRef<VertexBuffer>(VertexBuffer::CreateVertexBuffer(vertices, sizeof(vertices)));
+			vertex_buffer->SetLayout
+			({
+				{ShaderDataType::Float3, "a_Position"},
+				{ShaderDataType::Float4, "a_Color"},
+			});
+			shader_vertex_array_->AddVertexBuffer(vertex_buffer);
+
+			GW_UINT32 indices[3] = { 0, 1, 2 };
+			auto index_buffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(indices, sizeof(indices) / sizeof(GW_UINT32)));
+			shader_vertex_array_->SetIndexBuffer(index_buffer);
+
+			shader_program_ = CreateScope<ShaderBase>();
+
+			shader_program_->LinkShaderFile
+			(
+				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.vs",
+				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.fs"
+			);
+			shader_program_->UseShader();
+		}
+
+		{
+			GW_FLOAT32 squad_vertices[4 * 3] =
+			{
+				-0.35f, -0.5f, 0.0f,
+				-0.35f,  0.5f, 0.0f,
+				 0.30f, -0.5f, 0.0f,
+				 0.30f,  0.5f, 0.0f,
+			};
+			auto squad_vertex_buffer = CreateAbstractRef<VertexBuffer>(VertexBuffer::CreateVertexBuffer(squad_vertices, sizeof(squad_vertices)));
+			squad_vertex_buffer->SetLayout
+			({
+				{ShaderDataType::Float3, "aPos"},
+				});
+			squad_shader_vertex_array_->AddVertexBuffer(squad_vertex_buffer);
+			GW_UINT32 squad_indices[] = { 0, 1, 2, 1, 2, 3 };
+			auto squad_index_buffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(squad_indices, sizeof(squad_indices) / sizeof(GW_UINT32)));
+			squad_shader_vertex_array_->SetIndexBuffer(squad_index_buffer);
+
+			squad_shader_program_ = CreateScope<ShaderBase>();
+
+			squad_shader_program_->LinkShaderFile
+			(
+				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/squad.vs",
+				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/squad.fs"
+			);
+			squad_shader_program_->UseShader();
+		}
 	}
 
-	virtual	~TestLayer()
+	virtual	~Game2DLayer()
 	{
 	}
 
 	void OnUpdate(GameWorld::Timestep ts) override
 	{
-		//GAMEWORLD_INFO("For Test Layer : update");
+		camera_controller_->TickUpdate(ts);
+		squad_shader_program_->UseShader();
+		ShaderTool::SetMat4Uniform(squad_shader_program_->GetProgramID(), "uVPmat", camera_controller_->GetCamera().GetViewProjectionMatrix());
+		squad_shader_vertex_array_->Bind();
+		RenderCommand::DrawElements(squad_shader_vertex_array_);
+
+		shader_program_->UseShader();
+		ShaderTool::SetMat4Uniform(shader_program_->GetProgramID(), "uVPmat", camera_controller_->GetCamera().GetViewProjectionMatrix());
+		shader_vertex_array_->Bind();
+		RenderCommand::DrawElements(shader_vertex_array_);
 	}
 
 	void  OnImGuiRender()
@@ -35,7 +113,7 @@ public:
 			}
 			ImGui::EndMenuBar();
 		}
-		
+
 		// Edit a color (stored as ~4 floats)
 		const GW_FLOAT32* background_color = GameWorld::Application::GetInst().GetBackgroundColor();
 		GW_FLOAT32 tmp_color[4] = { background_color[0], background_color[1], background_color[2], background_color[3] };
@@ -58,26 +136,26 @@ public:
 
 	void OnEvent(GameWorld::Event& event) override
 	{
+		camera_controller_->OnEvent(event);
 		if (event.GetEventType() == GameWorld::EventType::KeyPressed)
 		{
 			GameWorld::KeyPressedEvent& e = (GameWorld::KeyPressedEvent&) event;
 			GAMEWORLD_INFO("For Test Layer : {0}", (char)e.GetKeyCode());
 		}
 	}
-
 };
 
-class SandBox : public GameWorld::Application
+class SandBox2DExample : public GameWorld::Application
 {
 public:
 
-	SandBox()
+	SandBox2DExample()
 	{
 		GAMEWORLD_WARN("Application is running on sandbox");
-		PushLayer(new TestLayer());
+		PushLayer(new Game2DLayer());
 	};
 
-	virtual ~SandBox()
+	virtual ~SandBox2DExample()
 	{
 
 	};
@@ -86,5 +164,5 @@ public:
 
 GameWorld::Application* GameWorld::CreateApplication()
 {
-	return new SandBox();
+	return new SandBox2DExample();
 }

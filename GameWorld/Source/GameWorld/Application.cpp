@@ -29,72 +29,6 @@ namespace GameWorld
 
 		imgui_base_render_layer_ = new ImGuiLayer();
 		PushOverlay(imgui_base_render_layer_);
-
-		camera_ = CreateScope<Camera2DOrtho>(-1.0f, 1.0f, -1.0f, 1.0f);
-		//camera_->SetPosition({ 0.5f, -0.5f, 0.0f });
-		camera_->SetRotation(10.f);
-
-		shader_vertex_array_.reset(RenderArray::CreateRenderArray());
-		squad_shader_vertex_array_.reset(RenderArray::CreateRenderArray());
-
-		{
-			GW_FLOAT32 vertices[3 * 7] =
-			{
-				-0.25f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-				-0.25f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-				 0.28f,  0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-			};
-
-			auto vertex_buffer = CreateAbstractRef<VertexBuffer>(VertexBuffer::CreateVertexBuffer(vertices, sizeof(vertices)));
-			vertex_buffer->SetLayout
-			({
-				{ShaderDataType::Float3, "a_Position"},
-				{ShaderDataType::Float4, "a_Color"},
-				});
-			shader_vertex_array_->AddVertexBuffer(vertex_buffer);
-
-			GW_UINT32 indices[3] = { 0, 1, 2 };
-			auto index_buffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(indices, sizeof(indices) / sizeof(GW_UINT32)));
-			shader_vertex_array_->SetIndexBuffer(index_buffer);
-
-			shader_program_ = CreateScope<ShaderBase>();
-
-			shader_program_->LinkShaderFile
-			(
-				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.vs",
-				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.fs"
-			);
-			shader_program_->UseShader();
-		}
-	
-		{
-			GW_FLOAT32 squad_vertices[4 * 3] =
-			{
-				-0.35f, -0.5f, 0.0f,
-				-0.35f,  0.5f, 0.0f,
-				 0.30f, -0.5f, 0.0f,
-				 0.30f,  0.5f, 0.0f,
-			};
-			auto squad_vertex_buffer = CreateAbstractRef<VertexBuffer>(VertexBuffer::CreateVertexBuffer(squad_vertices, sizeof(squad_vertices)));
-			squad_vertex_buffer->SetLayout
-			({
-				{ShaderDataType::Float3, "aPos"},
-			});
-			squad_shader_vertex_array_->AddVertexBuffer(squad_vertex_buffer);
-			GW_UINT32 squad_indices[] = { 0, 1, 2, 1, 2, 3 };
-			auto squad_index_buffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(squad_indices, sizeof(squad_indices) / sizeof(GW_UINT32)));
-			squad_shader_vertex_array_->SetIndexBuffer(squad_index_buffer);
-
-			squad_shader_program_ = CreateScope<ShaderBase>();
-
-			squad_shader_program_->LinkShaderFile
-			(
-				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/squad.vs",
-				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/squad.fs"
-			);
-			squad_shader_program_->UseShader();
-		}
-
 	}
 
 	Application::~Application()
@@ -108,27 +42,17 @@ namespace GameWorld
 		{
 			// Fresh window color buffer
 			RenderCommand::ClearColor
-			({ 
-				window_background_color_[0], 
-				window_background_color_[1], 
+			({
+				window_background_color_[0],
+				window_background_color_[1],
 				window_background_color_[2],
 				window_background_color_[3]
-			});
+				});
 			RenderCommand::ClearBuffer();
-
-			squad_shader_program_->UseShader();
-			ShaderTool::SetMat4Uniform(squad_shader_program_->GetProgramID(), "uVPmat", camera_->GetViewProjectionMatrix());
-			squad_shader_vertex_array_->Bind();
-			RenderCommand::DrawElements(squad_shader_vertex_array_);
-
-			shader_program_->UseShader();
-			ShaderTool::SetMat4Uniform(shader_program_->GetProgramID(), "uVPmat", camera_->GetViewProjectionMatrix());
-			shader_vertex_array_->Bind();
-			RenderCommand::DrawElements(shader_vertex_array_);
 
 			for (Layer* layer : layerstack_)
 			{
-				layer->OnUpdate(0.05);
+				layer->OnUpdate(0.033);
 			}
 
 			imgui_base_render_layer_->RenderTickBegin(); 
