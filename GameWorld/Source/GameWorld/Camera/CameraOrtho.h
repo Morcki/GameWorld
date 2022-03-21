@@ -1,7 +1,5 @@
 #pragma once
-
 #include "CameraBase.h"
-#include <glm/glm.hpp>
 
 namespace GameWorld
 {
@@ -12,10 +10,11 @@ namespace GameWorld
 
 		void SetProjection(GW_FLOAT32 left, GW_FLOAT32 right, GW_FLOAT32 bottom, GW_FLOAT32 top);
 
+		glm::vec3 GetPosition() { return position_; }
 		const glm::vec3& GetPosition() const { return position_; }
 		void SetPosition(const glm::vec3& position) { position_ = position; RecalculateViewMatrix(); }
 
-		GW_FLOAT32 GetRotation() const { return rotation_; }
+		GW_FLOAT32 GetRotation() { return rotation_; }
 		void SetRotation(GW_FLOAT32 rotation) { rotation_ = rotation; RecalculateViewMatrix(); }
 
 		const glm::mat4& GetViewMatrix() const { return view_matrix_; }
