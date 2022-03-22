@@ -46,8 +46,12 @@ namespace GameWorld
 		static void SetFloatUniform(GW_UINT32 program_id, const std::string &name, GW_FLOAT32 value);
 		
 		static void SetVec3Uniform(GW_UINT32 program_id, const std::string &name, GW_FLOAT32 v1, GW_FLOAT32 v2, GW_FLOAT32 v3);
+
+		static void SetVec3Uniform(GW_UINT32 program_id, const std::string &name, const glm::vec3& val);
 		
 		static void SetVec4Uniform(GW_UINT32 program_id, const std::string &name, GW_FLOAT32 v1, GW_FLOAT32 v2, GW_FLOAT32 v3, GW_FLOAT32 v4);
+
+		static void SetVec4Uniform(GW_UINT32 program_id, const std::string &name, const glm::vec4& val);
 		
 		static void SetMat4Uniform(GW_UINT32 program_id, const std::string &name, GW_FLOAT32 *mat4);
 

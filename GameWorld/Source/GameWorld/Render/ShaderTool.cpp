@@ -93,9 +93,19 @@ namespace GameWorld
 		glUniform3f(glGetUniformLocation(program_id, name.c_str()), v1, v2, v3);
 	}
 
+	void ShaderTool::SetVec3Uniform(GW_UINT32 program_id, const std::string &name, const glm::vec3& val)
+	{
+		glUniform3f(glGetUniformLocation(program_id, name.c_str()), val.x, val.y, val.z);
+	}
+
 	void ShaderTool::SetVec4Uniform(GW_UINT32 program_id, const std::string &name, GW_FLOAT32 v1, GW_FLOAT32 v2, GW_FLOAT32 v3, GW_FLOAT32 v4)
 	{
 		glUniform4f(glGetUniformLocation(program_id, name.c_str()), v1, v2, v3, v4);
+	}
+
+	void ShaderTool::SetVec4Uniform(GW_UINT32 program_id, const std::string &name, const glm::vec4& val)
+	{
+		glUniform4f(glGetUniformLocation(program_id, name.c_str()), val.x, val.y, val.z, val.w);
 	}
 
 	void ShaderTool::SetMat4Uniform(GW_UINT32 program_id, const std::string &name, GW_FLOAT32 *mat4)
