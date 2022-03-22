@@ -52,7 +52,7 @@ namespace GameWorld
 
 			for (Layer* layer : layerstack_)
 			{
-				layer->OnUpdate(0.033);
+				layer->OnUpdate(0.05f);
 			}
 
 			imgui_base_render_layer_->RenderTickBegin(); 

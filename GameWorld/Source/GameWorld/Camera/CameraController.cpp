@@ -1,6 +1,7 @@
 #include <PrecompiledHeader.h>
 #include "CameraController.h"
 
+#include "GameWorld/Application.h"
 #include "GameWorld/Input/InputSystem.h"
 
 namespace GameWorld
@@ -54,12 +55,15 @@ namespace GameWorld
 		camera_2d_ortho_.SetPosition(camera_position);
 
 		translation_speed_ = zoom_;
+
+		glm::vec2 mouse_pos_ = InputSystem::GetMousePosition();
 	}
 
 	void Camera2DOrthoController::OnEvent(Event& e)
 	{
-
 		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnMouseLeftPressed));
+		dispatcher.Dispatch<MouseMovedEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnMouseMoved));
 		dispatcher.Dispatch<MouseScrolledEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnMouseScrolled));
 		//dispatcher.Dispatch<WindowResizeEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnWindowResized));
 	}
@@ -70,7 +74,33 @@ namespace GameWorld
 		camera_2d_ortho_.SetProjection(-aspect_ratio_ * zoom_, aspect_ratio_ * zoom_, -zoom_, zoom_);
 	}
 
-	bool Camera2DOrthoController::OnMouseScrolled(MouseScrolledEvent& e)
+	GW_BOOL Camera2DOrthoController::OnMouseLeftPressed(MouseButtonPressedEvent& e)
+	{
+		if (e.GetMouseButton() == Mouse::ButtonLeft)
+		{
+			mouse_press_pos_ = InputSystem::GetMousePosition();
+			return false;
+		}
+		return true;
+	}
+
+	GW_BOOL Camera2DOrthoController::OnMouseMoved(MouseMovedEvent& e)
+	{
+		if (InputSystem::IsMouseButtonPressed(Mouse::ButtonLeft))
+		{
+			GW_FLOAT32 mouse_sensitivity = 2 * zoom_;
+			glm::vec3 camera_pos = camera_2d_ortho_.GetPosition();
+			glm::vec2 window_resolution = Application::GetInst().GetWindow().GetResolution();
+			camera_pos.x -= mouse_sensitivity * (e.GetX() - mouse_press_pos_.x) * window_resolution.x;
+			camera_pos.y -= mouse_sensitivity * (mouse_press_pos_.y - e.GetY()) * window_resolution.y;
+			camera_2d_ortho_.SetPosition(camera_pos);
+			mouse_press_pos_ = { e.GetX() , e.GetY() };
+			return false;
+		}
+		return true;
+	}
+
+	GW_BOOL Camera2DOrthoController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
 
 		zoom_ -= e.GetYOffset() * 0.25f;
@@ -79,7 +109,7 @@ namespace GameWorld
 		return false;
 	}
 
-	bool Camera2DOrthoController::OnWindowResized(WindowResizeEvent& e)
+	GW_BOOL Camera2DOrthoController::OnWindowResized(WindowResizeEvent& e)
 	{
 		OnResize((GW_FLOAT32)e.GetWidth(), (GW_FLOAT32)e.GetHeight());
 		return false;

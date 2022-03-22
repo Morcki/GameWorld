@@ -25,10 +25,11 @@ namespace GameWorld
 		GW_FLOAT32 GetZoomLevel() const { return zoom_; }
 		void SetZoomLevel(GW_FLOAT32 zoom) { zoom_ = zoom; }
 
-
 	private:
-		bool OnMouseScrolled(MouseScrolledEvent& e);
-		bool OnWindowResized(WindowResizeEvent& e);
+		GW_BOOL OnMouseLeftPressed(MouseButtonPressedEvent& e);
+		GW_BOOL OnMouseMoved(MouseMovedEvent& e);
+		GW_BOOL OnMouseScrolled(MouseScrolledEvent& e);
+		GW_BOOL OnWindowResized(WindowResizeEvent& e);
 
 	private:
 		GW_FLOAT32 aspect_ratio_;
@@ -37,6 +38,7 @@ namespace GameWorld
 
 		bool b_rotation_;
 		GW_FLOAT32 translation_speed_ = 5.0f, rotation_speed_ = 180.0f;
+		glm::vec2 mouse_press_pos_;
 	};
 
 

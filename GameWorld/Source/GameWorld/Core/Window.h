@@ -5,6 +5,8 @@
 
 #include "GameWorld/Events/Event.h"
 
+#include "glm/glm.hpp"
+
 namespace GameWorld {
 
 	struct WindowProps
@@ -33,6 +35,8 @@ namespace GameWorld {
 
 		virtual GW_UINT32 GetWidth() const = 0;
 		virtual GW_UINT32 GetHeight() const = 0;
+		virtual GW_FLOAT32 GetAspectRatio() const = 0;
+		virtual glm::vec2 GetResolution() const = 0;
 
 		// Window attributes
 		virtual void SetEventCallback(const CallbackFunction& callback) = 0;

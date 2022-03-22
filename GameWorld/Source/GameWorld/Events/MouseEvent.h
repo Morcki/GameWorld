@@ -8,22 +8,22 @@ namespace GameWorld {
 	{
 	public:
 		MouseMovedEvent(const float x, const float y)
-			: mouse_x_(x), mouse_y(y) {}
+			: mouse_x_(x), mouse_y_(y) {}
 
 		float GetX() const { return mouse_x_; }
-		float GetY() const { return mouse_y; }
+		float GetY() const { return mouse_y_; }
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseMovedEvent: " << mouse_x_ << ", " << mouse_y;
+			ss << "MouseMovedEvent: " << mouse_x_ << ", " << mouse_y_;
 			return ss.str();
 		}
 
 		EVENT_CLASS_TYPE(MouseMoved)
 			EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	private:
-		float mouse_x_, mouse_y;
+		GW_FLOAT32 mouse_x_, mouse_y_;
 	};
 
 	class MouseScrolledEvent : public Event

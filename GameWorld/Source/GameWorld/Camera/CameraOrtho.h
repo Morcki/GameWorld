@@ -31,4 +31,9 @@ namespace GameWorld
 		GW_FLOAT32 rotation_ = 0.0f;
 	};
 
+	class CameraOrtho
+	{
+	public:
+		CameraOrtho();
+	};
 }

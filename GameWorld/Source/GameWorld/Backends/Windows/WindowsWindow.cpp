@@ -4,13 +4,16 @@
 
 #include "glad/glad.h"
 
+#include "GameWorld/Application.h"
+
 #include "GameWorld/Events/ApplicationEvent.h"
 #include "GameWorld/Events/MouseEvent.h"
 #include "GameWorld/Events/KeyEvent.h"
 
 #include "GameWorld/Backends/OpenGL/RenderAPI/OpenGLContext.h"
 
-namespace GameWorld {
+namespace GameWorld 
+{
 
 	static GW_UINT8 s_GLFW_window_count = 0;
 
@@ -34,6 +37,9 @@ namespace GameWorld {
 		window_info_.title = props.title;
 		window_info_.width = props.width;
 		window_info_.height = props.height;
+
+		window_resolution_ = { 1.0f / window_info_.width, 1.0f / window_info_.height };
+		window_aspect_ratio = (window_info_.width * 1.0) / window_info_.height;
 
 		GAMEWORLD_CORE_INFO("Creating window {0} ({1}, {2})", props.title, props.width, props.height);
 
@@ -136,11 +142,11 @@ namespace GameWorld {
 				data.callback_function(event);
 			});
 
-		glfwSetCursorPosCallback(window_, [](GLFWwindow* window, double xPos, double yPos)
+		glfwSetCursorPosCallback(window_, [](GLFWwindow* window, double xpos, double ypos)
 			{
 				WindowInfo& data = *(WindowInfo*)glfwGetWindowUserPointer(window);
 
-				MouseMovedEvent event((float)xPos, (float)yPos);
+				MouseMovedEvent event((float)xpos, (float)ypos);
 				data.callback_function(event);
 			});
 	}

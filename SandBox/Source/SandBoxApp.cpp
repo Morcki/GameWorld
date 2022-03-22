@@ -13,11 +13,13 @@ private:
 	Ref<ShaderBase>      squad_shader_program_;
 	Ref<RenderArray>     squad_shader_vertex_array_;
 	Scope<Camera2DOrthoController> camera_controller_;
+
+	glm::vec4 squad_color = { 0.0f, 0.0f, 1.0f, 1.0f };
 public:
 	Game2DLayer(const std::string& name = "TestLayer")
 		: Layer(name)
 	{
-		camera_controller_ = CreateScope<Camera2DOrthoController>(1.0f, true);
+		camera_controller_ = CreateScope<Camera2DOrthoController>(Application::GetInst().GetWindow().GetAspectRatio(), true);
 		shader_vertex_array_.reset(RenderArray::CreateRenderArray());
 		squad_shader_vertex_array_.reset(RenderArray::CreateRenderArray());
 
@@ -41,23 +43,23 @@ public:
 			auto index_buffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(indices, sizeof(indices) / sizeof(GW_UINT32)));
 			shader_vertex_array_->SetIndexBuffer(index_buffer);
 
-			shader_program_ = CreateScope<ShaderBase>();
+			shader_program_ = CreateAbstractRef<ShaderBase>(ShaderBase::CreateShaderBase());
 
 			shader_program_->LinkShaderFile
 			(
 				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.vs",
 				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.fs"
 			);
-			shader_program_->UseShader();
+			shader_program_->LockShader();
 		}
 
 		{
 			GW_FLOAT32 squad_vertices[4 * 3] =
 			{
-				-0.35f, -0.5f, 0.0f,
-				-0.35f,  0.5f, 0.0f,
-				 0.30f, -0.5f, 0.0f,
-				 0.30f,  0.5f, 0.0f,
+				-0.5f, -0.5f, 0.0f,
+				-0.5f,  0.5f, 0.0f,
+				 0.5f, -0.5f, 0.0f,
+				 0.5f,  0.5f, 0.0f,
 			};
 			auto squad_vertex_buffer = CreateAbstractRef<VertexBuffer>(VertexBuffer::CreateVertexBuffer(squad_vertices, sizeof(squad_vertices)));
 			squad_vertex_buffer->SetLayout
@@ -69,14 +71,14 @@ public:
 			auto squad_index_buffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(squad_indices, sizeof(squad_indices) / sizeof(GW_UINT32)));
 			squad_shader_vertex_array_->SetIndexBuffer(squad_index_buffer);
 
-			squad_shader_program_ = CreateScope<ShaderBase>();
+			squad_shader_program_ = CreateAbstractRef<ShaderBase>(ShaderBase::CreateShaderBase());
 
 			squad_shader_program_->LinkShaderFile
 			(
 				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/squad.vs",
 				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/squad.fs"
 			);
-			squad_shader_program_->UseShader();
+			squad_shader_program_->LockShader();
 		}
 	}
 
@@ -87,12 +89,26 @@ public:
 	void OnUpdate(GameWorld::Timestep ts) override
 	{
 		camera_controller_->TickUpdate(ts);
-		squad_shader_program_->UseShader();
-		ShaderTool::SetMat4Uniform(squad_shader_program_->GetProgramID(), "uVPmat", camera_controller_->GetCamera().GetViewProjectionMatrix());
+		squad_shader_program_->LockShader();
 		squad_shader_vertex_array_->Bind();
-		RenderCommand::DrawElements(squad_shader_vertex_array_);
-
-		shader_program_->UseShader();
+		for (GW_UINT32 x = 0; x < 25; x++)
+		{
+			for (GW_UINT32 y = 0; y < 25; y++)
+			{
+				glm::vec3 color = { squad_color.x, squad_color.y, squad_color.z };
+				glm::vec3 trans = {x * 1.1, y * 1.1, 0.0f};
+				if (x % 2 == 0)
+				{
+					color = glm::vec3(1.0f) - color;
+				}
+				ShaderTool::SetVec3Uniform(squad_shader_program_->GetProgramID(), "uTranslateVec", trans);
+				ShaderTool::SetMat4Uniform(squad_shader_program_->GetProgramID(), "uVPmat", camera_controller_->GetCamera().GetViewProjectionMatrix());
+				ShaderTool::SetVec3Uniform(squad_shader_program_->GetProgramID(), "uColor", color.x, color.y, color.z);
+				RenderCommand::DrawElements(squad_shader_vertex_array_);
+			}
+		}
+		
+		shader_program_->LockShader();
 		ShaderTool::SetMat4Uniform(shader_program_->GetProgramID(), "uVPmat", camera_controller_->GetCamera().GetViewProjectionMatrix());
 		shader_vertex_array_->Bind();
 		RenderCommand::DrawElements(shader_vertex_array_);
@@ -115,11 +131,11 @@ public:
 		}
 
 		// Edit a color (stored as ~4 floats)
-		const GW_FLOAT32* background_color = GameWorld::Application::GetInst().GetBackgroundColor();
-		GW_FLOAT32 tmp_color[4] = { background_color[0], background_color[1], background_color[2], background_color[3] };
-		ImGui::ColorEdit4("Color", tmp_color);
+		//const GW_FLOAT32* background_color = GameWorld::Application::GetInst().GetBackgroundColor();
+		//GW_FLOAT32 tmp_color[4] = { background_color[0], background_color[1], background_color[2], background_color[3] };
+		ImGui::ColorEdit4("Color", &squad_color[0]);
 
-		GameWorld::Application::GetInst().SetBackgroundColor(tmp_color);
+		//GameWorld::Application::GetInst().SetBackgroundColor(tmp_color);
 
 		// Plot some values
 		const GW_FLOAT32 my_values[] = { 0.2f, 0.1f, 1.0f, 0.5f, 0.9f, 2.2f };
