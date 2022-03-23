@@ -35,11 +35,7 @@ namespace GameWorld
 	void WindowsWindow::Init(const WindowProps& props)
 	{
 		window_info_.title = props.title;
-		window_info_.width = props.width;
-		window_info_.height = props.height;
-
-		window_resolution_ = { 1.0f / window_info_.width, 1.0f / window_info_.height };
-		window_aspect_ratio = (window_info_.width * 1.0) / window_info_.height;
+		ResizeWindow(props.width, props.height);
 
 		GAMEWORLD_CORE_INFO("Creating window {0} ({1}, {2})", props.title, props.width, props.height);
 
@@ -166,6 +162,15 @@ namespace GameWorld
 	{
 		glfwPollEvents();
 		render_graphics_context_->SwapBuffers(); // must do this at the end of render tick, swap the buffer of screen and the buffer of rendering results.
+	}
+
+	void WindowsWindow::ResizeWindow(GW_UINT32 width, GW_UINT32 height)
+	{
+		window_info_.width = width;
+		window_info_.height = height;
+
+		window_resolution_ = { 1.0f / width, 1.0f / height };
+		window_aspect_ratio = (width * 1.0) / height;
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)

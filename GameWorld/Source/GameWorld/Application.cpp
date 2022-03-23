@@ -14,6 +14,7 @@
 
 #include "GameWorld/Render/ShaderTool.h"
 #include "GameWorld/Render/RenderCommand.h"
+#include "GameWorld/Render/RenderCore.h"
 
 namespace GameWorld
 {
@@ -89,23 +90,23 @@ namespace GameWorld
 		}
 	}
 
-	bool Application::OnWindowsClose(Event& e)
+	bool Application::OnWindowsClose(WindowCloseEvent& e)
 	{
 		b_gameworld_running = false;
 		return b_gameworld_running;
 	}
 
-	bool Application::OnWindowResize(Event& e)
+	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
-		WindowResizeEvent& event = (WindowResizeEvent&)e;
-		if (event.GetWidth() == 0 || event.GetHeight() == 0)
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			b_set_minSize = true;
 			return false;
 		}
 
 		b_set_minSize = false;
-		//Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+		ptr_window_->ResizeWindow(e.GetWidth(), e.GetHeight());
+		RenderBase::ResizeWindow(e.GetWidth(), e.GetHeight());
 		return false;
 	}
 }

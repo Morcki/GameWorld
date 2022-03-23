@@ -27,8 +27,8 @@ namespace GameWorld
 
 	private:
 		void OnEvent(Event& e);
-		bool OnWindowsClose(Event& e);
-		bool OnWindowResize(Event& e);
+		bool OnWindowsClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 
 	private:
 		static Application*  s_instance_;

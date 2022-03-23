@@ -37,6 +37,7 @@ namespace GameWorld {
 		virtual GW_UINT32 GetHeight() const = 0;
 		virtual GW_FLOAT32 GetAspectRatio() const = 0;
 		virtual glm::vec2 GetResolution() const = 0;
+		virtual void ResizeWindow(GW_UINT32, GW_UINT32) = 0;
 
 		// Window attributes
 		virtual void SetEventCallback(const CallbackFunction& callback) = 0;

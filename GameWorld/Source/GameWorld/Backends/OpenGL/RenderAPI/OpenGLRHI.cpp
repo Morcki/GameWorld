@@ -16,6 +16,11 @@ namespace GameWorld
 
 	}
 
+	void OpenGLRHI::SetViewport(GW_UINT32 x, GW_UINT32 y, GW_UINT32 width, GW_UINT32 height)
+	{
+		glViewport(x, y, width, height);
+	}
+
 	void OpenGLRHI::SetClearColor(glm::vec4 color)
 	{
 		glClearColor(color.r, color.g, color.b, color.a);

@@ -17,11 +17,12 @@ namespace GameWorld
 
 		void OnUpdate() override;
 
-		GW_UINT32 GetWidth() const override { return window_info_.width; }
-		GW_UINT32 GetHeight() const override { return window_info_.height; }
-		GW_FLOAT32 GetAspectRatio() const override { return window_aspect_ratio; };
-		glm::vec2 GetResolution() const override { return window_resolution_; };
-
+		virtual GW_UINT32 GetWidth() const override { return window_info_.width; }
+		virtual GW_UINT32 GetHeight() const override { return window_info_.height; }
+		virtual GW_FLOAT32 GetAspectRatio() const override { return window_aspect_ratio; };
+		virtual glm::vec2 GetResolution() const override { return window_resolution_; };
+		virtual void ResizeWindow(GW_UINT32 width, GW_UINT32 height) override;
+		
 		// Window attributes
 		void SetEventCallback(const CallbackFunction& callback) override { window_info_.callback_function = callback; }
 		void SetVSync(bool enabled) override;
