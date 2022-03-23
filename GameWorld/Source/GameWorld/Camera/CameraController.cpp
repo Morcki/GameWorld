@@ -65,7 +65,7 @@ namespace GameWorld
 		dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnMouseLeftPressed));
 		dispatcher.Dispatch<MouseMovedEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnMouseMoved));
 		dispatcher.Dispatch<MouseScrolledEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnMouseScrolled));
-		//dispatcher.Dispatch<WindowResizeEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnWindowResized));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnWindowResized));
 	}
 
 	void Camera2DOrthoController::OnResize(GW_FLOAT32 width, GW_FLOAT32 height)

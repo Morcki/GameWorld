@@ -7,6 +7,7 @@ namespace GameWorld
 	{
 	public:
 		Camera2DOrtho(GW_FLOAT32 left, GW_FLOAT32 right, GW_FLOAT32 bottom, GW_FLOAT32 top);
+		~Camera2DOrtho();
 
 		void SetProjection(GW_FLOAT32 left, GW_FLOAT32 right, GW_FLOAT32 bottom, GW_FLOAT32 top);
 
@@ -31,9 +32,19 @@ namespace GameWorld
 		GW_FLOAT32 rotation_ = 0.0f;
 	};
 
-	class CameraOrtho
+	class CameraOrtho : public CameraProjection
 	{
 	public:
-		CameraOrtho();
+		CameraOrtho(GW_FLOAT32 left, GW_FLOAT32 right, GW_FLOAT32 bottom, GW_FLOAT32 top);
+		virtual ~CameraOrtho() override;
+		
+		glm::vec4 GetOrthoBox() { return ortho_box_; };
+		const glm::vec4& GetOrthoBox() const { return ortho_box_; };
+		void UpdateOrthoBox(GW_FLOAT32 left, GW_FLOAT32 right, GW_FLOAT32 bottom, GW_FLOAT32 top);
+
+	protected:
+		virtual void UpdateProjectionMatrix() override;
+	private:
+		glm::vec4 ortho_box_;
 	};
 }
