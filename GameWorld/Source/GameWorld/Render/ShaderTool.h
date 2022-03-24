@@ -6,19 +6,15 @@
 
 namespace GameWorld
 {
-	using ShaderType = uint16_t;
-	namespace ShaderConst
+	enum class ShaderType
 	{
-		enum ShaderType
-		{
-			kVertex,
-			kFragment,
-			kGeometry,
+		kVertex,
+		kFragment,
+		kGeometry,
 
-			kProgram
-		};
+		kProgram
+	};
 
-	}
 	enum class ShaderDataType
 	{
 		None = 0, Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, Bool

@@ -11,16 +11,16 @@ namespace GameWorld
 		std::string shader_type_string;
 		switch (type)
 		{
-		case ShaderConst::kVertex:
+		case ShaderType::kVertex:
 			shader_type_string = "Vertex";
 			break;
-		case ShaderConst::kFragment:
+		case ShaderType::kFragment:
 			shader_type_string = "Fragment";
 			break;
-		case ShaderConst::kGeometry:
+		case ShaderType::kGeometry:
 			shader_type_string = "Geometry";
 			break;
-		case ShaderConst::kProgram:
+		case ShaderType::kProgram:
 			shader_type_string = "Program";
 			break;
 		default:

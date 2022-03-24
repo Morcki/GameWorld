@@ -8,6 +8,10 @@ namespace GameWorld
 	class RenderCommand
 	{
 	public:
+		inline static void Init()
+		{
+			RenderHardwareAPI->Init();
+		}
 
 		inline static void SetViewport(GW_UINT32 x, GW_UINT32 y, GW_UINT32 width, GW_UINT32 height)
 		{

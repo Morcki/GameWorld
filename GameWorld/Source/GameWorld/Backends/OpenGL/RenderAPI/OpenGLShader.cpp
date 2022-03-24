@@ -5,6 +5,7 @@
 
 namespace GameWorld
 {
+
 	OpenGLShader::OpenGLShader()
 	{
 		ShaderProgramID = glCreateProgram();
@@ -17,16 +18,16 @@ namespace GameWorld
 
 	void OpenGLShader::LinkShaderFile(const GW_CHAR* vertexPath, const GW_CHAR* fragmentPath, const GW_CHAR* geometryPath)
 	{
-		GW_BOOL bCompileOk = LoadShaderFile(vertexPath, ShaderConst::kVertex) & LoadShaderFile(fragmentPath, ShaderConst::kFragment);
+		GW_BOOL bCompileOk = LoadShaderFile(vertexPath, ShaderType::kVertex) & LoadShaderFile(fragmentPath, ShaderType::kFragment);
 		if (geometryPath != nullptr)
 		{
-			bCompileOk &= LoadShaderFile(geometryPath, ShaderConst::kGeometry);
+			bCompileOk &= LoadShaderFile(geometryPath, ShaderType::kGeometry);
 		}
 
 		if (!bCompileOk) return;
 
 		glLinkProgram(ShaderProgramID);
-		bCompileOk &= CheckShaderCompile(ShaderProgramID, ShaderConst::kProgram);
+		bCompileOk &= CheckCompileResult(ShaderProgramID, ShaderType::kProgram);
 
 		if (!bCompileOk) return;
 
@@ -73,36 +74,41 @@ namespace GameWorld
 				"shader::cannot load shader file!\n\tShader Type : {0}\n\tShader File : {1}",
 				ShaderTool::ShaderTypeToString(type), shaderFilePath
 			);
-			GAMEWORLD_CORE_ASSERT(false, "Please input correct Shader File Path!");
+			//GAMEWORLD_CORE_ASSERT(false, "Please input correct Shader File Path!");
 		}
-		const char* code = shaderCode.c_str();
+		return CompileShader(type, shaderCode);
+	}
+
+	GW_BOOL OpenGLShader::CompileShader(ShaderType type, const std::string& shader_code)
+	{
 		GW_BOOL bCompileSuccess = false;
+		const GLchar* code = shader_code.c_str();
 		switch (type)
 		{
-		case ShaderConst::kVertex:
+		case ShaderType::kVertex:
 		{
 			ShaderVertexID = glCreateShader(GL_VERTEX_SHADER);
 			glShaderSource(ShaderVertexID, 1, &code, NULL);
 			glCompileShader(ShaderVertexID);
-			bCompileSuccess = CheckShaderCompile(ShaderVertexID, type);
+			bCompileSuccess = CheckCompileResult(ShaderVertexID, type);
 			glAttachShader(ShaderProgramID, ShaderVertexID);
 			break;
 		}
-		case ShaderConst::kFragment:
+		case ShaderType::kFragment:
 		{
 			ShaderFragmentID = glCreateShader(GL_FRAGMENT_SHADER);
 			glShaderSource(ShaderFragmentID, 1, &code, NULL);
 			glCompileShader(ShaderFragmentID);
-			bCompileSuccess = CheckShaderCompile(ShaderFragmentID, type);
+			bCompileSuccess = CheckCompileResult(ShaderFragmentID, type);
 			glAttachShader(ShaderProgramID, ShaderFragmentID);
 			break;
 		}
-		case ShaderConst::kGeometry:
+		case ShaderType::kGeometry:
 		{
 			ShaderGeometryID = glCreateShader(GL_GEOMETRY_SHADER);
 			glShaderSource(ShaderGeometryID, 1, &code, NULL);
 			glCompileShader(ShaderGeometryID);
-			bCompileSuccess = CheckShaderCompile(ShaderGeometryID, type);
+			bCompileSuccess = CheckCompileResult(ShaderGeometryID, type);
 			glAttachShader(ShaderProgramID, ShaderGeometryID);
 			break;
 		}
@@ -115,11 +121,11 @@ namespace GameWorld
 		return bCompileSuccess;
 	}
 
-	GW_BOOL OpenGLShader::CheckShaderCompile(GW_UINT32 shader, ShaderType type)
+	GW_BOOL OpenGLShader::CheckCompileResult(GW_UINT32 shader, ShaderType type)
 	{
 		int success;
 		char infoLog[1024];
-		if (type != ShaderConst::kProgram)
+		if (type != ShaderType::kProgram)
 		{
 			glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 			if (!success)

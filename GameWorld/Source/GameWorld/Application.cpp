@@ -30,6 +30,8 @@ namespace GameWorld
 
 		imgui_base_render_layer_ = new ImGuiLayer();
 		PushOverlay(imgui_base_render_layer_);
+
+		RenderBase::Init();
 	}
 
 	Application::~Application()

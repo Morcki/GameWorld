@@ -13,6 +13,8 @@ namespace GameWorld
 		OpenGLRHI();
 		virtual ~OpenGLRHI();
 
+		virtual void Init() override;
+
 		virtual void SetViewport(GW_UINT32 x, GW_UINT32 y, GW_UINT32 width, GW_UINT32 height) override;
 
 		virtual void SetClearColor(glm::vec4 color) override;

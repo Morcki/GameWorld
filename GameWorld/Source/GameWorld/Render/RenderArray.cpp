@@ -8,12 +8,12 @@
 namespace GameWorld
 {
 
-	RenderArray* RenderArray::CreateRenderArray()
+	Ref<RenderArray> RenderArray::CreateRenderArray()
 	{
 		switch (RenderBase::GetRenderAPI())
 		{
 		case RenderAPIType::kNone   : break;
-		case RenderAPIType::kOpenGl : return new OpenGLRenderArray();
+		case RenderAPIType::kOpenGl : return CreateRef<OpenGLRenderArray>();
 		}
 		GAMEWORLD_CORE_ASSERT(false, "Unknown Render API.");
 		return nullptr;

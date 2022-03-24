@@ -20,6 +20,8 @@ namespace GameWorld
 	public:
 		virtual ~RHI() = default;
 
+		virtual void Init() = 0;
+
 		virtual void SetViewport(GW_UINT32 x, GW_UINT32 y, GW_UINT32 width, GW_UINT32 height) = 0;
 
 		virtual void SetClearColor(glm::vec4 color) = 0;

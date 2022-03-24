@@ -72,7 +72,7 @@ namespace GameWorld
 		inline void SetLayout(RenderBufferLayout buffer_layout) { buffer_layout_ = buffer_layout; };
 		inline RenderBufferLayout& GetLayout() { return buffer_layout_; };
 
-		static VertexBuffer* CreateVertexBuffer(GW_FLOAT32* buff, GW_UINT32 size);
+		static Ref<VertexBuffer> CreateVertexBuffer(GW_FLOAT32* buff, GW_UINT32 size);
 
 	private:
 		RenderBufferLayout buffer_layout_;
@@ -88,6 +88,6 @@ namespace GameWorld
 
 		virtual GW_UINT32 Count() const = 0;
 
-		static IndexBuffer* CreateIndexBuffer(GW_UINT32* buff, GW_UINT32 count);
+		static Ref<IndexBuffer> CreateIndexBuffer(GW_UINT32* buff, GW_UINT32 count);
 	};
 }

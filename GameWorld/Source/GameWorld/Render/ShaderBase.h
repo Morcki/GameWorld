@@ -12,6 +12,7 @@ namespace GameWorld
 	public:		
 		virtual ~ShaderBase() = default;
 
+		//virtual void LinkShaderFile(const GW_CHAR* glslFilePath) = 0
 		virtual void LinkShaderFile(const GW_CHAR* vertexPath, const GW_CHAR* fragmentPath, const GW_CHAR* geometryPath = nullptr) = 0;
 
 		inline GW_UINT32 GetProgramID() { return ShaderProgramID; };
