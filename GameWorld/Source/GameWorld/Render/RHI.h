@@ -29,7 +29,7 @@ namespace GameWorld
 
 		static RenderAPIType GetAPIType() { return render_api_; }
 
-		static RHI* CreateRHI();
+		static Scope<RHI> CreateRHI();
 
 	private:
 		static RenderAPIType render_api_;

@@ -7,12 +7,12 @@
 
 namespace GameWorld
 {
-	ShaderBase* ShaderBase::CreateShaderBase()
+	Ref<ShaderBase> ShaderBase::CreateShaderBase()
 	{
 		switch (RenderBase::GetRenderAPI())
 		{
 		case RenderAPIType::kNone: break;
-		case RenderAPIType::kOpenGl: return new OpenGLShader();
+		case RenderAPIType::kOpenGl: return CreateRef<OpenGLShader>();
 		}
 		GAMEWORLD_CORE_ASSERT(false, "Unkown Rendering API Type");
 		return nullptr;

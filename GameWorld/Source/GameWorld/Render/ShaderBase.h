@@ -19,7 +19,7 @@ namespace GameWorld
 		virtual void LockShader()   const = 0;
 		virtual void UnlockShader() const = 0;
 
-		static ShaderBase* CreateShaderBase();
+		static Ref<ShaderBase> CreateShaderBase();
 
 	protected:
 		GW_UINT32 ShaderProgramID = 0;
