@@ -11,6 +11,7 @@
 #include "GameWorld/Camera/CameraOrtho.h"
 #include "GameWorld/Camera/CameraController.h"
 #include "GameWorld/Render/RenderCommand.h"
+#include "GameWorld/Texture/TextureBase.h"
 //----Entry Point----------------------------
 #include "GameWorld/EntryPoint.h"
 

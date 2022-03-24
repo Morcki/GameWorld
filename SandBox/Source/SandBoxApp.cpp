@@ -12,6 +12,8 @@ private:
 	Ref<RenderArray>     shader_vertex_array_;
 	Ref<ShaderBase>      squad_shader_program_;
 	Ref<RenderArray>     squad_shader_vertex_array_;
+	Ref<ShaderBase>      texture_shader_program_;
+	Ref<Texture2D>       texture_;
 	Scope<Camera2DOrthoController> camera_controller_;
 
 	glm::vec4 squad_color = { 0.0f, 0.0f, 1.0f, 1.0f };
@@ -43,43 +45,56 @@ public:
 			auto index_buffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(indices, sizeof(indices) / sizeof(GW_UINT32)));
 			shader_vertex_array_->SetIndexBuffer(index_buffer);
 
-			shader_program_ = CreateAbstractRef<ShaderBase>(ShaderBase::CreateShaderBase());
+			shader_program_ = ShaderBase::CreateShaderBase();
 
 			shader_program_->LinkShaderFile
 			(
-				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.vs",
-				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/test.fs"
+				"Shader/test.vs",
+				"Shader/test.fs"
 			);
 			shader_program_->LockShader();
 		}
 
 		{
-			GW_FLOAT32 squad_vertices[4 * 3] =
+			GW_FLOAT32 squad_vertices[4 * 5] =
 			{
-				-0.5f, -0.5f, 0.0f,
-				-0.5f,  0.5f, 0.0f,
-				 0.5f, -0.5f, 0.0f,
-				 0.5f,  0.5f, 0.0f,
+				-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+				-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+				 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+				 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
 			};
 			auto squad_vertex_buffer = CreateAbstractRef<VertexBuffer>(VertexBuffer::CreateVertexBuffer(squad_vertices, sizeof(squad_vertices)));
 			squad_vertex_buffer->SetLayout
 			({
-				{ShaderDataType::Float3, "aPos"},
+				{ShaderDataType::Float3, "aPosition"},
+				{ShaderDataType::Float2, "aTexCoord"},
 				});
 			squad_shader_vertex_array_->AddVertexBuffer(squad_vertex_buffer);
 			GW_UINT32 squad_indices[] = { 0, 1, 2, 1, 2, 3 };
 			auto squad_index_buffer = CreateAbstractRef<IndexBuffer>(IndexBuffer::CreateIndexBuffer(squad_indices, sizeof(squad_indices) / sizeof(GW_UINT32)));
 			squad_shader_vertex_array_->SetIndexBuffer(squad_index_buffer);
 
-			squad_shader_program_ = CreateAbstractRef<ShaderBase>(ShaderBase::CreateShaderBase());
+			squad_shader_program_ = ShaderBase::CreateShaderBase();
 
 			squad_shader_program_->LinkShaderFile
 			(
-				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/squad.vs",
-				"F:\\WorkSpace/Development/GameWorld/GameWorld/GameWorld/Shader/squad.fs"
+				"Shader/squad.vs",
+				"Shader/squad.fs"
 			);
 			squad_shader_program_->LockShader();
 		}
+
+		texture_shader_program_ = ShaderBase::CreateShaderBase();
+		texture_shader_program_->LinkShaderFile
+		(
+			"Shader/texture.vs",
+			"Shader/texture.fs"
+		);
+		texture_shader_program_->LockShader();
+
+		texture_ = Texture2D::CreateTexture2D("Assets/Texture/Image2D/Checkerboard.png");
+		texture_shader_program_->LockShader();
+		ShaderTool::SetIntUniform(texture_shader_program_->GetProgramID(),"uTexture" , 0);
 	}
 
 	virtual	~Game2DLayer()
@@ -107,8 +122,15 @@ public:
 				RenderCommand::DrawElements(squad_shader_vertex_array_);
 			}
 		}
-		
+
+		texture_shader_program_->LockShader();
+		texture_->Attach();
+		ShaderTool::SetVec3Uniform(texture_shader_program_->GetProgramID(), "uTranslateVec", glm::vec3(0.0f));
+		ShaderTool::SetMat4Uniform(texture_shader_program_->GetProgramID(), "uVPmat", camera_controller_->GetCamera().GetViewProjectionMatrix());
+		RenderCommand::DrawElements(squad_shader_vertex_array_);
+
 		shader_program_->LockShader();
+		ShaderTool::SetVec3Uniform(texture_shader_program_->GetProgramID(), "uTranslateVec", glm::vec3(-0.5f, 0.5f, 0.0f));
 		ShaderTool::SetMat4Uniform(shader_program_->GetProgramID(), "uVPmat", camera_controller_->GetCamera().GetViewProjectionMatrix());
 		shader_vertex_array_->Bind();
 		RenderCommand::DrawElements(shader_vertex_array_);
