@@ -14,6 +14,8 @@ project "GameWorld"
 	{
 		"Source/**.h",
 		"Source/**.cpp",
+		"ThirdParty/stb_image/**.h",
+		"ThirdParty/stb_image/**.cpp",
 		"ThirdParty/glm/glm/**.hpp",
 		"ThirdParty/glm/glm/**.inl",
 	}
@@ -32,6 +34,7 @@ project "GameWorld"
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.IMGUI}",
 		"%{IncludeDir.GLM}",
+		"%{IncludeDir.STB_IMAGE}",
 	}
 	
 	links

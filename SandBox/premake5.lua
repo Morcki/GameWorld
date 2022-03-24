@@ -1,5 +1,4 @@
 project "SandBox"
-	location "SandBox"
 	kind "ConsoleApp"
 	language "C++"
 	staticruntime "off"
