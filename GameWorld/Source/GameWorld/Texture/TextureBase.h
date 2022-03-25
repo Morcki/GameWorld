@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-
+#include <array>
 #include "GameWorld/Core/Core.h"
 
 namespace GameWorld
@@ -22,5 +22,11 @@ namespace GameWorld
 	{
 	public:
 		static Ref<Texture2D> CreateTexture2D(const std::string& path);
+	};
+
+	class TextureCube3D : public TextureBase
+	{
+	public:
+		static Ref<TextureCube3D> CreateTextureCube3D(std::array<std::string, 6> faces);
 	};
 }
