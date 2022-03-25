@@ -33,7 +33,7 @@ namespace GameWorld
 		//glEnable(GL_FRAMEBUFFER_SRGB);
 		// 开启深度测试
 		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
+		SetDepthFunc(ShaderCmpFunc::kLess);
 
 		// 开启CULL
 		glEnable(GL_CULL_FACE);
@@ -44,10 +44,6 @@ namespace GameWorld
 	void OpenGLRHI::SetDepthMask(GW_BOOL bWrite)
 	{
 		glDepthMask(bWrite ? GL_TRUE : GL_FALSE);
-		//if (!bWrite)
-		//	glDepthFunc(GL_LEQUAL);
-		//else
-		//	glDepthFunc(GL_LESS);
 	}
 
 	void OpenGLRHI::SetDepthFunc(ShaderCmpFunc cmp)

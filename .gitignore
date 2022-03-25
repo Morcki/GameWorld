@@ -3,7 +3,7 @@
 bin/
 bin-int/
 GameWorld/ThirdParty/imgui/examples/
-Assets/
+
 #Files
 *.user
 *.sln
