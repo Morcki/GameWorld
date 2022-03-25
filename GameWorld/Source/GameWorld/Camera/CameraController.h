@@ -6,6 +6,7 @@
 #include "GameWorld/Events/ApplicationEvent.h"
 #include "GameWorld/Events/KeyEvent.h"
 #include "CameraOrtho.h"
+#include "CameraPersp.h"
 
 namespace GameWorld
 {
@@ -14,7 +15,7 @@ namespace GameWorld
 	public:
 		Camera2DOrthoController(GW_FLOAT32 aspect_ratio, GW_BOOL b_rotation = false);
 
-		void TickUpdate(Timestep ts);
+		void TickUpdate();
 		void OnEvent(Event& e);
 
 		void OnResize(GW_FLOAT32 width, GW_FLOAT32 height);
@@ -26,6 +27,7 @@ namespace GameWorld
 		void SetZoomLevel(GW_FLOAT32 zoom) { zoom_ = zoom; }
 
 	private:
+		GW_BOOL OnKeyPressed(KeyPressedEvent& e);
 		GW_BOOL OnMouseLeftPressed(MouseButtonPressedEvent& e);
 		GW_BOOL OnMouseMoved(MouseMovedEvent& e);
 		GW_BOOL OnMouseScrolled(MouseScrolledEvent& e);
@@ -41,5 +43,31 @@ namespace GameWorld
 		glm::vec2 mouse_press_pos_;
 	};
 
+	class CameraPerspController
+	{
+	public:
+		CameraPerspController(GW_BOOL b_constrain_pitch = true);
 
+		void TickUpdate();
+		void OnEvent(Event& e);
+
+		CameraPersp& GetCamera() { return camera_; }
+		const CameraPersp& GetCamera() const { return camera_; }
+
+	private:
+		GW_BOOL OnKeyPressed(KeyPressedEvent& e);
+		GW_BOOL OnMouseMoved(MouseMovedEvent& e);
+		GW_BOOL OnMouseScrolled(MouseScrolledEvent& e);
+		GW_BOOL OnWindowResized(WindowResizeEvent& e);
+
+	private:
+		GW_BOOL b_constrain_pitch_ = true;
+
+		GW_FLOAT32 aspect_ratio_;
+		CameraPersp camera_;
+
+		// camera options
+		GW_FLOAT32 move_speed_ = 2.5f;
+		GW_FLOAT32 mouse_sensitive_ = 0.35f;
+	};
 }

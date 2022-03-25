@@ -6,6 +6,7 @@ namespace GameWorld
 	class CameraPersp : public CameraProjection
 	{
 	public:
+		CameraPersp();
 		CameraPersp(GW_FLOAT32 fov_y, GW_FLOAT32 aspect);
 		virtual ~CameraPersp() override;
 		
@@ -18,7 +19,7 @@ namespace GameWorld
 		virtual void UpdateProjectionMatrix() override;
 
 	private:
-		GW_FLOAT32 fov_y_;
+		GW_FLOAT32 fov_y_ = 45.0f;
 		GW_FLOAT32 aspect_ratio_;
 	};
 

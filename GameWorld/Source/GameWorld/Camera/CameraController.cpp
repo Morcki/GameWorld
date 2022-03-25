@@ -6,15 +6,41 @@
 
 namespace GameWorld
 {
+	/************************************************************************/
+	/*               Camera2DOrthoController                                */
+	/************************************************************************/
 	Camera2DOrthoController::Camera2DOrthoController(GW_FLOAT32 aspect_ratio, GW_BOOL b_rotation)
 		: aspect_ratio_(aspect_ratio), camera_2d_ortho_(-aspect_ratio * zoom_, aspect_ratio * zoom_, -zoom_, zoom_), b_rotation_(b_rotation)
 	{
 	}
 
-	void Camera2DOrthoController::TickUpdate(Timestep ts)
+	void Camera2DOrthoController::TickUpdate()
+	{
+		glm::vec2 mouse_pos_ = InputSystem::GetMousePosition();
+	}
+
+	void Camera2DOrthoController::OnEvent(Event& e)
+	{
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnKeyPressed));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnMouseLeftPressed));
+		dispatcher.Dispatch<MouseMovedEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnMouseMoved));
+		dispatcher.Dispatch<MouseScrolledEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnMouseScrolled));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnWindowResized));
+	}
+
+	void Camera2DOrthoController::OnResize(GW_FLOAT32 width, GW_FLOAT32 height)
+	{
+		aspect_ratio_ = width / height;
+		camera_2d_ortho_.SetProjection(-aspect_ratio_ * zoom_, aspect_ratio_ * zoom_, -zoom_, zoom_);
+	}
+
+	GW_BOOL Camera2DOrthoController::OnKeyPressed(KeyPressedEvent& e)
 	{
 		glm::vec3 camera_position = camera_2d_ortho_.GetPosition();
 		GW_FLOAT32 camera_rotation = camera_2d_ortho_.GetRotation();
+		GW_FLOAT32 ts = Timestep::GetDeltaTime();
+
 		if (InputSystem::IsKeyPressed(Key::A))
 		{
 			camera_position.x -= cos(glm::radians(camera_rotation)) * translation_speed_ * ts;
@@ -53,25 +79,7 @@ namespace GameWorld
 		}
 
 		camera_2d_ortho_.SetPosition(camera_position);
-
-		translation_speed_ = zoom_;
-
-		glm::vec2 mouse_pos_ = InputSystem::GetMousePosition();
-	}
-
-	void Camera2DOrthoController::OnEvent(Event& e)
-	{
-		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnMouseLeftPressed));
-		dispatcher.Dispatch<MouseMovedEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnMouseMoved));
-		dispatcher.Dispatch<MouseScrolledEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnMouseScrolled));
-		dispatcher.Dispatch<WindowResizeEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Camera2DOrthoController::OnWindowResized));
-	}
-
-	void Camera2DOrthoController::OnResize(GW_FLOAT32 width, GW_FLOAT32 height)
-	{
-		aspect_ratio_ = width / height;
-		camera_2d_ortho_.SetProjection(-aspect_ratio_ * zoom_, aspect_ratio_ * zoom_, -zoom_, zoom_);
+		return false;
 	}
 
 	GW_BOOL Camera2DOrthoController::OnMouseLeftPressed(MouseButtonPressedEvent& e)
@@ -114,4 +122,89 @@ namespace GameWorld
 		OnResize((GW_FLOAT32)e.GetWidth(), (GW_FLOAT32)e.GetHeight());
 		return false;
 	}
+	/************************************************************************/
+	/*                      CameraController                                */
+	/************************************************************************/
+
+	CameraPerspController::CameraPerspController(GW_BOOL b_constrain_pitch)
+		: b_constrain_pitch_(b_constrain_pitch), camera_(CameraPersp())
+	{
+		
+	}
+
+	void CameraPerspController::TickUpdate()
+	{
+		
+	}
+
+	void CameraPerspController::OnEvent(Event& e)
+	{
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(BIND_CLASS_CALLBACK_FUNCTRION(CameraPerspController::OnKeyPressed));
+		dispatcher.Dispatch<MouseMovedEvent>(BIND_CLASS_CALLBACK_FUNCTRION(CameraPerspController::OnMouseMoved));
+		dispatcher.Dispatch<MouseScrolledEvent>(BIND_CLASS_CALLBACK_FUNCTRION(CameraPerspController::OnMouseScrolled));
+		
+	}
+
+	GW_BOOL CameraPerspController::OnKeyPressed(KeyPressedEvent& e)
+	{
+		glm::vec3 camera_pos = camera_.GetCameraPosition();
+		GW_FLOAT32 ts = Timestep::GetDeltaTime();
+		GW_FLOAT32 velocity = move_speed_ * ts;
+		if (InputSystem::IsKeyPressed(Key::W))
+		{
+			camera_pos += camera_.GetCameraFront() * velocity;
+		}
+		else if (InputSystem::IsKeyPressed(Key::S))
+		{
+			camera_pos -= camera_.GetCameraFront() * velocity;
+		}
+		else if (InputSystem::IsKeyPressed(Key::A))
+		{
+			camera_pos -= camera_.GetCameraRight() * velocity;
+		}
+		else if (InputSystem::IsKeyPressed(Key::D))
+		{
+			camera_pos += camera_.GetCameraRight() * velocity;
+		}
+		else
+		{
+			return true;
+		}
+		camera_.UpdateCameraPosition(camera_pos);
+		return false;
+	}
+
+	GW_BOOL CameraPerspController::OnMouseMoved(MouseMovedEvent& e)
+	{
+		GW_FLOAT32 yaw   = camera_.GetCameraYaw();
+		GW_FLOAT32 pitch = camera_.GetCameraPitch();
+
+		yaw   += mouse_sensitive_ * InputSystem::GetMouseXOffset();
+		pitch += mouse_sensitive_ * InputSystem::GetMouseYOffset();
+
+		// make sure that when pitch is out of bounds, screen doesn't get flipped
+		if (b_constrain_pitch_)
+		{
+			if (pitch > 89.0f)
+				pitch = 89.0f;
+			if (pitch < -89.0f)
+				pitch = -89.0f;
+		}
+		camera_.UpdateCameraAttitude(yaw, pitch);
+		return false;
+	}
+
+	GW_BOOL CameraPerspController::OnMouseScrolled(MouseScrolledEvent& e)
+	{
+		GW_FLOAT32 fov_y = camera_.GetFovY();
+		fov_y -= (float)e.GetYOffset();
+		if (fov_y < 1.0f)
+			fov_y = 1.0f;
+		if (fov_y > 45.0f)
+			fov_y = 45.0f;
+		camera_.UpdateFovY(fov_y);
+		return false;
+	}
+
 }
