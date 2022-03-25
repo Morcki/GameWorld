@@ -14,6 +14,10 @@ namespace GameWorld
 		virtual ~OpenGLRHI();
 
 		virtual void Init() override;
+		virtual void Init3DConfig() override;
+
+		virtual void SetDepthMask(GW_BOOL bWrite) override;
+		virtual void SetDepthFunc(ShaderCmpFunc cmp) override;
 
 		virtual void SetViewport(GW_UINT32 x, GW_UINT32 y, GW_UINT32 width, GW_UINT32 height) override;
 
@@ -21,6 +25,7 @@ namespace GameWorld
 		virtual void ClearBuffer() override;
 
 		virtual void DrawElements(const Ref<RenderArray>& vertex_array, GW_UINT32 index_count = 0) override;
+		virtual void DrawArrays(GW_UINT32 vert_count) override;
 	};
 
 

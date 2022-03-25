@@ -1,21 +1,26 @@
 #pragma once
+
 namespace GameWorld 
 {
 
 	class Timestep
 	{
 	public:
-		Timestep(GW_FLOAT32 time = 0.0f)
-			: time_(time)
-		{
-		}
+	
+		static void TickUpdate();
 
-		operator float() const { return time_; }
+		static GW_FLOAT32 GetLastTickTime()    { return last_tick_time_; }
+		static GW_FLOAT32 GetLastTickTimeMs()  { return last_tick_time_ * 1000.0f; }
+											   
+		static GW_FLOAT32 GetStaticDeltaTime() { return ctick_delta_time_; }
+											   
+		static GW_FLOAT32 GetDeltaTime()       { return tick_delta_time_; }
+		static GW_FLOAT32 GetDeltaTimeMs()     { return tick_delta_time_ * 1000.0f; }
 
-		float GetSeconds() const { return time_; }
-		float GetMilliseconds() const { return time_ * 1000.0f; }
 	private:
-		GW_FLOAT32 time_;
+		const static GW_FLOAT32 ctick_delta_time_;
+		static GW_FLOAT32 last_tick_time_;
+		static GW_FLOAT32 tick_delta_time_;
 	};
 
 }

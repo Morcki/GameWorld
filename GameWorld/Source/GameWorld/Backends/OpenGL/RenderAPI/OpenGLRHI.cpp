@@ -6,6 +6,11 @@
 
 namespace GameWorld
 {
+	static GLenum GetOpenGLDepthFunc(ShaderCmpFunc cmp)
+	{
+		return (GL_NEVER - ShaderCmpFunc::kNever) + cmp;
+	};
+
 	OpenGLRHI::OpenGLRHI()
 	{
 
@@ -20,6 +25,34 @@ namespace GameWorld
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+
+	void OpenGLRHI::Init3DConfig()
+	{
+		//// 开启自动GAMA矫正
+		//glEnable(GL_FRAMEBUFFER_SRGB);
+		// 开启深度测试
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+
+		// 开启CULL
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CCW);
+	}
+
+	void OpenGLRHI::SetDepthMask(GW_BOOL bWrite)
+	{
+		glDepthMask(bWrite ? GL_TRUE : GL_FALSE);
+		//if (!bWrite)
+		//	glDepthFunc(GL_LEQUAL);
+		//else
+		//	glDepthFunc(GL_LESS);
+	}
+
+	void OpenGLRHI::SetDepthFunc(ShaderCmpFunc cmp)
+	{
+		glDepthFunc(GetOpenGLDepthFunc(cmp));
 	}
 
 	void OpenGLRHI::SetViewport(GW_UINT32 x, GW_UINT32 y, GW_UINT32 width, GW_UINT32 height)
@@ -42,4 +75,10 @@ namespace GameWorld
 		GW_UINT32 count = index_count ? index_count : vertex_array->GetIndexBuffer()->Count();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
+
+	void OpenGLRHI::DrawArrays(GW_UINT32 vert_count)
+	{
+		glDrawArrays(GL_TRIANGLES, 0, vert_count);
+	}
+
 }

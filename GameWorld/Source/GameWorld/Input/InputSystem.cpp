@@ -8,6 +8,31 @@
 
 namespace GameWorld
 {
+	GW_BOOL    InputSystem::b_first_tick = true;
+
+	GW_FLOAT32 InputSystem::last_tick_mouse_x = 0.0f;
+	GW_FLOAT32 InputSystem::last_tick_mouse_y = 0.0f;
+
+	GW_FLOAT32 InputSystem::tick_mouse_xoff = 0.0f;
+	GW_FLOAT32 InputSystem::tick_mouse_yoff = 0.0f;
+
+	void InputSystem::UpdateMousePosition(GW_FLOAT32 xpos, GW_FLOAT32 ypos)
+	{
+		if (b_first_tick)
+		{
+			last_tick_mouse_x = xpos;
+			last_tick_mouse_y = ypos;
+			b_first_tick = false;
+		}
+		
+		tick_mouse_xoff = xpos - last_tick_mouse_x;
+		tick_mouse_yoff = last_tick_mouse_y - ypos; // reversed since y-coordinates go from bottom to top
+
+		last_tick_mouse_x = xpos;
+		last_tick_mouse_y = ypos;
+		
+	}
+
 	bool InputSystem::IsKeyPressed(const KeyCode key)
 	{
 		auto* window = static_cast<GLFWwindow*>(Application::GetInst().GetWindow().GetNativeWindow());
@@ -40,4 +65,15 @@ namespace GameWorld
 	{
 		return GetMousePosition().y;
 	}
+
+	GW_FLOAT32 InputSystem::GetMouseXOffset()
+	{
+		return tick_mouse_xoff;
+	}
+
+	GW_FLOAT32 InputSystem::GetMouseYOffset()
+	{
+		return tick_mouse_yoff;
+	}
+
 }

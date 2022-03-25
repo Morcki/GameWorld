@@ -9,11 +9,9 @@
 #include "GameWorld/Render/ShaderBase.h"
 #include "GameWorld/Render/ShaderTool.h"
 #include "GameWorld/Camera/CameraOrtho.h"
+#include "GameWorld/Camera/CameraPersp.h"
 #include "GameWorld/Camera/CameraController.h"
 #include "GameWorld/Render/RenderCommand.h"
 #include "GameWorld/Texture/TextureBase.h"
 #include "GameWorld/Render/RenderCore.h"
-//----Entry Point----------------------------
-#include "GameWorld/EntryPoint.h"
-
 //-------------------------------------------

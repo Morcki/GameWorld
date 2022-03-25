@@ -13,6 +13,11 @@ namespace GameWorld
 			RenderHardwareAPI->Init();
 		}
 
+		inline static void Init3DConfig()
+		{
+			RenderHardwareAPI->Init3DConfig();
+		}
+
 		inline static void SetViewport(GW_UINT32 x, GW_UINT32 y, GW_UINT32 width, GW_UINT32 height)
 		{
 			RenderHardwareAPI->SetViewport(x, y, width, height);
@@ -27,6 +32,21 @@ namespace GameWorld
 		{ 
 			RenderHardwareAPI->ClearBuffer(); 
 		};
+		
+		inline static void SetDepthMask(GW_BOOL bWrite)
+		{
+			RenderHardwareAPI->SetDepthMask(bWrite);
+		}
+
+		inline static void SetDepthFunc(ShaderCmpFunc cmp)
+		{
+			RenderHardwareAPI->SetDepthFunc(cmp);
+		}
+
+		inline static void DrawArrays(GW_UINT32 vert_count)
+		{
+			RenderHardwareAPI->DrawArrays(vert_count);
+		}
 
 		inline static void DrawElements(const Ref<RenderArray>& vertexArray, GW_UINT32 indexCount = 0)
 		{ 

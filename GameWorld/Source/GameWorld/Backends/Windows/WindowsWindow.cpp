@@ -9,6 +9,7 @@
 #include "GameWorld/Events/ApplicationEvent.h"
 #include "GameWorld/Events/MouseEvent.h"
 #include "GameWorld/Events/KeyEvent.h"
+#include "GameWorld/Input/InputSystem.h"
 
 #include "GameWorld/Backends/OpenGL/RenderAPI/OpenGLContext.h"
 
@@ -140,8 +141,10 @@ namespace GameWorld
 
 		glfwSetCursorPosCallback(window_, [](GLFWwindow* window, double xpos, double ypos)
 			{
+				InputSystem::UpdateMousePosition(xpos, ypos);
+			
 				WindowInfo& data = *(WindowInfo*)glfwGetWindowUserPointer(window);
-
+				
 				MouseMovedEvent event((float)xpos, (float)ypos);
 				data.callback_function(event);
 			});

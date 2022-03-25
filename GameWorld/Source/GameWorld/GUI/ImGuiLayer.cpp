@@ -66,7 +66,7 @@ namespace GameWorld
 		ImGui::ShowDemoWindow(&b_show_demowindow);
 	}
 
-	void ImGuiLayer::OnUpdate(Timestep ts)
+	void ImGuiLayer::OnUpdate()
 	{
 
 	}

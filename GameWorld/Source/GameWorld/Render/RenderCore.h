@@ -31,7 +31,7 @@ namespace GameWorld
 		
 		~RenderPass()
 		{
-			//shader_program_->UnlockShader();
+			shader_program_->UnlockShader();
 		}
 
 		RenderPass& begin() 
@@ -46,12 +46,23 @@ namespace GameWorld
 			functor();
 			return *this;
 		};
-		
-		RenderPass& end(const Ref<RenderArray>& vertex_array) 
-		{// will automatically call drawcall
+		RenderPass& draw(const Ref<RenderArray>& vertex_array) 
+		{// drawcall
 			RenderBase::DrawCall(vertex_array);
 			return *this;
+		};		
+		
+		RenderPass& end()
+		{
+			return *this;
 		};
+
+		template <typename Functor>
+		RenderPass& end(Functor functor) 
+		{// post-process
+			functor();
+			return *this;
+		};		
 
 	private:
 		Ref<ShaderBase> shader_program_;

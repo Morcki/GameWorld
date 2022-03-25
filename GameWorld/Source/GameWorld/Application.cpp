@@ -43,6 +43,8 @@ namespace GameWorld
 	{
 		while (b_gameworld_running)
 		{
+			// Update Tick Time
+			Timestep::TickUpdate();
 			// Fresh window color buffer
 			RenderCommand::ClearColor
 			({
@@ -55,7 +57,7 @@ namespace GameWorld
 
 			for (Layer* layer : layerstack_)
 			{
-				layer->OnUpdate(0.05f);
+				layer->OnUpdate();
 			}
 
 			imgui_base_render_layer_->RenderTickBegin(); 
