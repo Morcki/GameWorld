@@ -61,15 +61,15 @@ namespace GameWorld
 		CameraType camera_type_;
 		ProjectionType projection_type_;
 
-		glm::vec3 position_               = glm::vec3(0.0f);
-		glm::vec3 world_up_               = { 0.0f, 1.0f, 0.0f };
+		glm::vec3 position_                { glm::vec3(0.0f) };
+		glm::vec3 world_up_                { glm::vec3(0.0f, 1.0f, 0.0f) };
 
-		GW_FLOAT32 yaw_                   = -90.0f;
-		GW_FLOAT32 pitch_                 =   0.0f;
+		GW_FLOAT32 yaw_                    { -90.0f };
+		GW_FLOAT32 pitch_                  {   0.0f };
 
-		glm::mat4 view_matrix_            = glm::mat4(1.0f);
-		glm::mat4 projection_matrix_      = glm::mat4(1.0f);
-		glm::mat4 view_projection_matrix_ = glm::mat4(1.0f);
+		glm::mat4 view_matrix_             { glm::mat4(1.0f) };
+		glm::mat4 projection_matrix_       { glm::mat4(1.0f) };
+		glm::mat4 view_projection_matrix_  { glm::mat4(1.0f) };
 
 		glm::vec3 front_;
 		glm::vec3 right_;
@@ -100,7 +100,7 @@ namespace GameWorld
 		virtual void UpdateProjectionMatrix() = 0;
 
 	protected:
-		GW_FLOAT32 znear_ = 0.3f;
-		GW_FLOAT32 zfar_  = 3000.0f;
+		GW_FLOAT32 znear_{ 0.3f };
+		GW_FLOAT32 zfar_ { 3000.0f };
 	};
 }

@@ -40,7 +40,7 @@ namespace GameWorld
 		glm::vec3 camera_position = camera_2d_ortho_.GetPosition();
 		GW_FLOAT32 camera_rotation = camera_2d_ortho_.GetRotation();
 		GW_FLOAT32 ts = Timestep::GetDeltaTime();
-
+		
 		if (InputSystem::IsKeyPressed(Key::A))
 		{
 			camera_position.x -= cos(glm::radians(camera_rotation)) * translation_speed_ * ts;
@@ -67,8 +67,10 @@ namespace GameWorld
 		{
 			if (InputSystem::IsKeyPressed(Key::Q))
 				camera_rotation += rotation_speed_ * ts;
-			if (InputSystem::IsKeyPressed(Key::E))
+			else if (InputSystem::IsKeyPressed(Key::E))
 				camera_rotation -= rotation_speed_ * ts;
+			else
+				return true;
 
 			if (camera_rotation > 180.0f)
 				camera_rotation -= 360.0f;
@@ -112,7 +114,7 @@ namespace GameWorld
 	{
 
 		zoom_ -= e.GetYOffset() * 0.25f;
-		zoom_ = std::max(zoom_, 0.25f);
+		zoom_ = zoom_ < 0.25f ? 0.25 : zoom_;
 		camera_2d_ortho_.SetProjection(-aspect_ratio_ * zoom_, aspect_ratio_ * zoom_, -zoom_, zoom_);
 		return false;
 	}

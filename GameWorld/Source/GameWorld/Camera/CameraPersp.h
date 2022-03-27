@@ -19,7 +19,7 @@ namespace GameWorld
 		virtual void UpdateProjectionMatrix() override;
 
 	private:
-		GW_FLOAT32 fov_y_ = 45.0f;
+		GW_FLOAT32 fov_y_{ 45.0f };
 		GW_FLOAT32 aspect_ratio_;
 	};
 

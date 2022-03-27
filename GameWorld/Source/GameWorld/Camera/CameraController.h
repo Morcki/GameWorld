@@ -35,11 +35,12 @@ namespace GameWorld
 
 	private:
 		GW_FLOAT32 aspect_ratio_;
-		GW_FLOAT32 zoom_ = 1.0f;
+		GW_FLOAT32 zoom_{ 1.0f };
 		Camera2DOrtho camera_2d_ortho_;
 
 		bool b_rotation_;
-		GW_FLOAT32 translation_speed_ = 5.0f, rotation_speed_ = 180.0f;
+		GW_FLOAT32 translation_speed_{ 5.0f };
+		GW_FLOAT32 rotation_speed_{ 180.0f };
 		glm::vec2 mouse_press_pos_;
 	};
 
@@ -67,7 +68,7 @@ namespace GameWorld
 		CameraPersp camera_;
 
 		// camera options
-		GW_FLOAT32 move_speed_ = 2.5f;
-		GW_FLOAT32 mouse_sensitive_ = 0.35f;
+		GW_FLOAT32 move_speed_{ 2.5f };
+		GW_FLOAT32 mouse_sensitive_{ 0.35f };
 	};
 }
