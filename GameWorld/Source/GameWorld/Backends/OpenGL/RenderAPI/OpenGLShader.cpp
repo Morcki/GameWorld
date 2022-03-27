@@ -19,7 +19,7 @@ namespace GameWorld
 	void OpenGLShader::LinkShaderFile(const GW_CHAR* vertexPath, const GW_CHAR* fragmentPath, const GW_CHAR* geometryPath)
 	{
 		GW_BOOL bCompileOk = LoadShaderFile(vertexPath, ShaderType::kVertex) & LoadShaderFile(fragmentPath, ShaderType::kFragment);
-		if (geometryPath != nullptr)
+		if (!geometryPath)
 		{
 			bCompileOk &= LoadShaderFile(geometryPath, ShaderType::kGeometry);
 		}
@@ -33,7 +33,30 @@ namespace GameWorld
 
 		glDeleteShader(ShaderVertexID);
 		glDeleteShader(ShaderFragmentID);
-		if (geometryPath != nullptr)
+		if (!geometryPath)
+		{
+			glDeleteShader(ShaderGeometryID);
+		}
+	}
+
+	void OpenGLShader::LinkSourceCode(const std::string& vertexCode, const std::string& fragmentCode, const std::string& geometryCode)
+	{
+		GW_BOOL bCompileOk = CompileShader(ShaderType::kVertex, vertexCode) & CompileShader(ShaderType::kFragment, fragmentCode);
+		
+		if (!geometryCode.empty())
+		{
+			bCompileOk &= CompileShader(ShaderType::kGeometry, geometryCode);
+		}
+
+		if (!bCompileOk) return;
+
+		glLinkProgram(ShaderProgramID);
+		bCompileOk &= CheckCompileResult(ShaderProgramID, ShaderType::kProgram);
+		
+		if (!bCompileOk) return;
+		glDeleteShader(ShaderVertexID);
+		glDeleteShader(ShaderFragmentID);
+		if (!geometryCode.empty())
 		{
 			glDeleteShader(ShaderGeometryID);
 		}

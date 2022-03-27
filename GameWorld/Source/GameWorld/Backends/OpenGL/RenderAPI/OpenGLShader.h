@@ -15,6 +15,7 @@ namespace GameWorld
 
 		//virtual void LinkShaderFile(const GW_CHAR* glslFilePath) override;
 		virtual void LinkShaderFile(const GW_CHAR* vertexPath, const GW_CHAR* fragmentPath, const GW_CHAR* geometryPath = nullptr) override;
+		virtual void LinkSourceCode(const std::string& vertexCode, const std::string& fragmentCode, const std::string& geometryCode = "") override;
 
 		virtual void LockShader() const override;
 		virtual void UnlockShader() const override;
