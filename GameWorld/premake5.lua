@@ -30,7 +30,6 @@ project "GameWorld"
 	{
 		"Source",
 		"ThirdParty/spdlog/include",
-		"Source/GameWorld/Pch",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.IMGUI}",
@@ -65,15 +64,15 @@ project "GameWorld"
 		
 	filter "configurations:Debug"
 		defines "GAMEWORLD_DEBUG"
-		buildoptions "/MTd"
+		buildoptions "/MDd"
 		symbols "On"
 		
 	filter "configurations:Release"
 		defines "GAMEWORLD_RELEASE"
-		buildoptions "/MT"
+		buildoptions "/MD"
 		symbols "On"
 	
 	filter "configurations:Dist"
 		defines "GAMEWORLD_DIST"
-		buildoptions "/MT"
+		buildoptions "/MD"
 		symbols "On"
