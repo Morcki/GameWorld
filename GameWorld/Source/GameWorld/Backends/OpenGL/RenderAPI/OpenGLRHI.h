@@ -16,8 +16,13 @@ namespace GameWorld
 		virtual void Init() override;
 		virtual void Init3DConfig() override;
 
+		virtual void SetGamaCorrect(GW_BOOL bGama) override;
+
+		virtual void SetDepthTest(GW_BOOL bDepth) override;
 		virtual void SetDepthMask(GW_BOOL bWrite) override;
 		virtual void SetDepthFunc(ShaderCmpFunc cmp) override;
+
+		virtual void SetCullFace(GW_BOOL bCull) override;
 
 		virtual void SetViewport(GW_UINT32 x, GW_UINT32 y, GW_UINT32 width, GW_UINT32 height) override;
 

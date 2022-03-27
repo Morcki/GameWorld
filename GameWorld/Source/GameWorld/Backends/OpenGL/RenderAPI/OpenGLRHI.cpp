@@ -29,26 +29,43 @@ namespace GameWorld
 
 	void OpenGLRHI::Init3DConfig()
 	{
-		//// 开启自动GAMA矫正
-		//glEnable(GL_FRAMEBUFFER_SRGB);
-		// 开启深度测试
-		glEnable(GL_DEPTH_TEST);
+		SetDepthTest(true);
 		SetDepthFunc(ShaderCmpFunc::kLess);
+	}
 
-		// 开启CULL
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		glFrontFace(GL_CCW);
+	void OpenGLRHI::SetGamaCorrect(GW_BOOL bGama)
+	{
+		//// 开启自动GAMA矫正
+		bGama ? glEnable(GL_FRAMEBUFFER_SRGB) : glDisable(GL_FRAMEBUFFER_SRGB);
+	}
+
+	void OpenGLRHI::SetDepthTest(GW_BOOL bDepth)
+	{
+		bDepth ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
 	}
 
 	void OpenGLRHI::SetDepthMask(GW_BOOL bWrite)
 	{
-		glDepthMask(bWrite ? GL_TRUE : GL_FALSE);
+		glDepthMask(bWrite);
 	}
 
 	void OpenGLRHI::SetDepthFunc(ShaderCmpFunc cmp)
 	{
 		glDepthFunc(GetOpenGLDepthFunc(cmp));
+	}
+
+	void OpenGLRHI::SetCullFace(GW_BOOL bCull)
+	{
+		if (bCull)
+		{
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			glFrontFace(GL_CCW);
+		}
+		else
+		{
+			glDisable(GL_CULL_FACE);
+		}
 	}
 
 	void OpenGLRHI::SetViewport(GW_UINT32 x, GW_UINT32 y, GW_UINT32 width, GW_UINT32 height)

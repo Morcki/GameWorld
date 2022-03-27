@@ -14,4 +14,5 @@
 #include "GameWorld/Render/RenderCommand.h"
 #include "GameWorld/Texture/TextureBase.h"
 #include "GameWorld/Render/RenderCore.h"
+#include "GameWorld/Material/Skybox/SkyboxRenderPass.h"
 //-------------------------------------------

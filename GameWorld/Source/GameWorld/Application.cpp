@@ -1,4 +1,4 @@
-#include "PrecompiledHeader.h"
+#include <PrecompiledHeader.h>
 
 #include "Application.h"
 
@@ -110,7 +110,7 @@ namespace GameWorld
 
 		b_set_minSize = false;
 		ptr_window_->ResizeWindow(e.GetWidth(), e.GetHeight());
-		RenderBase::ResizeWindow(e.GetWidth(), e.GetHeight());
+		RenderBase::ResizeWindow(0, 0, e.GetWidth(), e.GetHeight());
 		return false;
 	}
 }
