@@ -32,7 +32,17 @@ namespace GameWorld
 		{ 
 			RenderHardwareAPI->ClearBuffer(); 
 		};
+
+		inline static void SetGamaCorrect(GW_BOOL bGama)
+		{
+			RenderHardwareAPI->SetGamaCorrect(bGama);
+		}
 		
+		inline static void SetDepthTest(GW_BOOL bDepth)
+		{
+			RenderHardwareAPI->SetDepthTest(bDepth);
+		}
+
 		inline static void SetDepthMask(GW_BOOL bWrite)
 		{
 			RenderHardwareAPI->SetDepthMask(bWrite);
@@ -41,6 +51,11 @@ namespace GameWorld
 		inline static void SetDepthFunc(ShaderCmpFunc cmp)
 		{
 			RenderHardwareAPI->SetDepthFunc(cmp);
+		}
+
+		inline static void SetCullFace(GW_BOOL bCull)
+		{
+			RenderHardwareAPI->SetCullFace(bCull);
 		}
 
 		inline static void DrawArrays(GW_UINT32 vert_count)

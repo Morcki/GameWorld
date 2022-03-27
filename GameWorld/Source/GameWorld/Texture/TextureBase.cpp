@@ -14,15 +14,17 @@ namespace GameWorld
 		case RenderAPIType::kNone:break;
 		case RenderAPIType::kOpenGl: return CreateRef<OpenGLTexture2D>(path);
 		}
+		return nullptr;
 	}
 
-	GameWorld::Ref<GameWorld::TextureCube3D> TextureCube3D::CreateTextureCube3D(std::array<std::string, 6> faces)
+	GameWorld::Ref<GameWorld::TextureCube3D> TextureCube3D::CreateTextureCube3D(const std::array<std::string, 6>& faces)
 	{
 		switch (RHI::GetAPIType())
 		{
 		case RenderAPIType::kNone:break;
 		case RenderAPIType::kOpenGl: return CreateRef<OpenGLTextureCube3D>(faces);
 		}
+		return nullptr;
 	}
 
 }

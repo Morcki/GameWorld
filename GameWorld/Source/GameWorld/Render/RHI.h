@@ -23,8 +23,13 @@ namespace GameWorld
 		virtual void Init() = 0;
 		virtual void Init3DConfig() = 0;
 		
-		virtual void SetDepthMask(GW_BOOL bWrite) = 0;
+		virtual void SetGamaCorrect(GW_BOOL bGama)   = 0;
+
+		virtual void SetDepthTest(GW_BOOL bDepth)    = 0;
+		virtual void SetDepthMask(GW_BOOL bWrite)    = 0;
 		virtual void SetDepthFunc(ShaderCmpFunc cmp) = 0;
+
+		virtual void SetCullFace(GW_BOOL bCull)      = 0;
 
 		virtual void SetViewport(GW_UINT32 x, GW_UINT32 y, GW_UINT32 width, GW_UINT32 height) = 0;
 

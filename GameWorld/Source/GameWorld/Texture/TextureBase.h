@@ -27,6 +27,6 @@ namespace GameWorld
 	class TextureCube3D : public TextureBase
 	{
 	public:
-		static Ref<TextureCube3D> CreateTextureCube3D(std::array<std::string, 6> faces);
+		static Ref<TextureCube3D> CreateTextureCube3D(const std::array<std::string, 6>& faces);
 	};
 }

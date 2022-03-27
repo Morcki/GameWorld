@@ -16,7 +16,7 @@ namespace GameWorld
 
 		static void DrawCall(const Ref<RenderArray>& vertex_buffer);
 
-		static void ResizeWindow(uint32_t width, uint32_t height);
+		static void ResizeWindow(GW_UINT32 x, GW_UINT32 y, GW_UINT32 width, GW_UINT32 height);
 
 	private:
 		
@@ -29,12 +29,12 @@ namespace GameWorld
 			: shader_program_(shader_program)
 		{};
 		
-		~RenderPass()
+		virtual ~RenderPass()
 		{
 			shader_program_->UnlockShader();
 		}
 
-		RenderPass& begin() 
+		RenderPass& begin()
 		{
 			shader_program_->LockShader();
 			return *this;
@@ -42,15 +42,16 @@ namespace GameWorld
 
 		template <typename Functor>
 		RenderPass& next(Functor functor)
-		{ 
+		{
 			functor();
 			return *this;
 		};
-		RenderPass& draw(const Ref<RenderArray>& vertex_array) 
+		
+		RenderPass& draw(const Ref<RenderArray>& vertex_array)
 		{// drawcall
 			RenderBase::DrawCall(vertex_array);
 			return *this;
-		};		
+		};
 		
 		RenderPass& end()
 		{
@@ -58,7 +59,7 @@ namespace GameWorld
 		};
 
 		template <typename Functor>
-		RenderPass& end(Functor functor) 
+		RenderPass& end(Functor functor)
 		{// post-process
 			functor();
 			return *this;

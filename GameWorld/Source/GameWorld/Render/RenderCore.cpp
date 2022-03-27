@@ -18,9 +18,9 @@ namespace GameWorld
 		RenderCommand::DrawElements(vertex_buffer);
 	}
 
-	void RenderBase::ResizeWindow(uint32_t width, uint32_t height)
+	void RenderBase::ResizeWindow(GW_UINT32 x, GW_UINT32 y, GW_UINT32 width, GW_UINT32 height)
 	{
-		RenderCommand::SetViewport(0, 0, width, height);
+		RenderCommand::SetViewport(x, y, width, height);
 	}
 
 }
