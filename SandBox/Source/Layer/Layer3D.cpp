@@ -7,59 +7,29 @@ Game3DLayer::Game3DLayer(const std::string& name /*= "Game2DLayer"*/)
 {
 	camera_cto_ = CreateRef<CameraPerspController>();
 
-	skybox_vao_ = RenderArray::CreateRenderArray();
-
-	skybox_texture_ = TextureCube3D::CreateTextureCube3D
-	({
-		"Assets/Texture/Cube3D/Template1/right.jpg",
-		"Assets/Texture/Cube3D/Template1/left.jpg",
-		"Assets/Texture/Cube3D/Template1/top.jpg",
-		"Assets/Texture/Cube3D/Template1/bottom.jpg",
-		"Assets/Texture/Cube3D/Template1/front.jpg",
-		"Assets/Texture/Cube3D/Template1/back.jpg",
-	});
-
-	GW_FLOAT32 skybox_vertices[] = 
+	const std::array<std::string, 6> faces =
 	{
-		// positions          
-		-1.0f,  1.0f, -1.0f,   -1.0f, -1.0f, -1.0f,    1.0f, -1.0f, -1.0f,
-		 1.0f, -1.0f, -1.0f,    1.0f,  1.0f, -1.0f,   -1.0f,  1.0f, -1.0f,
-		
-		-1.0f, -1.0f,  1.0f,   -1.0f, -1.0f, -1.0f,   -1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f,   -1.0f,  1.0f,  1.0f,   -1.0f, -1.0f,  1.0f,
-		
-		 1.0f, -1.0f, -1.0f,    1.0f, -1.0f,  1.0f,    1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,    1.0f,  1.0f, -1.0f,    1.0f, -1.0f, -1.0f,
-
-		-1.0f, -1.0f,  1.0f,   -1.0f,  1.0f,  1.0f,    1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,    1.0f, -1.0f,  1.0f,   -1.0f, -1.0f,  1.0f,
-
-		-1.0f,  1.0f, -1.0f,    1.0f,  1.0f, -1.0f,    1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,   -1.0f,  1.0f,  1.0f,   -1.0f,  1.0f, -1.0f,
-
-		-1.0f, -1.0f, -1.0f,   -1.0f, -1.0f,  1.0f,    1.0f, -1.0f, -1.0f,
-		 1.0f, -1.0f, -1.0f,   -1.0f, -1.0f,  1.0f,    1.0f, -1.0f,  1.0f
+		"Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_2_Left+X.png",
+		"Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_3_Right-X.png",
+		"Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_4_Up+Y.png",
+		"Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_5_Down-Y.png",
+		"Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_0_Front+Z.png",
+		"Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_1_Back-Z.png",
+		//"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_2_Left+X.png",
+		//"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_3_Right-X.png",
+		//"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_4_Up+Y.png",
+		//"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_5_Down-Y.png",
+		//"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_0_Front+Z.png",
+		//"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_1_Back-Z.png",
+		//"Assets/Texture/Cube3D/Template2/pos-x.jpg",
+		//"Assets/Texture/Cube3D/Template2/neg-x.jpg",
+		//"Assets/Texture/Cube3D/Template2/pos-y.jpg",
+		//"Assets/Texture/Cube3D/Template2/neg-y.jpg",
+		//"Assets/Texture/Cube3D/Template2/pos-z.jpg",
+		//"Assets/Texture/Cube3D/Template2/neg-z.jpg",
 	};
 
-	auto skybox_vbo = VertexBuffer::CreateVertexBuffer(skybox_vertices, sizeof(skybox_vertices));
-	skybox_vbo->SetLayout
-	({
-		{ ShaderDataType::Float3, "aPos" },
-	});
-	skybox_vao_->AddVertexBuffer(skybox_vbo);
-
-	shader_3d_program_ = ShaderBase::CreateShaderBase();
-	shader_3d_program_->LinkShaderFile
-	(
-		"Shader/vertex/skybox_temp1.vert",
-		"Shader/fragment/skybox_temp1.frag"
-	);
-	RenderPass(shader_3d_program_)
-		.begin()
-		.next([&]()
-		{
-			ShaderTool::SetIntUniform(shader_3d_program_->GetProgramID(), "skybox", 0);
-		});
+	skybox_ = CreateRef<SkyboxRenderPass>(camera_cto_, faces);
 }
 
 Game3DLayer::~Game3DLayer()
@@ -70,30 +40,7 @@ Game3DLayer::~Game3DLayer()
 void Game3DLayer::OnUpdate()
 {
 	camera_cto_->TickUpdate();
-	RenderPass(shader_3d_program_)
-		.begin()
-		.next([&]()
-			{
-				RenderCommand::SetDepthMask(false);
-				RenderCommand::SetDepthFunc(ShaderCmpFunc::kLEqual);
-			})
-		.next([&]()
-			{
-				skybox_texture_->Attach();
-				skybox_vao_->Bind();
-				ShaderTool::SetMat4Uniform(shader_3d_program_->GetProgramID(), "uView", camera_cto_->GetCamera().GetViewMatrixWithoutTranslate());
-				ShaderTool::SetMat4Uniform(shader_3d_program_->GetProgramID(), "uProj", camera_cto_->GetCamera().GetProjectionMatrix());
-				//ShaderTool::SetMat4Uniform(shader_3d_program_->GetProgramID(), "uView", camera_cto_->GetCamera().GetViewProjectionMatrix());
-			})
-		.next([&]()
-			{
-				RenderCommand::DrawArrays(36);
-			})
-		.end([&]()
-			{
-				RenderCommand::SetDepthMask(true);
-				RenderCommand::SetDepthFunc(ShaderCmpFunc::kLess);
-			});
+	skybox_->TickUpdate();
 }
 
 void Game3DLayer::OnImGuiRender()

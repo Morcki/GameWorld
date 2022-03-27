@@ -72,7 +72,7 @@ namespace GameWorld
 	}
 
 
-	OpenGLTextureCube3D::OpenGLTextureCube3D(std::array<std::string, 6> faces)
+	OpenGLTextureCube3D::OpenGLTextureCube3D(const std::array<std::string, 6>& faces)
 	{
 		stbi_set_flip_vertically_on_load(0);
 
@@ -90,6 +90,7 @@ namespace GameWorld
 				glTexImage2D(
 						GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
 						internal_format, width_, height_, 0, data_format, GL_UNSIGNED_BYTE, data);
+				glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 			}
 			else
 			{
@@ -97,8 +98,9 @@ namespace GameWorld
 			}
 			stbi_image_free(data);
 		}
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);

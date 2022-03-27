@@ -17,9 +17,6 @@ public:
 
 private:
 	Ref<CameraPerspController> camera_cto_;
-	Ref<ShaderBase> shader_3d_program_;
-	Ref<RenderArray> skybox_vao_;
-
-	Ref<TextureCube3D> skybox_texture_;
+	Ref<SkyboxRenderPass> skybox_;
 	
 };
