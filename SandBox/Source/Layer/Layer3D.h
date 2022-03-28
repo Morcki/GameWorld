@@ -9,7 +9,7 @@ using namespace GameWorld;
 class Game3DLayer : public Layer
 {
 public:
-	Game3DLayer(const std::string& name = "Game2DLayer");
+	Game3DLayer(const std::string& name = "Game3DLayer");
 	virtual ~Game3DLayer() override;
 	void OnUpdate() override;
 	void OnImGuiRender() override;
@@ -17,6 +17,7 @@ public:
 
 private:
 	Ref<CameraPerspController> camera_cto_;
-	Ref<SkyboxRenderPass> skybox_;
+	Ref<SkyboxMaterial> skybox_1_;
+	Ref<SkyboxMaterial> skybox_2_;
 	
 };

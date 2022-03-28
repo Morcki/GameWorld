@@ -18,6 +18,7 @@ project "SandBox"
 		"%{wks.location}/GameWorld/Source",
 		"%{wks.location}/GameWorld/ThirdParty",
 		"%{IncludeDir.GLM}",
+		"%{IncludeDir.STB_IMAGE}",
 	}
 	
 	links
