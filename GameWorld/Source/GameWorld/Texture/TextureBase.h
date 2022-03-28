@@ -2,10 +2,29 @@
 
 #include <string>
 #include <array>
+
+#include "stb_image.h"
 #include "GameWorld/Core/Core.h"
 
 namespace GameWorld
 {
+	class TextureInfo 
+	{
+	public:
+		TextureInfo() {};
+		TextureInfo(const std::string& image_file);
+		~TextureInfo();
+
+		GW_BOOL LoadImgFile(const std::string& image_file);
+		
+	public:
+		GW_UINT8* data{ nullptr };
+		GW_INT32  width{ 0 };
+		GW_INT32  height{ 0 };
+		GW_INT32  channels{ 0 };
+		
+	};
+
 	class TextureBase
 	{
 	public:
@@ -27,6 +46,6 @@ namespace GameWorld
 	class TextureCube3D : public TextureBase
 	{
 	public:
-		static Ref<TextureCube3D> CreateTextureCube3D(const std::array<std::string, 6>& faces);
+		static Ref<TextureCube3D> CreateTextureCube3D(const std::array<TextureInfo, 6>& faces);
 	};
 }

@@ -27,7 +27,7 @@ namespace GameWorld
 	class OpenGLTextureCube3D : public TextureCube3D
 	{
 	public:
-		OpenGLTextureCube3D(const std::array<std::string, 6>& faces);
+		OpenGLTextureCube3D(const std::array<TextureInfo, 6>& faces);
 		virtual ~OpenGLTextureCube3D() override;
 
 		virtual GW_INT32 GetWidth()  const override { return width_; };
@@ -40,7 +40,6 @@ namespace GameWorld
 
 		GW_INT32 width_;
 		GW_INT32 height_;
-		GW_INT32 channels_;
 	};
 
 }

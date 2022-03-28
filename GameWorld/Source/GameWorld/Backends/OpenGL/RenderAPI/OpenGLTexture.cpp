@@ -72,7 +72,8 @@ namespace GameWorld
 	}
 
 
-	OpenGLTextureCube3D::OpenGLTextureCube3D(const std::array<std::string, 6>& faces)
+	OpenGLTextureCube3D::OpenGLTextureCube3D(const std::array<TextureInfo, 6>& faces)
+		: width_(faces[0].width), height_(faces[0].height)
 	{
 		stbi_set_flip_vertically_on_load(0);
 
@@ -81,22 +82,18 @@ namespace GameWorld
 
 		for (GW_UINT32 i = 0; i < faces.size(); i++)
 		{
-			GW_UINT8 *data = stbi_load(faces[i].c_str(), &width_, &height_, &channels_, 0);
-			if (data)
+			//GW_UINT8 *data = stbi_load(faces[i].c_str(), &width_, &height_, &channels_, 0);
+			if (faces[i].data)
 			{
 				GLenum internal_format = 0, data_format = 0;
-				CheckChannels(channels_, internal_format, data_format);
+				CheckChannels(faces[i].channels, internal_format, data_format);
 				
 				glTexImage2D(
 						GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
-						internal_format, width_, height_, 0, data_format, GL_UNSIGNED_BYTE, data);
+						internal_format, faces[i].width, faces[i].height, 0, data_format, GL_UNSIGNED_BYTE, faces[i].data);
 				glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 			}
-			else
-			{
-				GAMEWORLD_CORE_ERROR("Failed to load Cubemap Texture[Path:{0}]", faces[i]);
-			}
-			stbi_image_free(data);
+			//stbi_image_free(data);
 		}
 		glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

@@ -1,5 +1,5 @@
 #include <PrecompiledHeader.h>
-#include "SkyboxRenderPass.h"
+#include "SkyboxMaterial.h"
 
 #include "GameWorld/Render/ShaderBase.h"
 #include "GameWorld/Render/RenderCore.h"
@@ -59,39 +59,44 @@ namespace GameWorld
 			}
 		)";
 
-	SkyboxRenderPass::SkyboxRenderPass(const Ref<CameraPerspController>& camera)
+	SkyboxMaterial::SkyboxMaterial(const Ref<CameraPerspController>& camera)
 		: camera_(camera)
 	{
 		ResetShader();
 		ResetTexture();
 	}
 
-	SkyboxRenderPass::SkyboxRenderPass(const Ref<CameraPerspController>& camera, const std::array<std::string, 6>& faces)
-		: camera_(camera), skybox_faces_(faces)
+	SkyboxMaterial::SkyboxMaterial(const Ref<CameraPerspController>& camera, const std::array<std::string, 6>& faces)
+		: camera_(camera)
 	{
+		SetTexture(faces);
+
 		ResetShader();
 		ResetTexture();
 	}
 
-	SkyboxRenderPass::~SkyboxRenderPass()
+	SkyboxMaterial::~SkyboxMaterial()
 	{
 
 	}
 
-	void SkyboxRenderPass::SetTexture(GW_INT32 index_face, const std::string& texture_path)
+	void SkyboxMaterial::SetTexture(GW_INT32 index_face, const std::string& image_path)
 	{
 		GAMEWORLD_CORE_ASSERT(index_face < 6 && index_face >= 0, "Invalid Index(0<= i <6) : {0}", index_face);
-		skybox_faces_[index_face] = texture_path;
+		skybox_textureinfo_[index_face].LoadImgFile(image_path);
 		ResetTexture();
 	}
 	
-	void SkyboxRenderPass::SetTexture(const std::array<std::string, 6>& faces)
+	void SkyboxMaterial::SetTexture(const std::array<std::string, 6>& faces)
 	{
-		skybox_faces_ = faces;
+		for (GW_INT32 i = 0; i < faces.size(); i++)
+		{
+			skybox_textureinfo_[i].LoadImgFile(faces[i]);
+		}
 		ResetTexture();
 	}
 
-	void SkyboxRenderPass::ResetShader()
+	void SkyboxMaterial::ResetShader()
 	{
 		render_shader_  = ShaderBase::CreateShaderBase();
 		render_vao_     = RenderArray::CreateRenderArray();
@@ -108,12 +113,12 @@ namespace GameWorld
 		ShaderTool::SetIntUniform(render_shader_->GetProgramID(), "skybox", 0);
 	}
 
-	void SkyboxRenderPass::ResetTexture()
+	void SkyboxMaterial::ResetTexture()
 	{
-		render_texture_ = TextureCube3D::CreateTextureCube3D(skybox_faces_);
+		render_texture_ = TextureCube3D::CreateTextureCube3D(skybox_textureinfo_);
 	}
 
-	void SkyboxRenderPass::TickUpdate()
+	void SkyboxMaterial::TickUpdate()
 	{
 		RenderPass(render_shader_)
 		.begin()
@@ -137,5 +142,4 @@ namespace GameWorld
 			RenderCommand::SetDepthTest(true);
 		});
 	}
-
 }

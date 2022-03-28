@@ -9,17 +9,18 @@
 #include "GameWorld/Texture/TextureBase.h"
 
 #include "GameWorld/Camera/CameraController.h"
+#include "GameWorld/Texture/TextureBase.h"
 
 namespace GameWorld
 {
-	class SkyboxRenderPass
+	class SkyboxMaterial
 	{
 	public:
-		SkyboxRenderPass(const Ref<CameraPerspController>& camera);
-		SkyboxRenderPass(const Ref<CameraPerspController>& camera, const std::array<std::string, 6>& faces);
-		~SkyboxRenderPass();
+		SkyboxMaterial(const Ref<CameraPerspController>& camera);
+		SkyboxMaterial(const Ref<CameraPerspController>& camera, const std::array<std::string, 6>& faces);
+		~SkyboxMaterial();
 
-		void SetTexture(GW_INT32 index_face, const std::string& texture_path);
+		void SetTexture(GW_INT32 index_face, const std::string& image_path);
 		void SetTexture(const std::array<std::string, 6>& faces);
 		void TickUpdate();
 
@@ -28,7 +29,7 @@ namespace GameWorld
 		void ResetTexture();
 
 	private:
-		std::array<std::string, 6> skybox_faces_;
+		std::array<TextureInfo, 6> skybox_textureinfo_;
 
 		Ref<ShaderBase>    render_shader_;
 		Ref<RenderArray>   render_vao_;
