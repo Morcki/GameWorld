@@ -100,7 +100,7 @@ namespace GameWorld
 		return false;
 	}
 
-	void GCamera::UpdateProjectionMode(ProjectionMode pmode)
+	void GCamera::UpdateProjectionMode(EProjectionMode pmode)
 	{
 		projection_mode_ = pmode;
 		UpdateProjectionMatrix();
@@ -148,11 +148,11 @@ namespace GameWorld
 		GW_FLOAT32 half_height;
 		switch (projection_mode_)
 		{
-		case ProjectionMode::kPerspective:
+		case EProjectionMode::kPerspective:
 			p_mat_ = glm::perspective(glm::radians(viewport_fov_y_), viewport_ratio_, znear_, zfar_);
 			
 			break;
-		case ProjectionMode::kOrtho:
+		case EProjectionMode::kOrtho:
 			half_height = viewport_fov_y_ * 0.5f;
 			half_width = half_height * viewport_ratio_;
 			p_mat_ = glm::ortho(-half_width, half_width,
@@ -170,7 +170,7 @@ namespace GameWorld
 		Camera 2D Scope
 	*/
 
-	static void GetLocalCameraPoseVector(GCamera2D::ProjectionAxis axis, glm::vec3& front, glm::vec3& up)
+	static void GetLocalCameraPoseVector(GCamera2D::EProjectionAxis axis, glm::vec3& front, glm::vec3& up)
 	{
 		switch (axis)
 		{
@@ -204,7 +204,7 @@ namespace GameWorld
 		}
 	}
 
-	static void GetLocalXY(GCamera2D::ProjectionAxis axis, 
+	static void GetLocalXY(GCamera2D::EProjectionAxis axis, 
 								GW_INT32& x_index, GW_INT32& y_index, 
 								GW_INT32& x_sign, GW_INT32& y_sign)
 	{
@@ -385,10 +385,10 @@ namespace GameWorld
 		GW_FLOAT32 half_height;
 		switch (projection_mode_)
 		{
-		case ProjectionMode::kPerspective:
+		case EProjectionMode::kPerspective:
 			GAMEWORLD_CORE_ASSERT(false, "Camera2D only has Ortho Projection Type!");
 			break;
-		case ProjectionMode::kOrtho:
+		case EProjectionMode::kOrtho:
 			half_height = viewport_fov_y_ * 0.5f;
 			half_width = half_height * viewport_ratio_;
 			p_mat_ = glm::ortho(-half_width, half_width, -half_height, half_height);

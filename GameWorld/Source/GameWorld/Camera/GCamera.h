@@ -11,7 +11,7 @@
 namespace GameWorld
 {
 
-	enum ProjectionMode
+	enum EProjectionMode
 	{
 		kPerspective,
 		kOrtho
@@ -34,7 +34,7 @@ namespace GameWorld
 		const glm::mat4& GetProjectionMat()     const { return p_mat_; };
 		const glm::mat4& GetViewProjectionMat() const { return vp_mat_; };
 
-		ProjectionMode GetProjectionMode() { return projection_mode_; };
+		EProjectionMode GetProjectionMode() { return projection_mode_; };
 
 		glm::vec3 GetPosition() { return position_; };
 		glm::vec3 GetFront()    { return front_; };
@@ -54,7 +54,7 @@ namespace GameWorld
 		GW_BOOL OnWindowResized(WindowResizeEvent& e);
 
 	public: /* Handle Input System */
-		void UpdateProjectionMode(ProjectionMode pmode);
+		void UpdateProjectionMode(EProjectionMode pmode);
 
 		void UpdateViewportRatio(GW_FLOAT32 w, GW_FLOAT32 h) { viewport_ratio_ = w / h; UpdateProjectionMatrix(); }
 		void UpdateViewportRatio(GW_FLOAT32 ratio)           { viewport_ratio_ = ratio; UpdateProjectionMatrix(); }
@@ -69,7 +69,7 @@ namespace GameWorld
 		void UpdateProjectionMatrix();
 
 	private:
-		ProjectionMode projection_mode_{ ProjectionMode::kPerspective };
+		EProjectionMode projection_mode_{ EProjectionMode::kPerspective };
 		glm::vec3 position_{ glm::vec3(0.0f) };
 
 		glm::vec3 world_up_{ glm::vec3(0.0f, 1.0f, 0.0f) };
@@ -92,7 +92,7 @@ namespace GameWorld
 	class GCamera2D
 	{
 	public:
-		enum ProjectionAxis
+		enum EProjectionAxis
 		{
 			kAxisXpos, // Fixed X axis, assume camera placed on +X.
 			kAxisXneg, // Fixed X axis, assume camera placed on -X.
@@ -110,14 +110,14 @@ namespace GameWorld
 		GW_BOOL isRotation{ true };
 
 		GW_FLOAT32 move_speed{ 5.0f };
-		GW_FLOAT32 rotation_speed{ 45.0f };
+		GW_FLOAT32 rotation_speed{ 150.0f };
 
 	public:
 		const glm::mat4& GetViewMat()           const { return v_mat_; };
 		const glm::mat4& GetProjectionMat()     const { return p_mat_; };
 		const glm::mat4& GetViewProjectionMat() const { return vp_mat_; };
 
-		ProjectionMode GetProjectionMode() { return projection_mode_; };
+		EProjectionMode GetProjectionMode() { return projection_mode_; };
 
 		glm::vec3 GetPosition() { return position_; };
 		GW_FLOAT32 GetRow() { return row_; }
@@ -133,7 +133,7 @@ namespace GameWorld
 		GW_BOOL OnWindowResized(WindowResizeEvent& e);
 
 	public: /* Handle Input System */
-		void UpdateProjectionAxis(ProjectionAxis axis) { projection_axis_ = axis; UpdateViewMatrix(); }
+		void UpdateProjectionAxis(EProjectionAxis axis) { projection_axis_ = axis; UpdateViewMatrix(); }
 
 		void UpdateViewportRatio(GW_FLOAT32 w, GW_FLOAT32 h) { viewport_ratio_ = w / h; UpdateProjectionMatrix(); }
 		void UpdateViewportRatio(GW_FLOAT32 ratio) { viewport_ratio_ = ratio; UpdateProjectionMatrix(); }
@@ -148,8 +148,8 @@ namespace GameWorld
 		void UpdateProjectionMatrix();
 	
 	private:
-		ProjectionMode projection_mode_{ ProjectionMode::kOrtho };
-		ProjectionAxis projection_axis_{ ProjectionAxis::kAxisZneg };
+		EProjectionMode projection_mode_{ EProjectionMode::kOrtho };
+		EProjectionAxis projection_axis_{ EProjectionAxis::kAxisZneg };
 
 		glm::vec3 position_{ glm::vec3(0.0f) };
 		GW_FLOAT32 row_{ 0.0f };
