@@ -24,12 +24,12 @@ namespace GameWorld
 #define GAMEWORLD_CORE_INFO(...)  ::GameWorld::Log::GetCoreLogger()->info(__VA_ARGS__);
 #define GAMEWORLD_CORE_WARN(...)  ::GameWorld::Log::GetCoreLogger()->warn(__VA_ARGS__);
 #define GAMEWORLD_CORE_ERROR(...) ::GameWorld::Log::GetCoreLogger()->error(__VA_ARGS__);
-#define GAMEWORLD_CORE_FATAL(...) ::GameWorld::Log::GetCoreLogger()->fatal(__VA_ARGS__);
+#define GAMEWORLD_CORE_FATAL(...) ::GameWorld::Log::GetCoreLogger()->critical(__VA_ARGS__);
 
 
 #define GAMEWORLD_TRACE(...) ::GameWorld::Log::GetClientLogger()->trace(__VA_ARGS__);
 #define GAMEWORLD_INFO(...)  ::GameWorld::Log::GetClientLogger()->info(__VA_ARGS__);
 #define GAMEWORLD_WARN(...)  ::GameWorld::Log::GetClientLogger()->warn(__VA_ARGS__);
 #define GAMEWORLD_ERROR(...) ::GameWorld::Log::GetClientLogger()->error(__VA_ARGS__);
-#define GAMEWORLD_FATAL(...) ::GameWorld::Log::GetClientLogger()->fatal(__VA_ARGS__);
+#define GAMEWORLD_FATAL(...) ::GameWorld::Log::GetClientLogger()->critical(__VA_ARGS__);
 
