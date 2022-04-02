@@ -27,7 +27,7 @@ private:
 	Ref<ShaderBase>      texture_shader_program_;
 	Ref<Texture2D>       texture_bg_img_;
 	Ref<Texture2D>       texture_;
-	Scope<Camera2DOrthoController> camera_controller_;
+	Scope<GCamera2D>     camera_;
 
 	glm::vec4 squad_color = { 0.0f, 0.0f, 1.0f, 1.0f };
 };

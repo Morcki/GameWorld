@@ -8,7 +8,7 @@
 #include "GameWorld/Render/RenderArray.h"
 #include "GameWorld/Texture/TextureBase.h"
 
-#include "GameWorld/Camera/CameraController.h"
+#include "GameWorld/Camera/GCamera.h"
 #include "GameWorld/Texture/TextureBase.h"
 
 namespace GameWorld
@@ -16,8 +16,8 @@ namespace GameWorld
 	class SkyboxMaterial
 	{
 	public:
-		SkyboxMaterial(const Ref<CameraPerspController>& camera);
-		SkyboxMaterial(const Ref<CameraPerspController>& camera, const std::array<std::string, 6>& faces);
+		SkyboxMaterial(const Ref<GCamera>& camera);
+		SkyboxMaterial(const Ref<GCamera>& camera, const std::array<std::string, 6>& faces);
 		~SkyboxMaterial();
 
 		void SetTexture(GW_INT32 index_face, const std::string& image_path);
@@ -35,6 +35,6 @@ namespace GameWorld
 		Ref<RenderArray>   render_vao_;
 		Ref<TextureCube3D> render_texture_;
 
-		Ref<CameraPerspController> camera_;
+		Ref<GCamera> camera_;
 	};
 }

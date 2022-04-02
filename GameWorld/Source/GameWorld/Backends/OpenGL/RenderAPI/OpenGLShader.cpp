@@ -19,7 +19,7 @@ namespace GameWorld
 	void OpenGLShader::LinkShaderFile(const GW_CHAR* vertexPath, const GW_CHAR* fragmentPath, const GW_CHAR* geometryPath)
 	{
 		GW_BOOL bCompileOk = LoadShaderFile(vertexPath, ShaderType::kVertex) & LoadShaderFile(fragmentPath, ShaderType::kFragment);
-		if (!geometryPath)
+		if (geometryPath)
 		{
 			bCompileOk &= LoadShaderFile(geometryPath, ShaderType::kGeometry);
 		}
@@ -33,7 +33,7 @@ namespace GameWorld
 
 		glDeleteShader(ShaderVertexID);
 		glDeleteShader(ShaderFragmentID);
-		if (!geometryPath)
+		if (geometryPath)
 		{
 			glDeleteShader(ShaderGeometryID);
 		}

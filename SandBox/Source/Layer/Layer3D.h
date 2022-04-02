@@ -16,7 +16,7 @@ public:
 	void OnEvent(Event& event) override;
 
 private:
-	Ref<CameraPerspController> camera_cto_;
+	Ref<GCamera> camera_;
 	Ref<SkyboxMaterial> skybox_1_;
 	Ref<SkyboxMaterial> skybox_2_;
 	

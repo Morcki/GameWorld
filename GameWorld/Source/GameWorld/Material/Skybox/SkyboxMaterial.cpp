@@ -34,13 +34,14 @@ namespace GameWorld
 			# version 330 core
 			layout(location = 0) in vec3 aPos;
 			out vec3 TexCoords;
+			uniform vec3 uCameraPos;
 			uniform mat4 uView;
 			uniform mat4 uProj;
 
 			void main()
 			{
 				TexCoords = aPos;
-				vec4 pos = uProj * uView * vec4(aPos, 1.0);
+				vec4 pos = uProj * uView * vec4(aPos + uCameraPos, 1.0);
 				gl_Position = pos.xyww;
 			}
 		)";
@@ -59,14 +60,14 @@ namespace GameWorld
 			}
 		)";
 
-	SkyboxMaterial::SkyboxMaterial(const Ref<CameraPerspController>& camera)
+	SkyboxMaterial::SkyboxMaterial(const Ref<GCamera>& camera)
 		: camera_(camera)
 	{
 		ResetShader();
 		ResetTexture();
 	}
 
-	SkyboxMaterial::SkyboxMaterial(const Ref<CameraPerspController>& camera, const std::array<std::string, 6>& faces)
+	SkyboxMaterial::SkyboxMaterial(const Ref<GCamera>& camera, const std::array<std::string, 6>& faces)
 		: camera_(camera)
 	{
 		SetTexture(faces);
@@ -130,8 +131,9 @@ namespace GameWorld
 		{
 			render_texture_->Attach();
 			render_vao_->Bind();
-			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uView", camera_->GetCamera().GetViewMatrixWithoutTranslate());
-			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uProj", camera_->GetCamera().GetProjectionMatrix());
+			ShaderTool::SetVec3Uniform(render_shader_->GetProgramID(), "uCameraPos", camera_->GetPosition());
+			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uView", camera_->GetViewMat());
+			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uProj", camera_->GetProjectionMat());
 		})
 		.next([&]()
 		{

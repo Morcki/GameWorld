@@ -4,7 +4,7 @@
 Game2DLayer::Game2DLayer(const std::string& name /*= "Game2DLayer"*/)
 	: Layer(name)
 {
-	camera_controller_ = CreateScope<Camera2DOrthoController>(Application::GetInst().GetWindow().GetAspectRatio(), true);
+	camera_ = CreateScope<GCamera2D>();
 	shader_vertex_array_ = RenderArray::CreateRenderArray();
 	squad_shader_vertex_array_ = RenderArray::CreateRenderArray();
 
@@ -75,7 +75,7 @@ Game2DLayer::Game2DLayer(const std::string& name /*= "Game2DLayer"*/)
 	);
 	texture_shader_program_->LockShader();
 
-	texture_bg_img_ = Texture2D::CreateTexture2D("Assets/Texture/Image2D/Checkerboard.png");
+	texture_bg_img_ = Texture2D::CreateTexture2D("Assets/Texture/Image2D/background.png");
 	texture_ = Texture2D::CreateTexture2D("Assets/Texture/Image2D/awesomeface.png");
 
 	texture_shader_program_->LockShader();
@@ -89,7 +89,7 @@ Game2DLayer::~Game2DLayer()
 
 void Game2DLayer::OnUpdate()
 {
-	camera_controller_->TickUpdate();
+	camera_->TickUpdate();
 
 	for (GW_UINT32 x = 0; x < 25; x++)
 	{
@@ -103,50 +103,50 @@ void Game2DLayer::OnUpdate()
 			}
 
 			RenderPass(squad_shader_program_)
-				.begin()
-				.next([&]()
-					{
-						ShaderTool::SetVec3Uniform(squad_shader_program_->GetProgramID(), "uTranslateVec", trans);
-						ShaderTool::SetMat4Uniform(squad_shader_program_->GetProgramID(), "uVPmat", camera_controller_->GetCamera().GetViewProjectionMatrix());
-						ShaderTool::SetVec3Uniform(squad_shader_program_->GetProgramID(), "uColor", color.x, color.y, color.z);
-					})
-				.draw(squad_shader_vertex_array_)
-				.end();
+			.begin()
+			.next([&]()
+			{
+				ShaderTool::SetVec3Uniform(squad_shader_program_->GetProgramID(), "uTranslateVec", trans);
+				ShaderTool::SetMat4Uniform(squad_shader_program_->GetProgramID(), "uVPmat", camera_->GetViewProjectionMat());
+				ShaderTool::SetVec3Uniform(squad_shader_program_->GetProgramID(), "uColor", color.x, color.y, color.z);
+			})
+			.draw(squad_shader_vertex_array_)
+			.end();
 		}
 	}
 
 	RenderPass(texture_shader_program_)
-		.begin()
-		.next([&]()
-			{
-				texture_bg_img_->Attach();
-				ShaderTool::SetVec3Uniform(texture_shader_program_->GetProgramID(), "uTranslateVec", glm::vec3(0.0f));
-				ShaderTool::SetMat4Uniform(texture_shader_program_->GetProgramID(), "uVPmat", camera_controller_->GetCamera().GetViewProjectionMatrix());
-			})
-		.draw(squad_shader_vertex_array_)
-		.end();
+	.begin()
+	.next([&]()
+	{
+		texture_bg_img_->Attach();
+		ShaderTool::SetVec3Uniform(texture_shader_program_->GetProgramID(), "uTranslateVec", glm::vec3(0.0f));
+		ShaderTool::SetMat4Uniform(texture_shader_program_->GetProgramID(), "uVPmat", camera_->GetViewProjectionMat());
+	})
+	.draw(squad_shader_vertex_array_)
+	.end();
 
 	RenderPass(texture_shader_program_)
-		.begin()
-		.next([&]()
-			{
-				texture_->Attach();
-				ShaderTool::SetVec3Uniform(texture_shader_program_->GetProgramID(), "uTranslateVec", glm::vec3(0.0f));
-				ShaderTool::SetMat4Uniform(texture_shader_program_->GetProgramID(), "uVPmat", camera_controller_->GetCamera().GetViewProjectionMatrix());
-			})
-		.draw(squad_shader_vertex_array_)
-		.end();
+	.begin()
+	.next([&]()
+	{
+		texture_->Attach();
+		ShaderTool::SetVec3Uniform(texture_shader_program_->GetProgramID(), "uTranslateVec", glm::vec3(0.0f));
+		ShaderTool::SetMat4Uniform(texture_shader_program_->GetProgramID(), "uVPmat", camera_->GetViewProjectionMat());
+	})
+	.draw(squad_shader_vertex_array_)
+	.end();
 
 
     RenderPass(shader_program_)
-		.begin()
-		.next([&]()
-			{
-				ShaderTool::SetVec3Uniform(shader_program_->GetProgramID(), "uTranslateVec", glm::vec3(-0.5f, 0.5f, 0.0f));
-				ShaderTool::SetMat4Uniform(shader_program_->GetProgramID(), "uVPmat", camera_controller_->GetCamera().GetViewProjectionMatrix());
-			})
-		.draw(shader_vertex_array_)
-		.end();
+	.begin()
+	.next([&]()
+	{
+		ShaderTool::SetVec3Uniform(shader_program_->GetProgramID(), "uTranslateVec", glm::vec3(-0.5f, 0.5f, 0.0f));
+		ShaderTool::SetMat4Uniform(shader_program_->GetProgramID(), "uVPmat", camera_->GetViewProjectionMat());
+	})
+	.draw(shader_vertex_array_)
+	.end();
 }
 
 void Game2DLayer::OnImGuiRender()
@@ -163,7 +163,7 @@ void Game2DLayer::OnImGuiRender()
 
 void Game2DLayer::OnEvent(GameWorld::Event& event)
 {
-	camera_controller_->OnEvent(event);
+	camera_->OnEvent(event);
 	if (event.GetEventType() == GameWorld::EventType::KeyPressed)
 	{
 		GameWorld::KeyPressedEvent& e = (GameWorld::KeyPressedEvent&) event;

@@ -5,7 +5,7 @@
 Game3DLayer::Game3DLayer(const std::string& name /*= "Game2DLayer"*/)
 	: Layer(name)
 {
-	camera_cto_ = CreateRef<CameraPerspController>();
+	camera_ = CreateRef<GCamera>();
 
 	const std::array<std::string, 6> faces1 =
 	{
@@ -37,8 +37,8 @@ Game3DLayer::Game3DLayer(const std::string& name /*= "Game2DLayer"*/)
 		"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_0_Front+Z.png",
 		"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_1_Back-Z.png",
 	};
-	skybox_1_ = CreateRef<SkyboxMaterial>(camera_cto_, faces1);
-	skybox_2_ = CreateRef<SkyboxMaterial>(camera_cto_, faces2);
+	skybox_1_ = CreateRef<SkyboxMaterial>(camera_, faces1);
+	skybox_2_ = CreateRef<SkyboxMaterial>(camera_, faces2);
 }
 
 Game3DLayer::~Game3DLayer()
@@ -48,7 +48,7 @@ Game3DLayer::~Game3DLayer()
 
 void Game3DLayer::OnUpdate()
 {
-	camera_cto_->TickUpdate();
+	camera_->TickUpdate();
 	
 	if (InputSystem::IsKeyPressed(Key::C))
 	{
@@ -61,6 +61,13 @@ void Game3DLayer::OnUpdate()
 			"Assets/Texture/Cube3D/GloriousPink/Epic_GloriousPink_Cam_0_Front+Z.png",
 			"Assets/Texture/Cube3D/GloriousPink/Epic_GloriousPink_Cam_1_Back-Z.png",
 		});
+	}
+
+	if (InputSystem::IsKeyPressed(Key::P))
+	{
+		camera_->GetProjectionMode() == ProjectionMode::kPerspective ?
+			camera_->UpdateProjectionMode(ProjectionMode::kOrtho)
+			: camera_->UpdateProjectionMode(ProjectionMode::kPerspective);
 	}
 
 	if (InputSystem::IsKeyPressed(Key::Space))
@@ -89,7 +96,7 @@ void Game3DLayer::OnImGuiRender()
 
 void Game3DLayer::OnEvent(Event& event)
 {
-	camera_cto_->OnEvent(event);
+	camera_->OnEvent(event);
 	if (event.GetEventType() == GameWorld::EventType::KeyPressed)
 	{
 		GameWorld::KeyPressedEvent& e = (GameWorld::KeyPressedEvent&) event;
