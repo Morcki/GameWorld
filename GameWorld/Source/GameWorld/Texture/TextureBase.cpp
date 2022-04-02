@@ -6,57 +6,44 @@
 
 namespace GameWorld
 {
-	TextureInfo::TextureInfo(const std::string& image_file)
-	{
-		LoadImgFile(image_file);
-	}
-
-
-	TextureInfo::~TextureInfo()
-	{
-		data ? stbi_image_free(data) : free(data);
-	}
-
-	GW_BOOL TextureInfo::LoadImgFile(const std::string& image_file)
-	{
-		if (image_file.empty()) return false;
-		if (data)
-		{
-			stbi_image_free(data);
-			data = nullptr;
-		}
-
-		data = stbi_load(image_file.c_str(), &width, &height, &channels, 0);
-
-		if (!data)
-		{
-			GAMEWORLD_CORE_ERROR("Failed to load image file : {0}", image_file);
-			return false;
-		}
-
-		return true;
-	}
-
-	GameWorld::Ref<GameWorld::Texture2D> Texture2D::CreateTexture2D(const std::string& path)
+	GameWorld::Ref<GameWorld::GTexture> GTexture::CreateTexture2D(const std::string path, GW_BOOL bflip /*= true*/, GW_BOOL bgama /*= false*/)
 	{
 		switch (RHI::GetAPIType())
 		{
 		case RenderAPIType::kNone:break;
-		case RenderAPIType::kOpenGl: return CreateRef<OpenGLTexture2D>(path);
+		case RenderAPIType::kOpenGl: return CreateRef<OpenGLTexture>(path, bflip, bgama);
 		}
 		return nullptr;
 	}
 
-	GameWorld::Ref<GameWorld::TextureCube3D> TextureCube3D::CreateTextureCube3D(const std::array<TextureInfo, 6>& faces)
+	GameWorld::Ref<GameWorld::GTexture> GTexture::CreateTexture2D(const GImage& image, GW_BOOL bgama /*= false*/)
 	{
 		switch (RHI::GetAPIType())
 		{
 		case RenderAPIType::kNone:break;
-		case RenderAPIType::kOpenGl: return CreateRef<OpenGLTextureCube3D>(faces);
+		case RenderAPIType::kOpenGl: return CreateRef<OpenGLTexture>(image, bgama);
 		}
 		return nullptr;
 	}
 
-	
+	GameWorld::Ref<GameWorld::GTexture> GTexture::CreateTextureCubeMap(const std::array<std::string, 6> skybox_files, GW_BOOL bflip /*= true*/, GW_BOOL bgama /*= false*/)
+	{
+		switch (RHI::GetAPIType())
+		{
+		case RenderAPIType::kNone:break;
+		case RenderAPIType::kOpenGl: return CreateRef<OpenGLTexture>(skybox_files, bflip, bgama);
+		}
+		return nullptr;
+	}
+
+	GameWorld::Ref<GameWorld::GTexture> GTexture::CreateTextureCubeMap(const std::array<GImage, 6>& skybox_images, GW_BOOL bgama /*= false*/)
+	{
+		switch (RHI::GetAPIType())
+		{
+		case RenderAPIType::kNone:break;
+		case RenderAPIType::kOpenGl: return CreateRef<OpenGLTexture>(skybox_images, bgama);
+		}
+		return nullptr;
+	}
 
 }

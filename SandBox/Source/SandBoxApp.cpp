@@ -43,5 +43,5 @@ public:
 
 GameWorld::Application* GameWorld::CreateApplication()
 {
-	return new SandBox2DExample();
+	return new SandBox3DExample();
 }

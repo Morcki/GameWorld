@@ -65,9 +65,9 @@ void Game3DLayer::OnUpdate()
 
 	if (InputSystem::IsKeyPressed(Key::P))
 	{
-		camera_->GetProjectionMode() == ProjectionMode::kPerspective ?
-			camera_->UpdateProjectionMode(ProjectionMode::kOrtho)
-			: camera_->UpdateProjectionMode(ProjectionMode::kPerspective);
+		camera_->GetProjectionMode() == EProjectionMode::kPerspective ?
+			camera_->UpdateProjectionMode(EProjectionMode::kOrtho)
+			: camera_->UpdateProjectionMode(EProjectionMode::kPerspective);
 	}
 
 	if (InputSystem::IsKeyPressed(Key::Space))

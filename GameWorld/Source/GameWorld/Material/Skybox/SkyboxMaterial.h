@@ -29,11 +29,11 @@ namespace GameWorld
 		void ResetTexture();
 
 	private:
-		std::array<TextureInfo, 6> skybox_textureinfo_;
+		std::array<GImage, 6> skybox_textureinfo_;
 
 		Ref<ShaderBase>    render_shader_;
 		Ref<RenderArray>   render_vao_;
-		Ref<TextureCube3D> render_texture_;
+		Ref<GTexture>      render_texture_;
 
 		Ref<GCamera> camera_;
 	};

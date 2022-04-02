@@ -3,43 +3,40 @@
 
 namespace GameWorld
 {
-	class OpenGLTexture2D : public Texture2D
+	class OpenGLTexture : public GTexture
 	{
 	public:
-		OpenGLTexture2D(const std::string path);
-		virtual ~OpenGLTexture2D() override;
+		OpenGLTexture(const std::string path, GW_BOOL bflip, GW_BOOL bgama);
+		OpenGLTexture(const GImage& image, GW_BOOL bgama);
+		OpenGLTexture(const std::array<std::string, 6> skybox_files, GW_BOOL bflip, GW_BOOL bgama);
+		OpenGLTexture(const std::array<GImage, 6>& skybox_images, GW_BOOL bgama);
 
-		virtual GW_INT32 GetWidth()  const override { return width_; };
-		virtual GW_INT32 GetHeight() const override { return height_; };
+		virtual ~OpenGLTexture() override;
 
-		virtual void Attach(GW_UINT32 slot = 0) const override;
+		virtual GW_UINT32 GetID()       const override { return texture_id_; };
+		virtual ETextureType GetType()  const override { return texture_type_; };
+		virtual GW_BOOL IsValid()       const override { return texture_type_ != ETextureType::kInValid; };
+
+		virtual GW_INT32 GetWidth()     const override { return width_; };
+		virtual GW_INT32 GetHeight()    const override { return height_; };
+		virtual GW_INT32 GetChannel()   const override { return channels_; };
+
+		virtual void Bind(GW_UINT32 slot = 0) const override;
+		virtual void UnBind(GW_UINT32 slot = 0) const override;
+
+	public:
+		void DynamicLoadImage(const GImage& image, GW_BOOL bgama);
+		void DynamicLoadSkybox(const std::array<GImage, 6>& skybox_images, GW_BOOL bgama);
+		GW_BOOL GenMipmap();
 
 	private:
-		GW_UINT32 texture_id_ = 0;
+		void LoadImage(const GImage& image, GW_BOOL bgama);
+		void LoadSkybox(const std::array<GImage, 6>& skybox_images, GW_BOOL bgama);
 
+	private:
 		GW_INT32 width_;
 		GW_INT32 height_;
 		GW_INT32 channels_;
-
-		std::string texture_path_;
-	};
-
-	class OpenGLTextureCube3D : public TextureCube3D
-	{
-	public:
-		OpenGLTextureCube3D(const std::array<TextureInfo, 6>& faces);
-		virtual ~OpenGLTextureCube3D() override;
-
-		virtual GW_INT32 GetWidth()  const override { return width_; };
-		virtual GW_INT32 GetHeight() const override { return height_; };
-
-		virtual void Attach(GW_UINT32 slot = 0) const override;
-
-	private:
-		GW_UINT32 texture_id_ = 0;
-
-		GW_INT32 width_;
-		GW_INT32 height_;
 	};
 
 }

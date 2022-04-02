@@ -3,49 +3,44 @@
 #include <string>
 #include <array>
 
-#include "stb_image.h"
 #include "GameWorld/Core/Core.h"
+
+#include "GImage.h"
 
 namespace GameWorld
 {
-	class TextureInfo 
+	enum ETextureType
+	{
+		kInValid,
+		kTexture2D,
+		kCubeMap
+	};
+	class GTexture
 	{
 	public:
-		TextureInfo() {};
-		TextureInfo(const std::string& image_file);
-		~TextureInfo();
+		virtual ~GTexture() = default;
 
-		GW_BOOL LoadImgFile(const std::string& image_file);
-		
+		virtual GW_UINT32     GetID()      const = 0;
+		virtual ETextureType  GetType()    const = 0;
+		virtual GW_BOOL       IsValid()    const = 0;
+
+		virtual GW_INT32      GetWidth()   const = 0;
+		virtual GW_INT32      GetHeight()  const = 0;
+		virtual GW_INT32      GetChannel() const = 0;
+
+		virtual void Bind(GW_UINT32 slot = 0)   const = 0;
+		virtual void UnBind(GW_UINT32 slot = 0) const = 0;
+
+	protected:
+		ETextureType texture_type_{ ETextureType::kInValid };
+		GW_UINT32    texture_id_{ 0 };
+
 	public:
-		GW_UINT8* data{ nullptr };
-		GW_INT32  width{ 0 };
-		GW_INT32  height{ 0 };
-		GW_INT32  channels{ 0 };
-		
+		static Ref<GTexture> CreateTexture2D(const std::string path, GW_BOOL bflip = true, GW_BOOL bgama = false);
+		static Ref<GTexture> CreateTexture2D(const GImage& image, GW_BOOL bgama = false);
+		static Ref<GTexture> CreateTextureCubeMap(const std::array<std::string, 6> skybox_files, GW_BOOL bflip = true, GW_BOOL bgama = false);
+		static Ref<GTexture> CreateTextureCubeMap(const std::array<GImage, 6>& skybox_images, GW_BOOL bgama = false);
+
 	};
 
-	class TextureBase
-	{
-	public:
-		virtual ~TextureBase() = default;
-
-		virtual GW_INT32 GetWidth()  const = 0;
-		virtual GW_INT32 GetHeight() const = 0;
-
-		virtual void Attach(GW_UINT32 slot = 0) const = 0;
-
-	};
-
-	class Texture2D : public TextureBase
-	{
-	public:
-		static Ref<Texture2D> CreateTexture2D(const std::string& path);
-	};
-
-	class TextureCube3D : public TextureBase
-	{
-	public:
-		static Ref<TextureCube3D> CreateTextureCube3D(const std::array<TextureInfo, 6>& faces);
-	};
 }

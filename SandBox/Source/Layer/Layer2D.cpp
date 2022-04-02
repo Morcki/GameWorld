@@ -51,7 +51,7 @@ Game2DLayer::Game2DLayer(const std::string& name /*= "Game2DLayer"*/)
 		({
 			{ShaderDataType::Float3, "aPosition"},
 			{ShaderDataType::Float2, "aTexCoord"},
-			});
+		});
 		squad_shader_vertex_array_->AddVertexBuffer(squad_vertex_buffer);
 		GW_UINT32 squad_indices[] = { 0, 1, 2, 1, 2, 3 };
 		auto squad_index_buffer = IndexBuffer::CreateIndexBuffer(squad_indices, sizeof(squad_indices) / sizeof(GW_UINT32));
@@ -75,8 +75,8 @@ Game2DLayer::Game2DLayer(const std::string& name /*= "Game2DLayer"*/)
 	);
 	texture_shader_program_->LockShader();
 
-	texture_bg_img_ = Texture2D::CreateTexture2D("Assets/Texture/Image2D/background.png");
-	texture_ = Texture2D::CreateTexture2D("Assets/Texture/Image2D/awesomeface.png");
+	texture_bg_img_ = GTexture::CreateTexture2D("Assets/Texture/Image2D/background.png");
+	texture_ = GTexture::CreateTexture2D("Assets/Texture/Image2D/awesomeface.png");
 
 	texture_shader_program_->LockShader();
 	ShaderTool::SetIntUniform(texture_shader_program_->GetProgramID(), "uTexture", 0);
@@ -119,7 +119,7 @@ void Game2DLayer::OnUpdate()
 	.begin()
 	.next([&]()
 	{
-		texture_bg_img_->Attach();
+		texture_bg_img_->Bind();
 		ShaderTool::SetVec3Uniform(texture_shader_program_->GetProgramID(), "uTranslateVec", glm::vec3(0.0f));
 		ShaderTool::SetMat4Uniform(texture_shader_program_->GetProgramID(), "uVPmat", camera_->GetViewProjectionMat());
 	})
@@ -130,7 +130,7 @@ void Game2DLayer::OnUpdate()
 	.begin()
 	.next([&]()
 	{
-		texture_->Attach();
+		texture_->Bind();
 		ShaderTool::SetVec3Uniform(texture_shader_program_->GetProgramID(), "uTranslateVec", glm::vec3(0.0f));
 		ShaderTool::SetMat4Uniform(texture_shader_program_->GetProgramID(), "uVPmat", camera_->GetViewProjectionMat());
 	})

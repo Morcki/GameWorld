@@ -84,7 +84,7 @@ namespace GameWorld
 	void SkyboxMaterial::SetTexture(GW_INT32 index_face, const std::string& image_path)
 	{
 		GAMEWORLD_CORE_ASSERT(index_face < 6 && index_face >= 0, "Invalid Index(0<= i <6) : {0}", index_face);
-		skybox_textureinfo_[index_face].LoadImgFile(image_path);
+		skybox_textureinfo_[index_face].LoadFromFile(image_path, false);
 		ResetTexture();
 	}
 	
@@ -92,7 +92,7 @@ namespace GameWorld
 	{
 		for (GW_INT32 i = 0; i < faces.size(); i++)
 		{
-			skybox_textureinfo_[i].LoadImgFile(faces[i]);
+			skybox_textureinfo_[i].LoadFromFile(faces[i], false);
 		}
 		ResetTexture();
 	}
@@ -116,7 +116,7 @@ namespace GameWorld
 
 	void SkyboxMaterial::ResetTexture()
 	{
-		render_texture_ = TextureCube3D::CreateTextureCube3D(skybox_textureinfo_);
+		render_texture_ = GTexture::CreateTextureCubeMap(skybox_textureinfo_);
 	}
 
 	void SkyboxMaterial::TickUpdate()
@@ -129,7 +129,7 @@ namespace GameWorld
 		})
 		.next([&]()
 		{
-			render_texture_->Attach();
+			render_texture_->Bind();
 			render_vao_->Bind();
 			ShaderTool::SetVec3Uniform(render_shader_->GetProgramID(), "uCameraPos", camera_->GetPosition());
 			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uView", camera_->GetViewMat());
