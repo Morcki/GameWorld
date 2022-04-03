@@ -6,6 +6,7 @@ namespace GameWorld
 	class Camera2DOrtho
 	{
 	public:
+		[[deprecated("Will Deprecated soon,Use GCamera2D instead.")]]
 		Camera2DOrtho(GW_FLOAT32 left, GW_FLOAT32 right, GW_FLOAT32 bottom, GW_FLOAT32 top);
 		~Camera2DOrtho();
 
@@ -31,10 +32,11 @@ namespace GameWorld
 		glm::vec3 position_ = { 0.0f, 0.0f, 0.0f };
 		GW_FLOAT32 rotation_ = 0.0f;
 	};
-
+	
 	class CameraOrtho : public CameraProjection
 	{
 	public:
+		[[deprecated("Will Deprecated soon,Use GCamera instead.")]]
 		CameraOrtho(GW_FLOAT32 left, GW_FLOAT32 right, GW_FLOAT32 bottom, GW_FLOAT32 top);
 		virtual ~CameraOrtho() override;
 		

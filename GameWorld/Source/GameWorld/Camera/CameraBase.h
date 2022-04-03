@@ -23,10 +23,11 @@ namespace GameWorld
 		kOrthographic,
 		kPerspective,
 	};
-
+	
 	class CameraBase
 	{// Only Care about view matrix part
 	public:
+		[[deprecated("Will Deprecated soon,Use GCamera instead.")]]
 		CameraBase();
 		CameraBase(glm::vec3 position, glm::vec3 up, float yaw, float pitch);
 		virtual ~CameraBase() = default;
@@ -74,7 +75,7 @@ namespace GameWorld
 		glm::vec3 front_;
 		glm::vec3 right_;
 	};
-
+	
 	class CameraProjection : public CameraBase
 	{
 	public:
@@ -90,7 +91,6 @@ namespace GameWorld
 		CameraProjection& operator=(CameraProjection&&) = delete;
 
 		virtual ~CameraProjection() override { };
-
 		virtual void UpdateNearPlane(GW_FLOAT32 zn)                   override { znear_ = zn; UpdateProjectionMatrix(); };
 		virtual void UpdateFarPlane(GW_FLOAT32 zf)                    override { zfar_ = zf; UpdateProjectionMatrix(); };
 		virtual void UpdateNearFarPlane(GW_FLOAT32 zn, GW_FLOAT32 zf) override { znear_ = zn; zfar_ = zf; UpdateProjectionMatrix(); };

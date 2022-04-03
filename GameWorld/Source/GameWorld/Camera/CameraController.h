@@ -13,6 +13,7 @@ namespace GameWorld
 	class Camera2DOrthoController
 	{
 	public:
+		[[deprecated("Will Deprecated soon,Use GCamera2D instead.")]]
 		Camera2DOrthoController(GW_FLOAT32 aspect_ratio, GW_BOOL b_rotation = false);
 
 		void TickUpdate();
@@ -43,10 +44,11 @@ namespace GameWorld
 		GW_FLOAT32 rotation_speed_{ 180.0f };
 		glm::vec2 mouse_press_pos_;
 	};
-
+	
 	class CameraPerspController
 	{
 	public:
+		[[deprecated("Will Deprecated soon,Use GCamera instead.")]]
 		CameraPerspController(GW_BOOL b_constrain_pitch = true);
 
 		void TickUpdate();
