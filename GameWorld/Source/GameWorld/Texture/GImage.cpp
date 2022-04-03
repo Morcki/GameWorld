@@ -7,7 +7,12 @@ namespace GameWorld
 {
 	GImage::GImage(const std::string& image_file, GW_BOOL bflip)
 	{
-		LoadFromFile(image_file, bflip);
+		Load(image_file, bflip);
+	}
+
+	GImage::GImage(const std::string& image_file, const std::string& directory, GW_BOOL bflip /*= true*/)
+	{
+		Load(directory + '/' + image_file, bflip);
 	}
 
 	GImage::~GImage()
@@ -15,11 +20,12 @@ namespace GameWorld
 		data ? stbi_image_free(data) : free(data);
 	}
 
-	GW_BOOL GImage::LoadFromFile(const std::string& image_file, GW_BOOL bflip)
+	GW_BOOL GImage::Load(const std::string& image_file, GW_BOOL bflip)
 	{
 		if (image_file.empty()) return false;
-		FreeImageData();
+		Free();
 
+		image_path_ = image_file;
 		stbi_set_flip_vertically_on_load(bflip);
 		data = stbi_load(image_file.c_str(), &width, &height, &channels, 0);
 
@@ -31,7 +37,25 @@ namespace GameWorld
 		return true;
 	}
 
-	GW_BOOL GImage::FreeImageData()
+	void GImage::Swap(GImage& image) noexcept
+	{
+		GImage::Swap(std::move(image));
+	}
+
+	void GImage::Swap(GImage&& image) noexcept
+	{
+		if (this == &image) return;
+		using std::swap;
+
+		auto ptr_image = &image;
+		swap(this->width, ptr_image->width);
+		swap(this->height, ptr_image->height);
+		swap(this->channels, ptr_image->channels);
+		swap(this->image_path_, ptr_image->image_path_);
+		swap(this->data, ptr_image->data);
+	}
+
+	GW_BOOL GImage::Free()
 	{
 		if (data)
 		{
@@ -42,7 +66,7 @@ namespace GameWorld
 		return false;
 	}
 
-	GW_BOOL GImage::IsEmptyImage()
+	GW_BOOL GImage::IsEmpty()
 	{
 		return data == nullptr;
 	}

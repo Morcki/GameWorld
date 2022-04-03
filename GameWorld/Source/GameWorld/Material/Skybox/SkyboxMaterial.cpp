@@ -84,7 +84,7 @@ namespace GameWorld
 	void SkyboxMaterial::SetTexture(GW_INT32 index_face, const std::string& image_path)
 	{
 		GAMEWORLD_CORE_ASSERT(index_face < 6 && index_face >= 0, "Invalid Index(0<= i <6) : {0}", index_face);
-		skybox_textureinfo_[index_face].LoadFromFile(image_path, false);
+		skybox_textureinfo_[index_face] = GImage(image_path, false);
 		ResetTexture();
 	}
 	
@@ -92,7 +92,7 @@ namespace GameWorld
 	{
 		for (GW_INT32 i = 0; i < faces.size(); i++)
 		{
-			skybox_textureinfo_[i].LoadFromFile(faces[i], false);
+			skybox_textureinfo_[i] = GImage(faces[i], false);
 		}
 		ResetTexture();
 	}

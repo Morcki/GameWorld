@@ -25,7 +25,9 @@ namespace GameWorld
 		virtual void UnBind(GW_UINT32 slot = 0) const override;
 
 	public:
+		// TODO:untest
 		void DynamicLoadImage(const GImage& image, GW_BOOL bgama);
+		// TODO:untest
 		void DynamicLoadSkybox(const std::array<GImage, 6>& skybox_images, GW_BOOL bgama);
 		GW_BOOL GenMipmap();
 

@@ -56,7 +56,7 @@ namespace GameWorld
 		std::array<GImage, 6> skybox_images;
 		for (GW_INT32 i = 0; i < 6; i++)
 		{
-			skybox_images[i].LoadFromFile(skybox_files[i], bflip);
+			skybox_images[i].Load(skybox_files[i], bflip);
 		}
 		LoadSkybox(skybox_images, bgama);
 	}
