@@ -5,7 +5,6 @@ extern GameWorld::Application* GameWorld::CreateApplication();
 
 int main(int argc, char** argv)
 {
-	GameWorld::Log::Init();
 
 	GAMEWORLD_CORE_INFO("Welcome to Game World!");
 

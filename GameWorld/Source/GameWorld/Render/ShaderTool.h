@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "GameWorld/Log/Log.h"
+#include "GameWorld/Log/GLogSystem.h"
 
 #include "glm/glm.hpp"
 
