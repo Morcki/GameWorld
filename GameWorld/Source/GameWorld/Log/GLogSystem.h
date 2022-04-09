@@ -7,7 +7,7 @@
 
 namespace GameWorld
 {
-	class GLogSystem final : public GSingleton<GLogSystem>
+	class GLogSystem final : public GSingletonPublic<GLogSystem>
 	{
 	public:
 		GLogSystem();

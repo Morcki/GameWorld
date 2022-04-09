@@ -15,8 +15,18 @@ public:
 	SandBox2DExample()
 	{
 		GAMEWORLD_WARN("Application is running on sandbox 2d example");
-		PushLayer(new Game2DLayer());
 	};
+
+	virtual void Init() override
+	{
+		Application::Init();
+		PushLayer(new Game2DLayer());
+	}
+
+	virtual void Run() override
+	{
+		Application::Run();
+	}
 
 	virtual ~SandBox2DExample()
 	{
@@ -30,10 +40,21 @@ class SandBox3DExample : public GameWorld::Application
 public:
 	SandBox3DExample()
 	{
-		RenderCommand::Init3DConfig();
 		GAMEWORLD_WARN("Application is running on sandbox 3d example");
-		PushLayer(new Game3DLayer());
 	};
+
+	virtual void Init() override
+	{
+		Application::Init();
+		
+		PushLayer(new Game3DLayer());
+		RenderCommand::Init3DConfig();
+	}
+
+	virtual void Run() override
+	{
+		Application::Run();
+	}
 
 	virtual ~SandBox3DExample()
 	{
@@ -41,7 +62,7 @@ public:
 	};
 };
 
-GameWorld::Application* GameWorld::CreateApplication()
+GameWorld::Application* GameWorld::GetApplication()
 {
 	return new SandBox3DExample();
 }

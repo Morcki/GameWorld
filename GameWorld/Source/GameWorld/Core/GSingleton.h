@@ -5,10 +5,10 @@
 namespace GameWorld
 {
 	template<typename T>
-	class GSingleton
-	{
+	class GSingletonPublic
+	{/* Do not support virtual class */
 	public:
-		GSingleton() {}
+		GSingletonPublic() {}
 
 	public:
 		static T& GetInst() noexcept(std::is_nothrow_constructible<T>::value)
@@ -16,8 +16,8 @@ namespace GameWorld
 			static T instance;
 			return instance;
 		}
-		virtual ~GSingleton() noexcept {}
-		GSingleton(const GSingleton&) = delete;
-		GSingleton& operator=(const GSingleton&) = delete;
+		virtual ~GSingletonPublic() noexcept {}
+		GSingletonPublic(const GSingletonPublic&) = delete;
+		GSingletonPublic& operator=(const GSingletonPublic&) = delete;
 	};
 }

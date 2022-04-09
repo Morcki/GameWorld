@@ -5,7 +5,7 @@
 Game3DLayer::Game3DLayer(const std::string& name /*= "Game2DLayer"*/)
 	: Layer(name)
 {
-	camera_ = CreateRef<GCamera>();
+	camera_ = CreateRef<GCameraEditor>();
 
 	const std::array<std::string, 6> faces1 =
 	{

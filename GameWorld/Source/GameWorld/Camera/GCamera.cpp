@@ -19,111 +19,36 @@ namespace GameWorld
 		UpdateProjectionMatrix();
 	}
 
-	GCamera::~GCamera()
+	GCamera::GCamera(CameraOptions opts)
+		: opts_(opts)
 	{
 
-	}
-
-	void GCamera::TickUpdate()
-	{
-
-	}
-
-	void GCamera::OnEvent(Event& e)
-	{
-		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<KeyPressedEvent>(BIND_CLASS_CALLBACK_FUNCTRION(GCamera::OnKeyPressed));
-		dispatcher.Dispatch<MouseMovedEvent>(BIND_CLASS_CALLBACK_FUNCTRION(GCamera::OnMouseMoved));
-		dispatcher.Dispatch<MouseScrolledEvent>(BIND_CLASS_CALLBACK_FUNCTRION(GCamera::OnMouseScrolled));
-	}
-
-	GW_BOOL GCamera::OnKeyPressed(KeyPressedEvent& e)
-	{
-		GW_FLOAT32 ts = Timestep::GetDeltaTime();
-		GW_FLOAT32 velocity = move_speed * ts;
-		if (InputSystem::IsKeyPressed(Key::W))
-		{
-			position_ += right_ * velocity;
-		}
-		else if (InputSystem::IsKeyPressed(Key::S))
-		{
-			position_ -= right_ * velocity;
-		}
-		else if (InputSystem::IsKeyPressed(Key::A))
-		{
-			position_ -= right_ * velocity;
-		}
-		else if (InputSystem::IsKeyPressed(Key::D))
-		{
-			position_ += right_ * velocity;
-		}
-		else
-		{
-			return true;
-		}
-		UpdateViewMatrix();
-		return false;
-	}
-
-	GW_BOOL GCamera::OnMouseMoved(MouseMovedEvent& e)
-	{
-
-		yaw_ += mouse_sensitive * InputSystem::GetMouseXOffset();
-		pitch_ += mouse_sensitive * InputSystem::GetMouseYOffset();
-
-		// make sure that when pitch is out of bounds, screen doesn't get flipped
-		if (isConstrainPitch)
-		{
-			if (pitch_ > 89.0f)
-				pitch_ = 89.0f;
-			if (pitch_ < -89.0f)
-				pitch_ = -89.0f;
-		}
-		UpdateViewMatrix();
-		return false;
-	}
-
-	GW_BOOL GCamera::OnMouseScrolled(MouseScrolledEvent& e)
-	{
-		viewport_fov_y_ -= (float)e.GetYOffset();
-		if (viewport_fov_y_ < 1.0f)
-			viewport_fov_y_ = 1.0f;
-		if (viewport_fov_y_ > 45.0f)
-			viewport_fov_y_ = 45.0f;
-		UpdateProjectionMatrix();
-		return false;
-	}
-
-	GW_BOOL GCamera::OnWindowResized(WindowResizeEvent& e)
-	{
-		UpdateViewportRatio((GW_FLOAT32)e.GetWidth(), (GW_FLOAT32)e.GetHeight());
-		return false;
 	}
 
 	void GCamera::UpdateProjectionMode(EProjectionMode pmode)
 	{
-		projection_mode_ = pmode;
+		opts_.projection_mode = pmode;
 		UpdateProjectionMatrix();
 	}
 
 	void GCamera::UpdateState(const glm::vec3& position)
 	{
-		position_ = position;
+		opts_.position = position;
 		UpdateViewMatrix();
 	}
 
 	void GCamera::UpdateState(GW_FLOAT32 yaw, GW_FLOAT32 pitch)
 	{
-		yaw_ = yaw;
-		pitch_ = pitch;
+		opts_.yaw = yaw;
+		opts_.pitch = pitch;
 		UpdateViewMatrix();
 	}
 
 	void GCamera::UpdateState(const glm::vec3& position, GW_FLOAT32 yaw, GW_FLOAT32 pitch)
 	{
-		position_ = position;
-		yaw_ = yaw;
-		pitch_ = pitch;
+		opts_.position = position;
+		opts_.yaw = yaw;
+		opts_.pitch = pitch;
 		UpdateViewMatrix();
 	}
 
@@ -131,14 +56,14 @@ namespace GameWorld
 	{
 		// calculate the new Front vector
 		glm::vec3 front;
-		front.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
-		front.y = sin(glm::radians(pitch_));
-		front.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
-		front_ = glm::normalize(front);
+		front.x = cos(glm::radians(opts_.yaw)) * cos(glm::radians(opts_.pitch));
+		front.y = sin(glm::radians(opts_.pitch));
+		front.z = sin(glm::radians(opts_.yaw)) * cos(glm::radians(opts_.pitch));
+		opts_.front = glm::normalize(front);
 		// also re-calculate the Right and Up vector
 		// normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-		right_ = glm::normalize(glm::cross(front_, world_up_)); 
-		v_mat_ = glm::lookAt(position_, position_ + front_, glm::normalize(glm::cross(right_, front_)));
+		opts_.right = glm::normalize(glm::cross(opts_.front, opts_.world_up));
+		v_mat_ = glm::lookAt(opts_.position, opts_.position + opts_.front, glm::normalize(glm::cross(opts_.right, opts_.front)));
 		vp_mat_ = p_mat_ * v_mat_;
 	}
 
@@ -146,18 +71,17 @@ namespace GameWorld
 	{
 		GW_FLOAT32 half_width;
 		GW_FLOAT32 half_height;
-		switch (projection_mode_)
+		switch (opts_.projection_mode)
 		{
 		case EProjectionMode::kPerspective:
-			p_mat_ = glm::perspective(glm::radians(viewport_fov_y_), viewport_ratio_, znear_, zfar_);
-			
+			p_mat_ = glm::perspective(glm::radians(opts_.viewport_fov_y), opts_.viewport_ratio, opts_.znear, opts_.zfar);
 			break;
 		case EProjectionMode::kOrtho:
-			half_height = viewport_fov_y_ * 0.5f;
-			half_width = half_height * viewport_ratio_;
+			half_height = opts_.viewport_fov_y * 0.5f;
+			half_width = half_height * opts_.viewport_ratio;
 			p_mat_ = glm::ortho(-half_width, half_width,
 									-half_height, half_height,
-										znear_, zfar_);
+										opts_.znear, opts_.zfar);
 			break;
 		default:
 			p_mat_ = glm::mat4(1.0f);

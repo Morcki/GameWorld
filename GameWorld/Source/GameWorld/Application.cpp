@@ -18,32 +18,32 @@
 
 namespace GameWorld
 {
-	Application* Application::s_instance_ = nullptr;
-
 	Application::Application()
 	{
-		GAMEWORLD_CORE_ASSERT(!s_instance_, "Application has already been created!");
-		s_instance_ = this;
+		assert(!ptr_instance_, "GameWorld::Application::Application => Error,Application already existed!");
+		ptr_instance_ = this;
 
 		ptr_window_ = Scope<Window>(Window::Create());
 		ptr_window_->SetEventCallback(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnEvent));
-
-		imgui_base_render_layer_ = new ImGuiLayer();
-		PushOverlay(imgui_base_render_layer_);
-
-		RenderBase::Init();
 	}
 
 	Application::~Application()
 	{
+		
+	}
 
+	void Application::Init()
+	{
+		imgui_base_render_layer_ = new ImGuiLayer();
+		PushOverlay(imgui_base_render_layer_);
+		RenderBase::Init();
 	}
 
 	void Application::Run()
 	{
 		while (b_gameworld_running)
 		{
-			// Update Tick Time
+			// First Step : Update Tick Time
 			Timestep::TickUpdate();
 			// Fresh window color buffer
 			RenderCommand::ClearColor
@@ -69,6 +69,11 @@ namespace GameWorld
 
 			ptr_window_->OnUpdate();
 		}
+	}
+
+	void Application::Close()
+	{
+
 	}
 
 	void Application::PushLayer(Layer* layer)
