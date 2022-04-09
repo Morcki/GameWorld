@@ -192,7 +192,7 @@ namespace GameWorld
 
 	GW_BOOL GCamera2D::OnKeyPressed(KeyPressedEvent& e)
 	{
-		GW_FLOAT32 ts = Timestep::GetDeltaTime();
+		GW_FLOAT32 ts = GTimeSystem::GetInst().GetDeltaTime();
 		GW_INT32 x, y, signx, signy;
 		GetLocalXY(projection_axis_, x, y, signx, signy);
 		if (InputSystem::IsKeyPressed(Key::A))

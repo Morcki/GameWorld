@@ -44,7 +44,7 @@ namespace GameWorld
 		while (b_gameworld_running)
 		{
 			// First Step : Update Tick Time
-			Timestep::TickUpdate();
+			GTimeSystem::GetInst().TickUpdate();
 			// Fresh window color buffer
 			RenderCommand::ClearColor
 			({

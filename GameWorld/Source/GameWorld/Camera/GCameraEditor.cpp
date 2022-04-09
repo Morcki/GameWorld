@@ -38,7 +38,7 @@ namespace GameWorld
 
 	GW_BOOL GCameraEditor::OnKeyPressed(KeyPressedEvent& e)
 	{
-		GW_FLOAT32 ts = Timestep::GetDeltaTime();
+		GW_FLOAT32 ts = GTimeSystem::GetInst().GetDeltaTime();
 		GW_FLOAT32 velocity = move_speed * ts;
 
 		switch (e.GetKeyCode())

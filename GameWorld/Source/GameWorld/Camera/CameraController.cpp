@@ -39,7 +39,7 @@ namespace GameWorld
 	{
 		glm::vec3 camera_position = camera_2d_ortho_.GetPosition();
 		GW_FLOAT32 camera_rotation = camera_2d_ortho_.GetRotation();
-		GW_FLOAT32 ts = Timestep::GetDeltaTime();
+		GW_FLOAT32 ts = GTimeSystem::GetInst().GetDeltaTime();
 		
 		if (InputSystem::IsKeyPressed(Key::A))
 		{
@@ -151,7 +151,7 @@ namespace GameWorld
 	GW_BOOL CameraPerspController::OnKeyPressed(KeyPressedEvent& e)
 	{
 		glm::vec3 camera_pos = camera_.GetCameraPosition();
-		GW_FLOAT32 ts = Timestep::GetDeltaTime();
+		GW_FLOAT32 ts = GTimeSystem::GetInst().GetDeltaTime();
 		GW_FLOAT32 velocity = move_speed_ * ts;
 		if (InputSystem::IsKeyPressed(Key::W))
 		{
