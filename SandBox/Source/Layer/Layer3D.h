@@ -19,5 +19,6 @@ private:
 	Ref<GCameraEditor>  camera_;
 	Ref<SkyboxMaterial> skybox_1_;
 	Ref<SkyboxMaterial> skybox_2_;
+	Ref<GCube>          cube_1_;
 	
 };

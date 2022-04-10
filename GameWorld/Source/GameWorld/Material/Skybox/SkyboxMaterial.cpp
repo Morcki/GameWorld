@@ -7,7 +7,7 @@
 
 namespace GameWorld
 {
-	const GW_FLOAT32 skybox_vertices[] =
+	constexpr GW_FLOAT32 skybox_vertices[] =
 	{
 		// positions          
 		-1.0f,  1.0f, -1.0f,   -1.0f, -1.0f, -1.0f,    1.0f, -1.0f, -1.0f,
@@ -60,15 +60,13 @@ namespace GameWorld
 			}
 		)";
 
-	SkyboxMaterial::SkyboxMaterial(const Ref<GCamera>& camera)
-		: camera_(camera)
+	SkyboxMaterial::SkyboxMaterial()
 	{
 		ResetShader();
 		ResetTexture();
 	}
 
-	SkyboxMaterial::SkyboxMaterial(const Ref<GCamera>& camera, const std::array<std::string, 6>& faces)
-		: camera_(camera)
+	SkyboxMaterial::SkyboxMaterial(const std::array<std::string, 6>& faces)
 	{
 		SetTexture(faces);
 
@@ -101,7 +99,7 @@ namespace GameWorld
 	{
 		render_shader_  = ShaderBase::CreateShaderBase();
 		render_vao_     = RenderArray::CreateRenderArray();
-		auto render_vbo = VertexBuffer::CreateVertexBuffer(const_cast<GW_FLOAT32*>(skybox_vertices), sizeof(skybox_vertices));
+		auto& render_vbo = VertexBuffer::CreateVertexBuffer(const_cast<GW_FLOAT32*>(skybox_vertices), sizeof(skybox_vertices));
 
 		render_vbo->SetLayout
 		({
@@ -119,7 +117,7 @@ namespace GameWorld
 		render_texture_ = GTexture::CreateTextureCubeMap(skybox_textureinfo_);
 	}
 
-	void SkyboxMaterial::TickUpdate()
+	void SkyboxMaterial::TickUpdate(const Ref<GCamera>& camera)
 	{
 		RenderPass(render_shader_)
 		.begin()
@@ -131,9 +129,9 @@ namespace GameWorld
 		{
 			render_texture_->Bind();
 			render_vao_->Bind();
-			ShaderTool::SetVec3Uniform(render_shader_->GetProgramID(), "uCameraPos", camera_->GetPosition());
-			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uView", camera_->GetViewMat());
-			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uProj", camera_->GetProjectionMat());
+			ShaderTool::SetVec3Uniform(render_shader_->GetProgramID(), "uCameraPos", camera->GetPosition());
+			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uView", camera->GetViewMat());
+			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uProj", camera->GetProjectionMat());
 		})
 		.next([&]()
 		{

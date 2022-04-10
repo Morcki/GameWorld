@@ -28,17 +28,18 @@ Game3DLayer::Game3DLayer(const std::string& name /*= "Game2DLayer"*/)
 		//"Assets/Texture/Cube3D/Template2/pos-z.jpg",
 		//"Assets/Texture/Cube3D/Template2/neg-z.jpg",
 	};
-	const std::array<std::string, 6> faces2 =
-	{
-		"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_2_Left+X.png",
-		"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_3_Right-X.png",
-		"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_4_Up+Y.png",
-		"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_5_Down-Y.png",
-		"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_0_Front+Z.png",
-		"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_1_Back-Z.png",
-	};
-	skybox_1_ = CreateRef<SkyboxMaterial>(camera_, faces1);
-	skybox_2_ = CreateRef<SkyboxMaterial>(camera_, faces2);
+	//const std::array<std::string, 6> faces2 =
+	//{
+	//	"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_2_Left+X.png",
+	//	"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_3_Right-X.png",
+	//	"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_4_Up+Y.png",
+	//	"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_5_Down-Y.png",
+	//	"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_0_Front+Z.png",
+	//	"Assets/Texture/Cube3D/AnotherPlanet/AllSky_Space_AnotherPlanet_Cam_1_Back-Z.png",
+	//};
+	skybox_1_ = CreateRef<SkyboxMaterial>(faces1);
+	//skybox_2_ = CreateRef<SkyboxMaterial>(faces2);
+	cube_1_ = CreateRef<GCube>();
 }
 
 Game3DLayer::~Game3DLayer()
@@ -70,15 +71,9 @@ void Game3DLayer::OnUpdate()
 			: camera_->UpdateProjectionMode(EProjectionMode::kPerspective);
 	}
 
-	if (InputSystem::IsKeyPressed(Key::Space))
-	{
-		skybox_2_->TickUpdate();
-	}
-	else
-	{
-		skybox_1_->TickUpdate();
-	}
-	
+	skybox_1_->TickUpdate(camera_);
+	cube_1_->TickUpdate(camera_);
+
 }
 
 void Game3DLayer::OnImGuiRender()

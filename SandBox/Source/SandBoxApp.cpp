@@ -62,6 +62,37 @@ public:
 	};
 };
 
+class SandBoxTest : public GameWorld::Application
+{
+public:
+	SandBoxTest()
+	{
+		GAMEWORLD_WARN("Application is running on sandbox 3d example");
+	};
+
+	virtual void Init() override
+	{
+		Application::Init();
+
+		glm::vec3 Pos = glm::vec3(0.0f, 1.0f, 0.0f);
+		glm::quat Rot = glm::vec3(0.0f, 0.0f, glm::radians(45.0f));
+		glm::vec3 Sca = glm::vec3(1.0f, 2.0f, 3.0f);
+
+		MTransform transform(
+			Pos,
+			Rot,
+			Sca
+		);
+
+		glm::mat4 trans_mat = transform.ToTransformMat();
+	}
+
+	virtual ~SandBoxTest()
+	{
+
+	};
+};
+
 GameWorld::Application* GameWorld::GetApplication()
 {
 	return new SandBox3DExample();
