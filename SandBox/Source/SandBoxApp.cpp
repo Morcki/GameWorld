@@ -78,11 +78,7 @@ public:
 		glm::quat Rot = glm::vec3(0.0f, 0.0f, glm::radians(45.0f));
 		glm::vec3 Sca = glm::vec3(1.0f, 2.0f, 3.0f);
 
-		MTransform transform(
-			Pos,
-			Rot,
-			Sca
-		);
+		MTransform transform(Pos, Rot, Sca);
 
 		glm::mat4 trans_mat = transform.ToTransformMat();
 	}

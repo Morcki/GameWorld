@@ -16,6 +16,13 @@ namespace GameWorld
 		GCube(MTransform transform);
 		virtual ~GCube();
 
+	public:
+		inline MTransform GetTransform() { return m_transform; };
+		inline glm::vec4  GetColor    () { return m_color; };
+
+		void SetTransform(const MTransform& transform) { m_transform = transform; };
+		void SetColor    (const glm::vec4& color)      { m_color = color; };
+
 	private:
 		void Init();
 
@@ -23,7 +30,9 @@ namespace GameWorld
 		void TickUpdate(const Ref<GCamera>& camera);
 
 	private:
-		MTransform m_transform{ MTransform() };
+		MTransform m_transform { MTransform() };
+
+		glm::vec4 m_color { glm::vec4(1.0f, 0.5f, 0.0f, 1.0f) };
 
 		Ref<ShaderBase>    render_shader_;
 		Ref<RenderArray>   render_vao_;

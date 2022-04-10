@@ -59,14 +59,17 @@ namespace GameWorld
 			layout(location = 0) in vec3 aPosition;
 			layout(location = 1) in vec3 aNormal;
 			layout(location = 2) in vec2 aTexcoord;
-			out vec2 Texcoord;
+			out vec2 vTexcoord;
+			out vec4 vColor;
 			uniform mat4 uModel;
 			uniform mat4 uView;
 			uniform mat4 uProj;
+			uniform vec4 uColor;
 
 			void main()
 			{
-				Texcoord = aTexcoord;
+				vTexcoord = aTexcoord;
+				vColor = uColor;
 				gl_Position = uProj * uView * uModel * vec4(aPosition, 1.0);
 			}
 		)";
@@ -76,12 +79,13 @@ namespace GameWorld
 			# version 330 core
 			layout(location = 0) out vec4 fragColor;
 
-			in vec3 TexCoords;
+			in vec2 vTexcoords;
+			in vec4 vColor;
 			uniform samplerCube skybox;
 
 			void main()
 			{
-				fragColor = vec4( 0.85f, 0.55f, 0.96f, 1.00f );
+				fragColor = vec4(vec3(vColor), 1.0f);
 			}
 		)";
 
@@ -103,8 +107,8 @@ namespace GameWorld
 	
 	void GCube::Init()
 	{
-		m_transform.m_position += glm::vec3(5.0f, 1.0f, 0.0f);
-		m_transform.m_scale *= 0.1;
+		m_transform.m_position += glm::vec3(0.2f, 0.1f, 0.0f);
+		m_transform.m_scale *= 0.2;
 
 		render_shader_ = ShaderBase::CreateShaderBase();
 		render_vao_ = RenderArray::CreateRenderArray();
@@ -135,20 +139,10 @@ namespace GameWorld
 		{
 			render_vao_->Bind();
 
-			//auto trans = m_transform.ToTransformMat();
-			//for (int i = 0; i < 4; i++)
-			//{
-			//	for (int j = 0; j < 4; j++)
-			//	{
-			//		std::cout << trans[i][j] << " ";
-			//	}
-			//	std::cout << "\n";
-			//}
-			
-			auto trans = glm::scale(m_transform.m_scale) * glm::mat4(1.0f);
-			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uModel", trans);
+			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uModel", m_transform.ToTransformMat());
 			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uView",  camera->GetViewMat());
 			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uProj",  camera->GetProjectionMat());
+			ShaderTool::SetVec4Uniform(render_shader_->GetProgramID(), "uColor", m_color);
 		})
 		.next([&]()
 		{

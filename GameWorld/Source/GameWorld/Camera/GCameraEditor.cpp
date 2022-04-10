@@ -127,10 +127,10 @@ namespace GameWorld
 	GW_BOOL GCameraEditor::OnMouseScrolled(MouseScrolledEvent& e)
 	{
 		opts_.viewport_fov_y -= (float)e.GetYOffset();
-		if (opts_.viewport_fov_y < 1.0f)
-			opts_.viewport_fov_y = 1.0f;
-		if (opts_.viewport_fov_y > 45.0f)
-			opts_.viewport_fov_y = 45.0f;
+		if (opts_.viewport_fov_y < 0.5f)
+			opts_.viewport_fov_y = 0.5f;
+		if (opts_.viewport_fov_y > 40.0f)
+			opts_.viewport_fov_y = 40.0f;
 		UpdateProjectionMatrix();
 		return false;
 	}
