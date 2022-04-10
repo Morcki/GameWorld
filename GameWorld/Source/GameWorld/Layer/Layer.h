@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GameWorld/Core/Core.h"
-#include "GameWorld/Core/Timestep.h"
+#include "GameWorld/Core/GTimeSystem.h"
 #include "GameWorld/Events/Event.h"
 
 namespace GameWorld {
