@@ -11,7 +11,7 @@ namespace GameWorld
 	class MTransform
 	{
 		/* 
-			±‰ªªæÿ’Û£®Transformation matrices£©
+			Transformation matrices
 			Ref : http://www.opengl-tutorial.org/cn/beginners-tutorials/tutorial-3-matrices/
 		*/
 
@@ -31,8 +31,7 @@ namespace GameWorld
 
 		glm::mat4 ToTransformMat() const
 		{// TransformedVector = TranslationMatrix * RotationMatrix * ScaleMatrix * OriginalVector
-			glm::mat4 trans = glm::translate(glm::toMat4(m_rotation) * glm::scale(m_scale), m_position);
-			return trans;
+			return glm::translate(glm::toMat4(m_rotation) * glm::scale(m_scale), m_position);
 		}
 	};
 }
