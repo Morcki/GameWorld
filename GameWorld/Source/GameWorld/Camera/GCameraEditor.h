@@ -10,6 +10,12 @@ namespace GameWorld
 		GCameraEditor(CameraOptions opts);
 		virtual ~GCameraEditor() {};
 
+	public:
+		GW_BOOL isConstrainPitch{ true };
+		// camera options
+		GW_FLOAT32 move_speed{ 2.5f };
+		GW_FLOAT32 mouse_sensitive{ 0.35f };
+
 	public: /* Handle Event System */
 		virtual void TickUpdate()                                    override;
 		virtual void OnEvent(Event& e)                               override;

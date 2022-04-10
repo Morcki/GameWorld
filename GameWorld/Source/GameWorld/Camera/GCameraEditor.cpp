@@ -2,7 +2,7 @@
 #include "GCameraEditor.h"
 
 #include "GameWorld/Input/InputSystem.h"
-#include "GameWorld/Core/Timestep.h"
+#include "GameWorld/Core/GTimeSystem.h"
 #include "GameWorld/Events/MouseCodes.h"
 
 namespace GameWorld
@@ -44,10 +44,10 @@ namespace GameWorld
 		switch (e.GetKeyCode())
 		{
 		case Key::W:
-			opts_.position += opts_.right * velocity;
+			opts_.position += opts_.front * velocity;
 			break;
 		case Key::S:
-			opts_.position -= opts_.right * velocity;
+			opts_.position -= opts_.front * velocity;
 			break;
 		case Key::A:
 			opts_.position -= opts_.right * velocity;
@@ -137,6 +137,7 @@ namespace GameWorld
 
 	GW_BOOL GCameraEditor::OnWindowResized(WindowResizeEvent& e)
 	{
+		if (e.GetWidth() == 0 || e.GetHeight() == 0) return true;
 		UpdateViewportRatio((GW_FLOAT32)e.GetWidth(), (GW_FLOAT32)e.GetHeight());
 		return false;
 	}

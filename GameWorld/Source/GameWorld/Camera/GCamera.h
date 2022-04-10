@@ -29,7 +29,7 @@ namespace GameWorld
 	{
 		ECameraMode     camera_mode{ ECameraMode::kEditor };
 		EProjectionMode projection_mode{ EProjectionMode::kPerspective };
-		glm::vec3 position{ glm::vec3(0.0f) };
+		glm::vec3 position{ glm::vec3(0.0f, 0.0f, -1.0f) };
 
 		glm::vec3 world_up{ glm::vec3(0.0f, 1.0f, 0.0f) };
 		glm::vec3 up{ NULL };
@@ -51,12 +51,6 @@ namespace GameWorld
 		GCamera();
 		GCamera(CameraOptions opts);
 		virtual ~GCamera() = default;
-
-	public:
-		GW_BOOL isConstrainPitch{ true };
-		// camera options
-		GW_FLOAT32 move_speed{ 2.5f };
-		GW_FLOAT32 mouse_sensitive{ 0.35f };
 
 	public:
 		const glm::mat4& GetViewMat()           const { return v_mat_; };
