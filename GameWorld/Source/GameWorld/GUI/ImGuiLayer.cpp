@@ -62,7 +62,7 @@ namespace GameWorld
 
 	void ImGuiLayer::OnImGuiRender()
 	{
-		static bool b_show_demowindow = true;
+		static bool b_show_demowindow = false;
 		ImGui::ShowDemoWindow(&b_show_demowindow);
 	}
 

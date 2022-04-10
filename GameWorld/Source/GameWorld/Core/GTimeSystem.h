@@ -16,16 +16,16 @@ namespace GameWorld
 		inline GW_FLOAT32 GetDeltaTime()       { return tick_delta_time_; }
 		inline GW_FLOAT32 GetDeltaTimeMs()     { return tick_delta_time_ * 1000.0f; }
 
-		inline GW_INT32   GetFramePerSeconds() { return frame_per_seconds_; }
+		//inline GW_INT32   GetFramePerSeconds() { return frame_per_seconds_; }
 
 	private:
 		GW_FLOAT32 last_tick_time_;
 		GW_FLOAT32 tick_delta_time_ { 0.0f };
 		
-		GW_INT32   frame_per_seconds_{ 0 };
-
-		GW_FLOAT32 hold_time_{ 0.0f };
-		GW_INT32   hold_frames_{ 0 };
+		//GW_INT32   frame_per_seconds_{ 0 };
+		//
+		//GW_FLOAT32 hold_time_{ 0.0f };
+		//GW_INT32   hold_frames_{ 0 };
 	};
 
 }
