@@ -31,7 +31,7 @@ namespace GameWorld
 
 		glm::mat4 ToTransformMat() const
 		{// TransformedVector = TranslationMatrix * RotationMatrix * ScaleMatrix * OriginalVector
-			return glm::translate(glm::toMat4(m_rotation) * glm::scale(m_scale), m_position);
+			return glm::translate(glm::mat4(1.0f), m_position) * glm::toMat4(m_rotation) * glm::scale(m_scale);
 		}
 	};
 }
