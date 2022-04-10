@@ -18,3 +18,7 @@ Just run `GenerateProjects.bat`
 ## GameWorld's First Triangle
 
 ![First Triangle](https://github.com/Morcki/GameWorld/raw/main/ResultCapture/GameWorldFirstTriangle.jpg "First Triangle Created by GameWorld.")
+
+## GameWorld's Current Stage
+
+![Screen Capture](https://github.com/Morcki/GameWorld/raw/main/ResultCapture/CurrentStage.png "Current Stage")
