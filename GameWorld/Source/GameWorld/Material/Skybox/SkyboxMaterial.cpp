@@ -5,6 +5,9 @@
 #include "GameWorld/Render/RenderCore.h"
 #include "GameWorld/Render/RenderCommand.h"
 
+#include "GameWorld/Camera/GCameraEditor.h"
+#include "GameWorld/Application.h"
+
 namespace GameWorld
 {
 	constexpr GW_FLOAT32 skybox_vertices[] =
@@ -117,8 +120,14 @@ namespace GameWorld
 		render_texture_ = GTexture::CreateTextureCubeMap(skybox_textureinfo_);
 	}
 
-	void SkyboxMaterial::TickUpdate(const Ref<GCamera>& camera)
+	void SkyboxMaterial::TickUpdate()
 	{
+#if RUN_WITH_EDITOR
+		auto camera = Application::GetInst().GetCamera();
+#else
+		// TODO : Add Game Camera
+		GAMEWORLD_CORE_ASSERT(false, "SkyboxMaterial::TickUpdate => Not Support yet!")
+#endif
 		RenderPass(render_shader_)
 		.begin()
 		.next([&]()
@@ -129,9 +138,9 @@ namespace GameWorld
 		{
 			render_texture_->Bind();
 			render_vao_->Bind();
-			ShaderTool::SetVec3Uniform(render_shader_->GetProgramID(), "uCameraPos", camera->GetPosition());
-			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uView", camera->GetViewMat());
-			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uProj", camera->GetProjectionMat());
+			ShaderTool::SetVec3Uniform(render_shader_->GetProgramID(), "uCameraPos", camera.GetPosition());
+			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uView", camera.GetViewMat());
+			ShaderTool::SetMat4Uniform(render_shader_->GetProgramID(), "uProj", camera.GetProjectionMat());
 		})
 		.next([&]()
 		{

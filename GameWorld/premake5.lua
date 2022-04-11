@@ -55,6 +55,7 @@ project "GameWorld"
 			"GAMEWORLD_PLATFORM_WINDOWS",
 			"GAMEWORLD_ENABLE_ASSERT",
 			"GLFW_INCLUDE_NONE",
+			"RUN_WITH_EDITOR",
 		}
 		
 		postbuildcommands

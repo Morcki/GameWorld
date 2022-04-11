@@ -6,6 +6,8 @@
 #include "GameWorld/Events/Event.h"
 #include "GameWorld/Layer/LayerStack.h"
 #include "GameWorld/GUI/ImGuiLayer.h"
+#include "GameWorld/Scene/GSceneManager.h"
+#include "GameWorld/Camera/GCameraEditor.h"
 
 namespace GameWorld
 {
@@ -24,9 +26,8 @@ namespace GameWorld
 
 		inline static Application& GetInst()                  { return *ptr_instance_; }
 		inline Window&             GetWindow()          const { return *ptr_window_; }
-		inline const GW_FLOAT32*   GetBackgroundColor() const { return window_background_color_; };
-		inline void                SetBackgroundColor(GW_FLOAT32 color[4]) 
-															  { memcpy(window_background_color_, color, sizeof(GW_FLOAT32) * 4); };
+		inline GCameraEditor&      GetCamera()          const { return *editor_camera_; }
+		inline GSceneManager&      GetSceneManager()    const { return *scene_manager_; }
 
 	private:
 		void OnEvent(Event& e);
@@ -38,6 +39,9 @@ namespace GameWorld
 		Scope<Window>               ptr_window_;
 		LayerStack                  layerstack_;
 		ImGuiLayer*                 imgui_base_render_layer_;
+		Scope<GCameraEditor>        editor_camera_;
+		Scope<GSceneManager>        scene_manager_;
+
 
 		float window_background_color_[4] = { 0.45f, 0.55f, 0.60f, 1.00f };
 

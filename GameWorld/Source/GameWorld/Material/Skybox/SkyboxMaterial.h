@@ -5,7 +5,6 @@
 #include "GameWorld/Render/ShaderBase.h"
 #include "GameWorld/Texture/TextureBase.h"
 #include "GameWorld/Render/RenderArray.h"
-#include "GameWorld/Camera/GCamera.h"
 
 namespace GameWorld
 {
@@ -18,7 +17,7 @@ namespace GameWorld
 
 		void SetTexture(GW_INT32 index_face, const std::string& image_path);
 		void SetTexture(const std::array<std::string, 6>& faces);
-		void TickUpdate(const Ref<GCamera>& camera);
+		void TickUpdate();
 
 	private:
 		void ResetShader();

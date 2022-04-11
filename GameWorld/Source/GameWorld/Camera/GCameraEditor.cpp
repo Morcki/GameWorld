@@ -41,23 +41,21 @@ namespace GameWorld
 		GW_FLOAT32 ts = GTimeSystem::GetInst().GetDeltaTime();
 		GW_FLOAT32 velocity = move_speed * ts;
 
-		switch (e.GetKeyCode())
+		if (e.GetKeyCode() == Key::W)
 		{
-		case Key::W:
 			opts_.position += opts_.front * velocity;
-			break;
-		case Key::S:
+		}
+		if (e.GetKeyCode() == Key::S)
+		{
 			opts_.position -= opts_.front * velocity;
-			break;
-		case Key::A:
+		}
+		if (e.GetKeyCode() == Key::A)
+		{
 			opts_.position -= opts_.right * velocity;
-			break;
-		case Key::D:
+		}
+		if (e.GetKeyCode() == Key::D)
+		{
 			opts_.position += opts_.right * velocity;
-			break;
-		default:
-			return true;
-			break;
 		}
 
 		UpdateViewMatrix();

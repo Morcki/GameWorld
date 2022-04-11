@@ -2,11 +2,12 @@
 
 #include <glm/glm.hpp>
 
+#include "GameWorld/Core/Core.h"
+
 #include "GameWorld/Events/Event.h"
 #include "GameWorld/Events/KeyEvent.h"
 #include "GameWorld/Events/MouseEvent.h"
-
-#include "GameWorld/Application.h"
+#include "GameWorld/Events/ApplicationEvent.h"
 
 namespace GameWorld
 {
@@ -37,8 +38,8 @@ namespace GameWorld
 		glm::vec3 right{ NULL };
 
 		GW_FLOAT32 viewport_fov_x{ 0.0f };
-		GW_FLOAT32 viewport_fov_y{ 55.0f }; // Present FovY when Perspective,Viewport Height when Ortho
-		GW_FLOAT32 viewport_ratio{ Application::GetInst().GetWindow().GetAspectRatio() };
+		GW_FLOAT32 viewport_fov_y{ 30.0f }; // Present FovY when Perspective,Viewport Height when Ortho
+		GW_FLOAT32 viewport_ratio{ 1280.0f / 720.0f };
 		GW_FLOAT32 znear{ 0.3f };
 		GW_FLOAT32 zfar{ 3000.0f };
 		GW_FLOAT32 yaw{ -90.0f };
@@ -169,7 +170,7 @@ namespace GameWorld
 		GW_FLOAT32 row_{ 0.0f };
 
 		GW_FLOAT32 viewport_fov_y_{ 5.0f }; // Present FovY when Perspective,Viewport Height when Ortho
-		GW_FLOAT32 viewport_ratio_{ Application::GetInst().GetWindow().GetAspectRatio() };
+		GW_FLOAT32 viewport_ratio_{ 1280.0f / 720.0f };
 
 		// camera options
 		glm::vec2 mouse_press_pos_;

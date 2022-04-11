@@ -20,7 +20,7 @@ namespace GameWorld
 {
 	Application::Application()
 	{
-		assert(!ptr_instance_, "GameWorld::Application::Application => Error,Application already existed!");
+		GAMEWORLD_CORE_ASSERT(!ptr_instance_, "GameWorld::Application::Application => Error,Application already existed!");
 		ptr_instance_ = this;
 
 		ptr_window_ = Scope<Window>(Window::Create());
@@ -36,7 +36,14 @@ namespace GameWorld
 	{
 		imgui_base_render_layer_ = new ImGuiLayer();
 		PushOverlay(imgui_base_render_layer_);
+
 		RenderBase::Init();
+
+		editor_camera_ = CreateScope<GCameraEditor>();
+		editor_camera_->UpdateViewportRatio(ptr_window_->GetAspectRatio());
+
+		scene_manager_ = CreateScope<GSceneManager>("Default Scene");
+		scene_manager_->Init();
 	}
 
 	void Application::Run()
@@ -45,16 +52,15 @@ namespace GameWorld
 		{
 			// First Step : Update Tick Time
 			GTimeSystem::GetInst().TickUpdate();
+			// Second Step : Update Camera
+			editor_camera_->TickUpdate();
+
 			// Fresh window color buffer
-			RenderCommand::ClearColor
-			({
-				window_background_color_[0],
-				window_background_color_[1],
-				window_background_color_[2],
-				window_background_color_[3]
-				});
+			RenderCommand::ClearColor({0.0f, 0.0f, 0.0f, 1.0f});
 			RenderCommand::ClearBuffer();
 
+
+			scene_manager_->TickUpdate();
 			for (Layer* layer : layerstack_)
 			{
 				layer->OnUpdate();
@@ -92,6 +98,8 @@ namespace GameWorld
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnWindowsClose));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_CLASS_CALLBACK_FUNCTRION(Application::OnWindowResize));
+
+		editor_camera_->OnEvent(e);
 
 		for (auto it = layerstack_.end(); it != layerstack_.begin();)
 		{

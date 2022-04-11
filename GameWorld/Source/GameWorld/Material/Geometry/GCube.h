@@ -1,15 +1,16 @@
 #pragma once
 
+#include "GameWorld/Component/GComponent.h"
 #include "GameWorld/Core/math/MTransform.h"
 
-#include "GameWorld/Render/ShaderBase.h"
 #include "GameWorld/Render/RenderArray.h"
+#include "GameWorld/Material/GMaterial.h"
 
-#include "GameWorld/Camera/GCamera.h"
+#include "GameWorld/Material/Light/GLight.h"
 
 namespace GameWorld
 {
-	class GCube
+	class GCube : public GComponent
 	{
 	public:
 		GCube();
@@ -18,23 +19,22 @@ namespace GameWorld
 
 	public:
 		inline MTransform GetTransform() { return m_transform; };
-		inline glm::vec4  GetColor    () { return m_color; };
+		inline GMaterial  GetMaterial() { return m_material; };
 
 		void SetTransform(const MTransform& transform) { m_transform = transform; };
-		void SetColor    (const glm::vec4& color)      { m_color = color; };
-
+		void SetMaterial(const GMaterial& material) { m_material = material; };
 	private:
-		void Init();
+		virtual void Init();
 
 	public:
-		void TickUpdate(const Ref<GCamera>& camera);
+		virtual void TickUpdate() override;
 
 	private:
+		inline static GW_INT32 s_num_cube_instance = 0;
+
 		MTransform m_transform { MTransform() };
+		GMaterial  m_material{ GMaterial(std::string("Cube_") + std::to_string(s_num_cube_instance++)) };
 
-		glm::vec4 m_color { glm::vec4(1.0f, 0.5f, 0.0f, 1.0f) };
-
-		Ref<ShaderBase>    render_shader_;
 		Ref<RenderArray>   render_vao_;
 		//Ref<GTexture>      render_texture_;
 	};
