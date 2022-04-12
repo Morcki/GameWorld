@@ -86,12 +86,12 @@ namespace GameWorld
 	void OpenGLRHI::DrawElements(const Ref<RenderArray>& vertex_array, GW_UINT32 index_count)
 	{
 		GW_UINT32 count = index_count ? index_count : vertex_array->GetIndexBuffer()->Count();
-		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLE_STRIP, count, GL_UNSIGNED_INT, nullptr);
 	}
 
 	void OpenGLRHI::DrawArrays(GW_UINT32 vert_count)
 	{
-		glDrawArrays(GL_TRIANGLES, 0, vert_count);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, vert_count);
 	}
 
 }

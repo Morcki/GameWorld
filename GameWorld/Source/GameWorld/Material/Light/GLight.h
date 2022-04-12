@@ -6,13 +6,13 @@ namespace GameWorld
 {
 	struct GDirectionalLight
 	{
-		glm::vec3 m_direction;
-		glm::vec3 m_color;
+		glm::vec3 m_direction{ glm::vec3(-1.0f) };
+		glm::vec3 m_color{ glm::vec3(0.0f) };
 	};
 
 	struct GAmbientLight
 	{
-		glm::vec3 m_irradiance;
+		glm::vec3 m_irradiance{ glm::vec3(0.0f) };
 	};
 
 	struct GPointLight
@@ -29,7 +29,7 @@ namespace GameWorld
 			// radius = where attenuation would lead to an intensity of 1W/m^2
 			const float INTENSITY_CUTOFF = 1.0f;
 			const float ATTENTUATION_CUTOFF = 0.05f;
-			glm::vec3   intensity = m_flux / (4.0f * glm::pi<GW_FLOAT32>());
+			glm::vec3   intensity = m_flux / (4.0f * M_PI);
 			float       maxIntensity = std::max({ intensity.x, intensity.y, intensity.z });
 			float       attenuation = std::max(INTENSITY_CUTOFF, ATTENTUATION_CUTOFF * maxIntensity) / maxIntensity;
 			return 1.0f / sqrtf(attenuation);

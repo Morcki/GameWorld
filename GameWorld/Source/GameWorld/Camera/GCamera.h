@@ -30,7 +30,7 @@ namespace GameWorld
 	{
 		ECameraMode     camera_mode{ ECameraMode::kEditor };
 		EProjectionMode projection_mode{ EProjectionMode::kPerspective };
-		glm::vec3 position{ glm::vec3(0.0f, 0.0f, 1.0f) };
+		glm::vec3 position{ glm::vec3(0.0f, 1.0f, 10.0f) };
 
 		glm::vec3 world_up{ glm::vec3(0.0f, 1.0f, 0.0f) };
 		glm::vec3 up{ NULL };

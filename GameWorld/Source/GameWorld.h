@@ -12,10 +12,12 @@
 #include "GameWorld/Render/RenderCommand.h"
 #include "GameWorld/Texture/TextureBase.h"
 #include "GameWorld/Render/RenderCore.h"
-#include "GameWorld/Material/Skybox/SkyboxMaterial.h"
+#include "GameWorld/Material/Skybox/GSkyboxComponent.h"
 #include "GameWorld/Input/InputSystem.h"
-#include "GameWorld/Material/Geometry/GCube.h"
+#include "GameWorld/GUI/GComponentUI.h"
 //-------------------------------------------
 #include "GameWorld/Core/math/MTransform.h"
+#include "GameWorld/Material/Geometry/GCube.h"
+#include "GameWorld/Material/Geometry/GSphere.h"
 
 

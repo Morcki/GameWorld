@@ -29,6 +29,7 @@ project "GameWorld"
 	includedirs
 	{
 		"Source",
+		"Assets",
 		"ThirdParty/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",

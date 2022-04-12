@@ -16,8 +16,6 @@ public:
 	void OnEvent(Event& event) override;
 
 private:
-	Ref<SkyboxMaterial> skybox_1_;
-	Ref<SkyboxMaterial> skybox_2_;
-	Ref<GCube>          cube_1_;
-	
+	Ref<GCubeInstance> cube_1;
+	Ref<GSphereInstance> sphere_1;
 };

@@ -1,5 +1,5 @@
 #include <PrecompiledHeader.h>
-#include "SkyboxMaterial.h"
+#include "GSkyboxComponent.h"
 
 #include "GameWorld/Render/ShaderBase.h"
 #include "GameWorld/Render/RenderCore.h"
@@ -63,13 +63,13 @@ namespace GameWorld
 			}
 		)";
 
-	SkyboxMaterial::SkyboxMaterial()
+	GSkyboxComponent::GSkyboxComponent()
 	{
 		ResetShader();
 		ResetTexture();
 	}
 
-	SkyboxMaterial::SkyboxMaterial(const std::array<std::string, 6>& faces)
+	GSkyboxComponent::GSkyboxComponent(const std::array<std::string, 6>& faces)
 	{
 		SetTexture(faces);
 
@@ -77,19 +77,19 @@ namespace GameWorld
 		ResetTexture();
 	}
 
-	SkyboxMaterial::~SkyboxMaterial()
+	GSkyboxComponent::~GSkyboxComponent()
 	{
 
 	}
 
-	void SkyboxMaterial::SetTexture(GW_INT32 index_face, const std::string& image_path)
+	void GSkyboxComponent::SetTexture(GW_INT32 index_face, const std::string& image_path)
 	{
 		GAMEWORLD_CORE_ASSERT(index_face < 6 && index_face >= 0, "Invalid Index(0<= i <6) : {0}", index_face);
 		skybox_textureinfo_[index_face] = GImage(image_path, false);
 		ResetTexture();
 	}
 	
-	void SkyboxMaterial::SetTexture(const std::array<std::string, 6>& faces)
+	void GSkyboxComponent::SetTexture(const std::array<std::string, 6>& faces)
 	{
 		for (GW_INT32 i = 0; i < faces.size(); i++)
 		{
@@ -98,7 +98,7 @@ namespace GameWorld
 		ResetTexture();
 	}
 
-	void SkyboxMaterial::ResetShader()
+	void GSkyboxComponent::ResetShader()
 	{
 		render_shader_  = ShaderBase::CreateShaderBase();
 		render_vao_     = RenderArray::CreateRenderArray();
@@ -115,12 +115,12 @@ namespace GameWorld
 		ShaderTool::SetIntUniform(render_shader_->GetProgramID(), "skybox", 0);
 	}
 
-	void SkyboxMaterial::ResetTexture()
+	void GSkyboxComponent::ResetTexture()
 	{
 		render_texture_ = GTexture::CreateTextureCubeMap(skybox_textureinfo_);
 	}
 
-	void SkyboxMaterial::TickUpdate()
+	void GSkyboxComponent::TickUpdate()
 	{
 #if RUN_WITH_EDITOR
 		auto camera = Application::GetInst().GetCamera();

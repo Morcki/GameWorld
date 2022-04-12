@@ -1,5 +1,6 @@
 #pragma once
 
+#include "glm/glm.hpp"
 
 #ifdef GAMEWORLD_PLATFORM_WINDOWS
 	typedef char GW_CHAR;
@@ -18,3 +19,5 @@
 
 	typedef bool GW_BOOL;
 #endif
+
+	constexpr GW_FLOAT32 M_PI = 3.14159265358979323846f;

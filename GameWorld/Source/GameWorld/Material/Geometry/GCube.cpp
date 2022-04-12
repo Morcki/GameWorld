@@ -59,8 +59,8 @@ namespace GameWorld
 	};
 
 	const std::string cube_vertex_code =
+		#include "Shader/ShaderHead.glsl"
 		R"(
-			# version 330 core
 			layout(location = 0) in vec3 aPosition;
 			layout(location = 1) in vec3 aNormal;
 			layout(location = 2) in vec2 aTexcoord;
@@ -82,22 +82,10 @@ namespace GameWorld
 		)";
 
 	const std::string cube_fragment_code =
+		#include "Shader/ShaderHead.glsl"
+		#include "Shader/Utils/LightUtils.glsl"
 		R"(
-			# version 330 core
 			layout(location = 0) out vec4 fragColor;
-
-			struct LightDirectional
-			{
-				vec3 LightColor;
-				vec3 LightDir;
-			};
-
-			struct Material
-			{
-				vec4 DiffuseAlbedo;
-				vec3 FresnelR0;
-				float Shininess;
-			};
 
 			in vec2 vTexcoords;
 			in vec3 vPosition;
@@ -107,37 +95,6 @@ namespace GameWorld
 			uniform LightDirectional uLightDirectional;
 			uniform Material uMat;
 			uniform vec3 uAmbientLightColor;
-
-			vec3 SchlickFresnel(vec3 R0, vec3 normal, vec3 lightDir)
-			{
-				float cosIncidentAngle = clamp(dot(normal, lightDir), 0.0, 1.0);
-
-				float f0 = 1.0 - cosIncidentAngle;
-				vec3 refectPercent = R0 + (1.0 - R0) * (f0 * f0 * f0 * f0 * f0);
-				
-				return refectPercent;
-			}
-
-			vec3 BlinnPhong(vec3 lightStrength, vec3 lightDir, vec3 normal, vec3 viewDir, Material mat)
-			{
-				float m = mat.Shininess * 256.0;
-				vec3 halfVec = normalize(lightDir + viewDir);
-
-				float roughnessFactor = (m + 8.0) * pow(max(dot(halfVec, normal), 0.0), m) / 8.0;
-				vec3 fresnelFactor = SchlickFresnel(mat.FresnelR0, halfVec, lightDir);
-				
-				vec3 specAlbedo = fresnelFactor * roughnessFactor;
-				specAlbedo = specAlbedo / (specAlbedo + 1.0);
-				return (mat.DiffuseAlbedo.rgb + specAlbedo) * lightStrength;
-			}
-
-			vec3 CalcLightDirectional(LightDirectional L, Material mat, vec3 normal, vec3 viewDir)
-			{
-				vec3 lightDir = -normalize(L.LightDir);
-				float ndotL = max(dot(lightDir, normal), 0.0);
-				vec3 lightStrength = L.LightColor * ndotL;
-				return BlinnPhong(lightStrength, lightDir, normal, viewDir, mat);
-			}
 
 			void main()
 			{
@@ -150,28 +107,9 @@ namespace GameWorld
 			}
 		)";
 
-	GCube::GCube()
+	GCubeSingleton::GCubeSingleton()
 	{
-		Init();
-	}
-
-	GCube::GCube(MTransform transform)
-		: m_transform(transform)
-	{
-		Init();
-	}
-
-	GCube::~GCube()
-	{
-
-	}
-	
-	void GCube::Init()
-	{
-		m_transform.m_position += glm::vec3(0.2f, 0.1f, 0.0f);
-		m_transform.m_scale *= 0.2;
-
-		render_vao_ = RenderArray::CreateRenderArray();
+		render_vao = RenderArray::CreateRenderArray();
 
 		auto& render_vbo = VertexBuffer::CreateVertexBuffer(const_cast<GW_FLOAT32*>(CubeVertices), sizeof(CubeVertices));
 		render_vbo->SetLayout
@@ -181,15 +119,46 @@ namespace GameWorld
 			{ShaderDataType::Float2 ,"aTexcoord"},
 		});
 
-		render_vao_->AddVertexBuffer(render_vbo);
-
-		auto cube_shader = ShaderBase::CreateShaderBase();
-		cube_shader->LinkSourceCode(cube_vertex_code, cube_fragment_code);
-		m_material.BindShader(cube_shader);
-		
+		render_vao->AddVertexBuffer(render_vbo);
 	}
 
-	void GCube::TickUpdate()
+	GCubeSingleton::~GCubeSingleton()
+	{
+
+	}
+
+	void GCubeSingleton::DrawCall()
+	{
+		render_vao->Bind();
+		RenderCommand::DrawArrays(36);
+		render_vao->UnBind();
+	}
+
+	GCubeInstance::GCubeInstance()
+		: GComponent(std::string("Cube_") + std::to_string(s_num_cube_instance++))
+	{
+		Init();
+	}
+
+	GCubeInstance::GCubeInstance(MTransform transform)
+	{
+		m_transform = transform;
+		Init();
+	}
+
+	GCubeInstance::~GCubeInstance()
+	{
+
+	}
+	
+	void GCubeInstance::Init()
+	{
+		auto cube_shader = ShaderBase::CreateShaderBase();
+		cube_shader->LinkSourceCode(cube_vertex_code, cube_fragment_code);
+		m_material.BindShader(cube_shader);	
+	}
+
+	void GCubeInstance::TickUpdate()
 	{
 
 #if RUN_WITH_EDITOR
@@ -211,8 +180,6 @@ namespace GameWorld
 		})
 		.next([&]()
 		{
-			render_vao_->Bind();
-
 			auto model = m_transform.ToTransformMat();
 
 			ShaderTool::SetMat4Uniform(shader->GetProgramID(), "uModel", model);
@@ -233,7 +200,7 @@ namespace GameWorld
 		})
 		.next([]()
 		{
-			RenderCommand::DrawArrays(36);
+			GCubeSingleton::GetInst().DrawCall();
 		})
 		.end([]()
 		{

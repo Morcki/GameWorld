@@ -8,11 +8,11 @@
 
 namespace GameWorld
 {
-	class GCubeSingleton final : public GSingletonPublic<GCubeSingleton>
+	class GSphereSingleton final : public GSingletonPublic<GSphereSingleton>
 	{
 	public:
-		GCubeSingleton();
-		virtual ~GCubeSingleton();
+		GSphereSingleton();
+		virtual ~GSphereSingleton();
 
 		void DrawCall();
 
@@ -20,12 +20,12 @@ namespace GameWorld
 		Ref<RenderArray>   render_vao;
 	};
 
-	class GCubeInstance : public GComponent
+	class GSphereInstance : public GComponent
 	{
 	public:
-		GCubeInstance();
-		GCubeInstance(MTransform transform);
-		virtual ~GCubeInstance();
+		GSphereInstance();
+		GSphereInstance(MTransform transform);
+		virtual ~GSphereInstance();
 
 	private:
 		virtual void Init();
@@ -34,9 +34,7 @@ namespace GameWorld
 		virtual void TickUpdate() override;
 
 	private:
-		inline static GW_INT32 s_num_cube_instance = 0;
+		inline static GW_INT32 s_num_sphere_instance = 0;
 
-		//Ref<GTexture>      render_texture_;
 	};
-
 }
