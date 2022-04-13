@@ -21,4 +21,4 @@ Just run `GenerateProjects.bat`
 
 ## GameWorld's Current Stage
 
-![Screen Capture](https://github.com/Morcki/GameWorld/raw/main/ResultCapture/CurrentStage.png "Current Stage")
+![Screen Capture](https://github.com/Morcki/GameWorld/raw/main/ResultCapture/CurrentStage.jpg "Current Stage")
