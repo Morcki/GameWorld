@@ -18,6 +18,7 @@ Game3DLayer::Game3DLayer(const std::string& name /*= "Game2DLayer"*/)
 	//auto skybox = CreateRef<SkyboxMaterial>(faces1);
 	cube_1 = CreateRef<GCubeInstance>();
 	sphere_1 = CreateRef<GSphereInstance>();
+	sphere_2 = CreateRef<GSphereInstance>();
 	auto cube_2 = CreateRef<GCubeInstance>();
 	////Application::GetInst().GetSceneManager().PlaceSkybox(skybox);
 	//
@@ -33,6 +34,7 @@ Game3DLayer::Game3DLayer(const std::string& name /*= "Game2DLayer"*/)
 	Application::GetInst().GetSceneManager().PlaceGameObject(cube_1);
 	Application::GetInst().GetSceneManager().PlaceGameObject(cube_2);
 	Application::GetInst().GetSceneManager().PlaceGameObject(sphere_1);
+	Application::GetInst().GetSceneManager().PlaceGameObject(sphere_2);
 }
 
 Game3DLayer::~Game3DLayer()
@@ -72,6 +74,7 @@ void Game3DLayer::OnImGuiRender()
 	
 	GComponentUI::ShowComponentDetails(*sphere_1);
 	GComponentUI::ShowComponentDetails(*cube_1);
+	GComponentUI::ShowComponentDetails(*sphere_2);
 }
 
 void Game3DLayer::OnEvent(Event& event)

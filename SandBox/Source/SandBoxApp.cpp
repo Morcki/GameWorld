@@ -51,7 +51,7 @@ public:
 		RenderCommand::Init3DConfig();
 
 		GDirectionalLight dir_light;
-		dir_light.m_color = glm::vec3(300.f, 300.f, 300.f);
+		dir_light.m_color = glm::vec3(1.0f, 1.0f, 1.0f);
 		dir_light.m_direction = glm::vec3(-10.0f, -10.0f, -10.0f);
 		GAmbientLight amb_light;
 		amb_light.m_irradiance = glm::vec3(0.2f);

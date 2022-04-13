@@ -5,6 +5,7 @@
 
 namespace GameWorld
 {
+	constexpr GW_INT8* ShaderPragmaInclude = "#pragma include";
 
 	OpenGLShader::OpenGLShader()
 	{
@@ -71,33 +72,51 @@ namespace GameWorld
 	{
 		glUseProgram(0);
 	}
-
-	GW_BOOL OpenGLShader::LoadShaderFile(const GW_CHAR* shaderFilePath, ShaderType type)
+	
+	GW_BOOL OpenGLShader::RecursiveLoadShaderFile(const GW_CHAR* glslShaderFilePath, std::string& shaderCode)
 	{
-		std::string shaderCode;
-		std::ifstream shaderFile;
-		shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-		try
+		std::ifstream shaderFile(glslShaderFilePath);
+	
+		if (shaderFile.is_open())
 		{
-			// open files
-			shaderFile.open(shaderFilePath);
-			std::stringstream shaderStream;
-			// read file's buffer contents into streams
-			shaderStream << shaderFile.rdbuf();
-
-			// close file handlers
+			std::string shaderLine;
+			while (getline(shaderFile, shaderLine))
+			{
+				shaderCode += "\n";
+				if (std::size_t pos = shaderLine.find(ShaderPragmaInclude) != std::string::npos)
+				{
+					std::string include_file_path = shaderLine.substr(pos + 16, pos + shaderLine.size() - 19);
+					RecursiveLoadShaderFile(include_file_path.c_str(), shaderCode);
+				}
+				else
+				{
+					shaderCode += shaderLine;
+				}
+			}
 			shaderFile.close();
-			// convert stream into string
-			shaderCode = shaderStream.str();
 		}
-		catch (std::ifstream::failure& e)
+		else
 		{
 			GAMEWORLD_CORE_ERROR
 			(
-				"shader::cannot load shader file!\n\tShader Type : {0}\n\tShader File : {1}",
+				"OpenGLShader::RecursiveLoadShaderFile::cannot load shader file!\n\tShader File : {0}", glslShaderFilePath
+			);
+			return false;
+		}
+
+		return true;
+	}
+
+	GW_BOOL OpenGLShader::LoadShaderFile(const GW_CHAR* shaderFilePath, ShaderType type)
+	{
+		std::string shaderCode("");
+		if (!RecursiveLoadShaderFile(shaderFilePath, shaderCode))
+		{
+			GAMEWORLD_CORE_ERROR
+			(
+				"OpenGLShader::LoadShaderFile::cannot load shader file!\n\tShader Type : {0}\n\tShader File : {1}",
 				ShaderTool::ShaderTypeToString(type), shaderFilePath
 			);
-			//GAMEWORLD_CORE_ASSERT(false, "Please input correct Shader File Path!");
 		}
 		return CompileShader(type, shaderCode);
 	}

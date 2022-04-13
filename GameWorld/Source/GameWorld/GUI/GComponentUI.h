@@ -44,7 +44,7 @@ namespace GameWorld
 				auto material_constant = material.GetConstant();
 
 				ImGui::ColorEdit4("Base Color", &material_constant.diffuse_albedo[0]);
-				ImGui::DragFloat3("Fresnel R0", &material_constant.fresnel_R0[0], 0.001f, 0.0f, 1.0f);
+				ImGui::DragFloat("Metallic", &material_constant.metallic, 0.001f, 0.0f, 1.0f);
 				ImGui::DragFloat("Roughness", &material_constant.roughness, 0.001f, 0.0f, 1.0f);
 
 				material.SetConstant(material_constant);

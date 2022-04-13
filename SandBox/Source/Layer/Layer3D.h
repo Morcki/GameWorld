@@ -18,4 +18,5 @@ public:
 private:
 	Ref<GCubeInstance> cube_1;
 	Ref<GSphereInstance> sphere_1;
+	Ref<GSphereInstance> sphere_2;
 };

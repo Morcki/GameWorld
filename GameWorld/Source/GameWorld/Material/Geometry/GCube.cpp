@@ -58,55 +58,6 @@ namespace GameWorld
 		-1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f  // bottom-left        
 	};
 
-	const std::string cube_vertex_code =
-		#include "Shader/ShaderHead.glsl"
-		R"(
-			layout(location = 0) in vec3 aPosition;
-			layout(location = 1) in vec3 aNormal;
-			layout(location = 2) in vec2 aTexcoord;
-			out vec2 vTexcoord;
-			out vec3 vPosition;
-			out vec3 vNormal;
-			uniform mat4 uModel;
-			uniform mat4 uView;
-			uniform mat4 uProj;
-			uniform mat4 uModelInvT;
-
-			void main()
-			{
-				vTexcoord   = aTexcoord;
-				vNormal     = mat3(uModelInvT) * aNormal;
-				vPosition   = vec3(uModel * vec4(aPosition, 1.0));
-				gl_Position = uProj * uView * vec4(vPosition, 1.0);
-			}
-		)";
-
-	const std::string cube_fragment_code =
-		#include "Shader/ShaderHead.glsl"
-		#include "Shader/Utils/LightUtils.glsl"
-		R"(
-			layout(location = 0) out vec4 fragColor;
-
-			in vec2 vTexcoords;
-			in vec3 vPosition;
-			in vec3 vNormal;
-
-			uniform vec3 uCameraPos;
-			uniform LightDirectional uLightDirectional;
-			uniform Material uMat;
-			uniform vec3 uAmbientLightColor;
-
-			void main()
-			{
-				vec3 normal = normalize(vNormal);
-				vec3 viewDir  = normalize(uCameraPos - vPosition);
-				vec3 color = CalcLightDirectional(uLightDirectional, uMat, normal, viewDir);
-				vec4 ambient_color = vec4(uAmbientLightColor, 1.0) * uMat.DiffuseAlbedo;
-				fragColor = vec4(color, 1.0) + ambient_color;
-				fragColor.a = uMat.DiffuseAlbedo.a;
-			}
-		)";
-
 	GCubeSingleton::GCubeSingleton()
 	{
 		render_vao = RenderArray::CreateRenderArray();
@@ -154,7 +105,8 @@ namespace GameWorld
 	void GCubeInstance::Init()
 	{
 		auto cube_shader = ShaderBase::CreateShaderBase();
-		cube_shader->LinkSourceCode(cube_vertex_code, cube_fragment_code);
+		//cube_shader->LinkSourceCode(cube_vertex_code, cube_fragment_code);
+		cube_shader->LinkShaderFile("Assets/Shader/Default/DefaultLighting.vert", "Assets/Shader/Default/DefaultLighting.frag");
 		m_material.BindShader(cube_shader);	
 	}
 
@@ -192,7 +144,7 @@ namespace GameWorld
 
 			ShaderTool::SetVec3Uniform(shader->GetProgramID(), "uCameraPos", camera.GetPosition());
 			ShaderTool::SetVec4Uniform(shader->GetProgramID(), "uMat.DiffuseAlbedo", m_material.GetConstant().diffuse_albedo);
-			ShaderTool::SetVec3Uniform(shader->GetProgramID(), "uMat.FresnelR0", m_material.GetConstant().fresnel_R0);
+			ShaderTool::SetFloatUniform(shader->GetProgramID(), "uMat.Metallic", m_material.GetConstant().metallic);
 			ShaderTool::SetFloatUniform(shader->GetProgramID(), "uMat.Shininess", 1 - m_material.GetConstant().roughness);
 
 			ShaderTool::SetVec3Uniform(shader->GetProgramID(), "uAmbientLightColor", ambient_light.m_irradiance);

@@ -21,6 +21,7 @@ namespace GameWorld
 		virtual void UnlockShader() const override;
 
 	private:
+		GW_BOOL RecursiveLoadShaderFile(const GW_CHAR* glslShaderFilePath, std::string& shaderCode);
 		GW_BOOL LoadShaderFile(const GW_CHAR* shaderFilePath, ShaderType type);
 		GW_BOOL CompileShader(ShaderType type, const std::string& shader_code);
 		GW_BOOL CheckCompileResult(GW_UINT32 shader, ShaderType type);

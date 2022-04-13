@@ -10,7 +10,7 @@ namespace GameWorld
 	struct MaterialConstant
 	{
 		glm::vec4  diffuse_albedo{ glm::vec4{1.0f} };
-		glm::vec3  fresnel_R0{ glm::vec3(0.01f) };
+		GW_FLOAT32 metallic { 0.25f };
 		GW_FLOAT32 roughness{ 0.25f };
 	};
 
