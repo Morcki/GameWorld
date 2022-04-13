@@ -11,7 +11,13 @@ namespace GameWorld
 		return (GL_NEVER - ShaderCmpFunc::kNever) + cmp;
 	};
 
+	static GLenum GetOpenGLDrawType(RenderDrawType draw_type)
+	{
+		return draw_type;
+	};
+
 	OpenGLRHI::OpenGLRHI()
+		: gl_begin_mode(GL_TRIANGLE_STRIP)
 	{
 
 	}
@@ -73,6 +79,11 @@ namespace GameWorld
 		glViewport(x, y, width, height);
 	}
 
+	void OpenGLRHI::SetDrawMode(RenderDrawType draw_mode)
+	{
+		gl_begin_mode = draw_mode;
+	}
+
 	void OpenGLRHI::SetClearColor(glm::vec4 color)
 	{
 		glClearColor(color.r, color.g, color.b, color.a);
@@ -86,12 +97,12 @@ namespace GameWorld
 	void OpenGLRHI::DrawElements(const Ref<RenderArray>& vertex_array, GW_UINT32 index_count)
 	{
 		GW_UINT32 count = index_count ? index_count : vertex_array->GetIndexBuffer()->Count();
-		glDrawElements(GL_TRIANGLE_STRIP, count, GL_UNSIGNED_INT, nullptr);
+		glDrawElements(gl_begin_mode, count, GL_UNSIGNED_INT, nullptr);
 	}
 
 	void OpenGLRHI::DrawArrays(GW_UINT32 vert_count)
 	{
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, vert_count);
+		glDrawArrays(gl_begin_mode, 0, vert_count);
 	}
 
 }

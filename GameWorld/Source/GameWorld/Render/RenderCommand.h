@@ -58,6 +58,11 @@ namespace GameWorld
 			RenderHardwareAPI->SetCullFace(bCull);
 		}
 
+		inline static void SetDrawType(RenderDrawType draw_type = RenderDrawType::kTRIANGLE_STRIP)
+		{
+			RenderHardwareAPI->SetDrawMode(draw_type);
+		}
+
 		inline static void DrawArrays(GW_UINT32 vert_count)
 		{
 			RenderHardwareAPI->DrawArrays(vert_count);

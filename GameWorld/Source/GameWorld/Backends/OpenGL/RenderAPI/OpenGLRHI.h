@@ -26,13 +26,17 @@ namespace GameWorld
 
 		virtual void SetViewport(GW_UINT32 x, GW_UINT32 y, GW_UINT32 width, GW_UINT32 height) override;
 
+		virtual void SetDrawMode(RenderDrawType draw_mode) override;
 		virtual void SetClearColor(glm::vec4 color) override;
+
 		virtual void ClearBuffer() override;
 
 		virtual void DrawElements(const Ref<RenderArray>& vertex_array, GW_UINT32 index_count = 0) override;
 		virtual void DrawArrays(GW_UINT32 vert_count) override;
-	};
 
+	private:
+		GW_UINT8 gl_begin_mode;
+	};
 
 }
 
