@@ -81,7 +81,9 @@ namespace GameWorld
 	void GCubeSingleton::DrawCall()
 	{
 		render_vao->Bind();
+		RenderCommand::SetDrawType(RenderDrawType::kTRIANGLES);
 		RenderCommand::DrawArrays(36);
+		RenderCommand::SetDrawType();
 		render_vao->UnBind();
 	}
 
