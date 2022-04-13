@@ -66,10 +66,10 @@ vec3 BlinnPhong(vec3 lightStrength, vec3 lightDir, vec3 normal, vec3 viewDir, Ma
 	vec3 F0 = vec3(0.04);
 	F0 = mix(F0, mat.DiffuseAlbedo.rgb, mat.Metallic);
 
-	float m = mat.Shininess * 256.0;
+	float m = mat.Shininess * 256.0f;
 	vec3 halfVec = normalize(lightDir + viewDir);
-
 	float roughnessFactor = (m + 8.0) * pow(max(dot(halfVec, normal), 0.0), m) / 8.0;
+
 	vec3 fresnelFactor = SchlickFresnel(F0, halfVec, lightDir);
 	
 	vec3 specAlbedo = fresnelFactor * roughnessFactor;
