@@ -8,7 +8,7 @@ namespace GameWorld
 	class GSingletonPublic
 	{/* Do not support virtual class */
 	public:
-		GSingletonPublic() {}
+		GSingletonPublic() = default;
 
 	public:
 		static T& GetInst() noexcept(std::is_nothrow_constructible<T>::value)
@@ -16,7 +16,7 @@ namespace GameWorld
 			static T instance;
 			return instance;
 		}
-		virtual ~GSingletonPublic() noexcept {}
+		virtual ~GSingletonPublic() noexcept = default;
 		GSingletonPublic(const GSingletonPublic&) = delete;
 		GSingletonPublic& operator=(const GSingletonPublic&) = delete;
 	};
