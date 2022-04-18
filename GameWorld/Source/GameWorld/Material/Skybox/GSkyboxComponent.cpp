@@ -144,7 +144,9 @@ namespace GameWorld
 		})
 		.next([&]()
 		{
+			RenderCommand::SetDrawType(RenderDrawType::kTRIANGLES);
 			RenderCommand::DrawArrays(36);
+			RenderCommand::SetDrawType();
 		})
 		.end([&]()
 		{

@@ -7,20 +7,20 @@ Game3DLayer::Game3DLayer(const std::string& name /*= "Game2DLayer"*/)
 {
 	const std::array<std::string, 6> faces1 =
 	{
-		"../GameWorld/Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_2_Left+X.png",
-		"../GameWorld/Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_3_Right-X.png",
-		"../GameWorld/Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_4_Up+Y.png",
-		"../GameWorld/Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_5_Down-Y.png",
-		"../GameWorld/Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_0_Front+Z.png",
-		"../GameWorld/Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_1_Back-Z.png",
+		"Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_2_Left+X.png",
+		"Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_3_Right-X.png",
+		"Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_4_Up+Y.png",
+		"Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_5_Down-Y.png",
+		"Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_0_Front+Z.png",
+		"Assets/Texture/Cube3D/BlueSunset/Epic_BlueSunset_Cam_1_Back-Z.png",
 	};
 	
-	//auto skybox = CreateRef<SkyboxMaterial>(faces1);
+	auto skybox = CreateRef<GSkyboxComponent>(faces1);
 	cube_1 = CreateRef<GCubeInstance>();
 	sphere_1 = CreateRef<GSphereInstance>();
 	sphere_2 = CreateRef<GSphereInstance>();
 	auto cube_2 = CreateRef<GCubeInstance>();
-	////Application::GetInst().GetSceneManager().PlaceSkybox(skybox);
+	Application::GetInst().GetSceneManager().PlaceSkybox(skybox);
 	//
 	auto cube2_transform = MTransform();
 	cube2_transform.m_position = { -2.5f, -2.5f, 0.2f };
