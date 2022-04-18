@@ -1,2 +1,2 @@
-call Plugins\premake\premake5.exe vs2017
+call Plugins\premake\premake5.exe vs2022
 pause
