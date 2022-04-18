@@ -30,6 +30,7 @@ project "GameWorld"
 	{
 		"Source",
 		"Assets",
+		"Source/GameWorld/Pch",
 		"ThirdParty/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
