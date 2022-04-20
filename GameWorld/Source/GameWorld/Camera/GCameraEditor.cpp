@@ -21,7 +21,27 @@ namespace GameWorld
 
 	void GCameraEditor::TickUpdate()
 	{
+		GW_FLOAT32 ts = GTimeSystem::GetInst().GetDeltaTime();
+		GW_FLOAT32 velocity = move_speed * ts;
 
+		if (InputSystem::IsKeyPressed(Key::W))
+		{
+			opts_.position += opts_.front * velocity;
+		}
+		if (InputSystem::IsKeyPressed(Key::S))
+		{
+			opts_.position -= opts_.front * velocity;
+		}
+		if (InputSystem::IsKeyPressed(Key::A))
+		{
+			opts_.position -= opts_.right * velocity;
+		}
+		if (InputSystem::IsKeyPressed(Key::D))
+		{
+			opts_.position += opts_.right * velocity;
+		}
+
+		UpdateViewMatrix();
 	}
 
 	void GCameraEditor::OnEvent(Event& e)
@@ -38,27 +58,6 @@ namespace GameWorld
 
 	GW_BOOL GCameraEditor::OnKeyPressed(KeyPressedEvent& e)
 	{
-		GW_FLOAT32 ts = GTimeSystem::GetInst().GetDeltaTime();
-		GW_FLOAT32 velocity = move_speed * ts;
-
-		if (e.GetKeyCode() == Key::W)
-		{
-			opts_.position += opts_.front * velocity;
-		}
-		if (e.GetKeyCode() == Key::S)
-		{
-			opts_.position -= opts_.front * velocity;
-		}
-		if (e.GetKeyCode() == Key::A)
-		{
-			opts_.position -= opts_.right * velocity;
-		}
-		if (e.GetKeyCode() == Key::D)
-		{
-			opts_.position += opts_.right * velocity;
-		}
-
-		UpdateViewMatrix();
 		return false;
 	}
 
